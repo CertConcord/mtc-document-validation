@@ -1,0 +1,39 @@
+{
+  "format": "original-synthetic-authenticated-facts-v1",
+  "policy": {
+    "profileId": "documents:v1",
+    "requirements": [
+      {"role":"certificate-status","subjectId":"cert:42","scope":"batch:7","sourceId":"status-history"},
+      {"role":"issuer-authorization","subjectId":"issuer:Q","scope":"documents:v1","sourceId":"authority-history"}
+    ]
+  },
+  "facts": {
+    "statusGoodLate": {"profileId":"documents:v1","role":"certificate-status","subjectId":"cert:42","scope":"batch:7","sourceId":"status-history","stateFrom":100,"stateUntil":151,"knowledgeFrom":210,"knowledgeThrough":300,"decision":"ALLOW"},
+    "statusGoodEarly": {"profileId":"documents:v1","role":"certificate-status","subjectId":"cert:42","scope":"batch:7","sourceId":"status-history","stateFrom":100,"stateUntil":151,"knowledgeFrom":150,"knowledgeThrough":219,"decision":"ALLOW"},
+    "issuerAllowed": {"profileId":"documents:v1","role":"issuer-authorization","subjectId":"issuer:Q","scope":"documents:v1","sourceId":"authority-history","stateFrom":100,"stateUntil":151,"knowledgeFrom":180,"knowledgeThrough":300,"decision":"ALLOW"},
+    "statusUnknown": {"profileId":"documents:v1","role":"certificate-status","subjectId":"cert:42","scope":"batch:7","sourceId":"status-history","stateFrom":100,"stateUntil":151,"knowledgeFrom":210,"knowledgeThrough":300,"decision":"UNKNOWN"},
+    "statusStale": {"profileId":"documents:v1","role":"certificate-status","subjectId":"cert:42","scope":"batch:7","sourceId":"status-history","stateFrom":100,"stateUntil":151,"knowledgeFrom":210,"knowledgeThrough":240,"decision":"ALLOW"},
+    "statusDenied": {"profileId":"documents:v1","role":"certificate-status","subjectId":"cert:42","scope":"batch:7","sourceId":"status-history","stateFrom":100,"stateUntil":151,"knowledgeFrom":220,"knowledgeThrough":300,"decision":"DENY"},
+    "statusRogue": {"profileId":"documents:v1","role":"certificate-status","subjectId":"cert:42","scope":"batch:7","sourceId":"archive-self","stateFrom":100,"stateUntil":151,"knowledgeFrom":210,"knowledgeThrough":300,"decision":"ALLOW"},
+    "statusOtherProfile": {"profileId":"documents:v2","role":"certificate-status","subjectId":"cert:42","scope":"batch:7","sourceId":"status-history","stateFrom":100,"stateUntil":151,"knowledgeFrom":210,"knowledgeThrough":300,"decision":"ALLOW"},
+    "statusOtherScope": {"profileId":"documents:v1","role":"certificate-status","subjectId":"cert:42","scope":"batch:8","sourceId":"status-history","stateFrom":100,"stateUntil":151,"knowledgeFrom":210,"knowledgeThrough":300,"decision":"ALLOW"},
+    "issuerDenied": {"profileId":"documents:v1","role":"issuer-authorization","subjectId":"issuer:Q","scope":"documents:v1","sourceId":"authority-history","stateFrom":100,"stateUntil":151,"knowledgeFrom":210,"knowledgeThrough":300,"decision":"DENY"},
+    "statusFuture": {"profileId":"documents:v1","role":"certificate-status","subjectId":"cert:42","scope":"batch:7","sourceId":"status-history","stateFrom":100,"stateUntil":151,"knowledgeFrom":270,"knowledgeThrough":300,"decision":"ALLOW"},
+    "statusNoClosure": {"profileId":"documents:v1","role":"certificate-status","subjectId":"cert:42","scope":"batch:7","sourceId":"status-history","stateFrom":100,"stateUntil":151,"knowledgeFrom":210,"knowledgeThrough":null,"decision":"ALLOW"}
+  },
+  "cases": [
+    {"id":"post-retirement-history","stateAt":120,"knownAt":250,"factIds":["statusGoodLate","issuerAllowed"],"expected":{"decision":"SATISFIED","stateAt":120,"knownAt":250,"reasons":[]}},
+    {"id":"unknown-historical-status","stateAt":120,"knownAt":250,"factIds":["statusUnknown","issuerAllowed"],"expected":{"decision":"INDETERMINATE","stateAt":120,"knownAt":250,"reasons":[{"role":"certificate-status","code":"HISTORY_UNKNOWN"}]}},
+    {"id":"stale-historical-status","stateAt":120,"knownAt":250,"factIds":["statusStale","issuerAllowed"],"expected":{"decision":"INDETERMINATE","stateAt":120,"knownAt":250,"reasons":[{"role":"certificate-status","code":"HISTORY_COVERAGE_MISSING"}]}},
+    {"id":"retrospective-revocation","stateAt":120,"knownAt":250,"factIds":["statusDenied","issuerAllowed"],"expected":{"decision":"REJECTED","stateAt":120,"knownAt":250,"reasons":[{"role":"certificate-status","code":"HISTORY_DENIED"}]}},
+    {"id":"earlier-knowledge-before-compromise","stateAt":120,"knownAt":205,"factIds":["statusGoodEarly","issuerAllowed"],"expected":{"decision":"SATISFIED","stateAt":120,"knownAt":205,"reasons":[]}},
+    {"id":"archive-supplied-status-source","stateAt":120,"knownAt":250,"factIds":["statusRogue","issuerAllowed"],"expected":{"decision":"INDETERMINATE","stateAt":120,"knownAt":250,"reasons":[{"role":"certificate-status","code":"HISTORY_COVERAGE_MISSING"}]}},
+    {"id":"cross-profile-history","stateAt":120,"knownAt":250,"factIds":["statusOtherProfile","issuerAllowed"],"expected":{"decision":"INDETERMINATE","stateAt":120,"knownAt":250,"reasons":[{"role":"certificate-status","code":"HISTORY_COVERAGE_MISSING"}]}},
+    {"id":"wrong-batch-history","stateAt":120,"knownAt":250,"factIds":["statusOtherScope","issuerAllowed"],"expected":{"decision":"INDETERMINATE","stateAt":120,"knownAt":250,"reasons":[{"role":"certificate-status","code":"HISTORY_COVERAGE_MISSING"}]}},
+    {"id":"missing-issuer-appointment","stateAt":120,"knownAt":250,"factIds":["statusGoodLate"],"expected":{"decision":"INDETERMINATE","stateAt":120,"knownAt":250,"reasons":[{"role":"issuer-authorization","code":"HISTORY_COVERAGE_MISSING"}]}},
+    {"id":"issuer-appointment-withdrawn","stateAt":120,"knownAt":250,"factIds":["statusGoodLate","issuerDenied"],"expected":{"decision":"REJECTED","stateAt":120,"knownAt":250,"reasons":[{"role":"issuer-authorization","code":"HISTORY_DENIED"}]}},
+    {"id":"conflicting-status-history","stateAt":120,"knownAt":250,"factIds":["statusGoodLate","statusDenied","issuerAllowed"],"expected":{"decision":"REJECTED","stateAt":120,"knownAt":250,"reasons":[{"role":"certificate-status","code":"HISTORY_CONFLICT"}]}},
+    {"id":"future-only-history","stateAt":120,"knownAt":250,"factIds":["statusFuture","issuerAllowed"],"expected":{"decision":"INDETERMINATE","stateAt":120,"knownAt":250,"reasons":[{"role":"certificate-status","code":"HISTORY_COVERAGE_MISSING"}]}},
+    {"id":"no-knowledge-closure","stateAt":120,"knownAt":250,"factIds":["statusNoClosure","issuerAllowed"],"expected":{"decision":"INDETERMINATE","stateAt":120,"knownAt":250,"reasons":[{"role":"certificate-status","code":"HISTORY_COVERAGE_MISSING"}]}}
+  ]
+}

@@ -7,6 +7,18 @@
     {"id":"expired-final-protection","expected":"ERS_FINAL_PROTECTION_EXPIRED"},
     {"id":"missing-hash-policy","expected":"ERS_HASH_LIFETIME_REQUIRED"},
     {"id":"timestamp-renewal-does-not-replace-data-hash","expected":"ERS_HASH_RENEWAL_LATE"},
-    {"id":"unknown-or-stale-historical-status","expected":"INDETERMINATE","coverage":"application requirement; not implemented by the lifetime function"}
+    {"id":"post-retirement-history","expected":"SATISFIED","component":"history"},
+    {"id":"unknown-historical-status","expected":"INDETERMINATE","component":"history"},
+    {"id":"stale-historical-status","expected":"INDETERMINATE","component":"history"},
+    {"id":"retrospective-revocation","expected":"REJECTED","component":"history"},
+    {"id":"earlier-knowledge-before-compromise","expected":"SATISFIED","component":"history"},
+    {"id":"archive-supplied-status-source","expected":"INDETERMINATE","component":"history"},
+    {"id":"cross-profile-history","expected":"INDETERMINATE","component":"history"},
+    {"id":"wrong-batch-history","expected":"INDETERMINATE","component":"history"},
+    {"id":"missing-issuer-appointment","expected":"INDETERMINATE","component":"history"},
+    {"id":"issuer-appointment-withdrawn","expected":"REJECTED","component":"history"},
+    {"id":"conflicting-status-history","expected":"REJECTED","component":"history"},
+    {"id":"future-only-history","expected":"INDETERMINATE","component":"history"},
+    {"id":"no-knowledge-closure","expected":"INDETERMINATE","component":"history"}
   ]
 }

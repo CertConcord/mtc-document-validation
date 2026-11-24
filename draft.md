@@ -14,6 +14,8 @@ The verifier receives original document and signature bytes, an identified appli
 
 The result distinguishes cryptographic integrity, certificate authorization at the relevant time, preservation continuity, and present admissibility. It records both times and missing dependencies. A historically valid result does not establish current acceptance. A later known compromise may invalidate a signature at an earlier state time according to the applicable policy.
 
+The state time MUST be justified by the selected application's evidence and time policy; it is not inferred from a claimed signing time. The knowledge time is the cutoff for facts admitted to the historical decision. A verifier MUST report the cutoff it actually evaluated and MUST NOT silently substitute its current clock or an archived policy object's preferred cutoff.
+
 Identity qualification, signing-key possession and authorization for the particular document are separate checks. The selected application identifies their evidence and authority. Login, identity-credential presentation, an issuance inclusion proof and a timestamp are not interchangeable evidence for these claims. This draft does not prescribe a new identity or intent object.
 
 ## 3. Retained evidence closure
@@ -33,6 +35,14 @@ The retained set MUST include:
 - time proofs, renewal chains and the evidence needed to validate their authorities.
 
 An unavailable required dependency yields INDETERMINATE. An invalid signature, inconsistent binding or applicable revocation yields INVALID. Required evidence that is stale at the selected time cannot yield VALID. Unsupported revisions fail explicitly; trying a weaker policy is not recovery.
+
+### 3.1. Historical status and authorization coverage
+
+The selected application MUST declare every required history question, including the certificate status and issuer authorization question where applicable. Each question identifies the subject, purpose or log/range scope, admitted source and selected profile through policy obtained independently of the archive. A status response cannot establish issuer appointment or authorization for a later document-signing operation. In particular, an OCSP `good` response alone does not prove that a certificate was issued (RFC 6960, section 2.2).
+
+For each question, the verifier MUST retain the original status or authority record and the evidence needed to authenticate its signer, delegation, applicability and publication history. It MUST resolve whether that source covers the state time and whether its history is complete through the knowledge time. CRL and OCSP `thisUpdate`/`nextUpdate` and OCSP `producedAt` retain their format-specific meanings (RFC 5280, section 5.1.2; RFC 6960, sections 2.4 and 4.2.2). None alone proves that a retained history is complete through an arbitrary later knowledge time. Unknown status, missing source coverage, a stale record, or an unproven knowledge horizon is INDETERMINATE. An applicable authenticated denial or contradictory authenticated facts cannot satisfy the history question. Later discovered compromise is evaluated at the chosen knowledge time under the selected policy, including its effective time and scope.
+
+The reference history function consumes *already authenticated and resolved* facts. Its `stateFrom`/`stateUntil` interval is half-open; its `knowledgeFrom`/`knowledgeThrough` interval is closed and describes the cutoffs for which the decision and completeness have been established. `knowledgeThrough: null` means no such completeness proof. The function requires an exact profile, subject, scope and independently admitted source match. `SATISFIED` means only that the declared history questions have coverage and allow decisions at the two supplied times; it is not document validity, an OCSP/CRL parser, a trust resolver, or a new wire format. A production verifier MUST authenticate raw records, prove the stated coverage and completeness, and apply the selected application's full signature, time, preservation and admissibility checks before returning document VALID.
 
 ## 4. Time and protection lifetimes
 
@@ -58,6 +68,8 @@ An archive policy MUST state the document validation horizon, responsible custod
 
 Before an issuer or archive operator retires, the successor obtains the retained closure, verifies byte identity and completeness, and records responsibility and access continuity through the deployment's existing administrative mechanism. Partial transfer must not be reported as completed preservation. Transfer does not install new trust anchors or erase earlier compromise information.
 
+Retirement alone does not cancel an issuer authorization that applied at the selected state time. The successor MUST retain enough authenticated appointment, status and change history to decide that earlier time at a later knowledge cutoff. A later applicable withdrawal or compromise can change the decision; an unavailable successor record cannot be treated as proof that no change occurred.
+
 ## 6. Existing container standards
 
 | Format | Application binding |
@@ -72,4 +84,4 @@ The editions in sources.json remain normative for their formats. A detached ERS 
 
 Adversarial cases include missing proof material, archive-supplied trust, inconsistent log scope, stale status, retrospective compromise, late renewal, hash-protection gaps, timestamp interval overlap and cross-profile substitution. Availability and privacy of historical lookups remain deployment properties.
 
-The positive and negative cases and reference lifetime tests cover ordering and protection deadlines. Complete historical authority resolution, actual archive succession and all AdES container augmentation require additional implementation evidence. Independent adoption is possible without a particular authority hierarchy or wallet ecosystem.
+The positive and negative cases and reference tests cover ordering, protection deadlines and decisions over already authenticated history facts. Complete historical authority resolution, actual archive succession and all AdES container augmentation require additional implementation evidence. Independent adoption is possible without a particular authority hierarchy or wallet ecosystem.

@@ -6,6 +6,8 @@ Long-term validation and preservation requirements for documents signed using Me
 
 [Draft](draft.md) defines the technical scope and limits. [Sources](sources.json) pins the upstream documents. [Cases](cases.json) identifies the positive and negative evaluation cases.
 
+The [history vectors](vectors/history.json) constrain the reference decision over already authenticated status and issuer-authorization facts. `SATISFIED` is a history precondition, not a document-validation result. The reference does not verify raw OCSP/CRL bytes, authority signatures, archive completeness or AdES containers.
+
 This repository can be reviewed and used independently of the CertConcord framework. It does not require the framework's authority hierarchy, operation objects or deployment. The framework selects this work through a pinned dependency and adds its own integration policy.
 
 Run with Node.js 24.15 or later:
