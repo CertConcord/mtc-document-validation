@@ -1,5 +1,8 @@
 {
   "cases": [
+    {"id":"same-chain-hash-preserved","expected":"VALID"},
+    {"id":"same-chain-hash-changed","expected":"ERS_CHAIN_HASH_MISMATCH"},
+    {"id":"new-chain-hash-changed","expected":"VALID"},
     {"id":"timely-hash-renewal","expected":"VALID"},
     {"id":"late-initial-protection","expected":"ERS_INITIAL_PROTECTION_LATE"},
     {"id":"overlapping-time-intervals","expected":"ERS_INTERVAL_ORDER"},
