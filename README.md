@@ -8,6 +8,8 @@ Long-term validation and preservation requirements for documents signed using Me
 
 This repository can be reviewed and used independently of the CertConcord framework. It does not require the framework's authority hierarchy, operation objects or deployment. The framework selects this work through a pinned dependency and adds its own integration policy.
 
+The [archive-availability vectors](vectors/archive-availability.json) exercise separate post-retirement checks for an admitted published-head inventory and the selected document's declared evidence set. The reference consumes independently admitted facts and reports byte availability at one check time; it does not establish complete document validity or future access.
+
 Run with Node.js 24.15 or later:
 
     npm run check

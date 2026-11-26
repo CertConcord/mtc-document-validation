@@ -1,0 +1,164 @@
+{
+  "format": "original-synthetic-admitted-archive-facts-v1",
+  "policy": {
+    "profileId": "code-signing-documents:v1",
+    "issuerRetiredAt": 200,
+    "documentThrough": 400,
+    "archiveSources": ["archive:successor"],
+    "headInventory": {
+      "completeThrough": 200,
+      "heads": [
+        {"id": "batch:A", "floorThrough": 300, "bytesHex": "484541442d41"},
+        {"id": "batch:B", "floorThrough": 300, "bytesHex": "484541442d42"}
+      ]
+    },
+    "documentRequired": [
+      {"id": "document:1", "role": "original-content", "bytesHex": "444f432d31"},
+      {"id": "signature:1", "role": "signature-container", "bytesHex": "5349472d31"},
+      {"id": "mtc:1", "role": "mtc-certificate-and-proof", "bytesHex": "4d54432d31"},
+      {"id": "status:1", "role": "historical-status", "bytesHex": "5354415455532d31"},
+      {"id": "issuer:1", "role": "issuer-authorization-history", "bytesHex": "4953535545522d31"},
+      {"id": "timestamp:1", "role": "time-and-renewal-evidence", "bytesHex": "54494d452d31"}
+    ]
+  },
+  "observations": {
+    "headA": {"id": "batch:A", "sourceId": "archive:successor", "at": 250, "bytesHex": "484541442d41"},
+    "headAFromIssuer": {"id": "batch:A", "sourceId": "issuer:live", "at": 250, "bytesHex": "484541442d41"},
+    "headB": {"id": "batch:B", "sourceId": "archive:successor", "at": 250, "bytesHex": "484541442d42"},
+    "headBAltered": {"id": "batch:B", "sourceId": "archive:successor", "at": 250, "bytesHex": "484541442d43"},
+    "document": {"id": "document:1", "sourceId": "archive:successor", "at": 250, "bytesHex": "444f432d31"},
+    "signature": {"id": "signature:1", "sourceId": "archive:successor", "at": 250, "bytesHex": "5349472d31"},
+    "mtc": {"id": "mtc:1", "sourceId": "archive:successor", "at": 250, "bytesHex": "4d54432d31"},
+    "mtcUppercaseHex": {"id": "mtc:1", "sourceId": "archive:successor", "at": 250, "bytesHex": "4D54432D31"},
+    "mtcAltered": {"id": "mtc:1", "sourceId": "archive:successor", "at": 250, "bytesHex": "4d54432d32"},
+    "mtcMalformed": {"id": "mtc:1", "sourceId": "archive:successor", "at": 250, "bytesHex": "zz"},
+    "status": {"id": "status:1", "sourceId": "archive:successor", "at": 250, "bytesHex": "5354415455532d31"},
+    "issuer": {"id": "issuer:1", "sourceId": "archive:successor", "at": 250, "bytesHex": "4953535545522d31"},
+    "timestamp": {"id": "timestamp:1", "sourceId": "archive:successor", "at": 250, "bytesHex": "54494d452d31"},
+    "documentLater": {"id": "document:1", "sourceId": "archive:successor", "at": 350, "bytesHex": "444f432d31"},
+    "signatureLater": {"id": "signature:1", "sourceId": "archive:successor", "at": 350, "bytesHex": "5349472d31"},
+    "mtcLater": {"id": "mtc:1", "sourceId": "archive:successor", "at": 350, "bytesHex": "4d54432d31"},
+    "statusLater": {"id": "status:1", "sourceId": "archive:successor", "at": 350, "bytesHex": "5354415455532d31"},
+    "issuerLater": {"id": "issuer:1", "sourceId": "archive:successor", "at": 350, "bytesHex": "4953535545522d31"},
+    "timestampLater": {"id": "timestamp:1", "sourceId": "archive:successor", "at": 350, "bytesHex": "54494d452d31"}
+  },
+  "cases": [
+    {
+      "id": "declared-closure-retrieved-after-retirement",
+      "at": 250,
+      "observationIds": ["headA", "headB", "document", "signature", "mtc", "status", "issuer", "timestamp"],
+      "expected": {"at": 250, "batchHeads": {"decision": "SATISFIED", "reasons": []}, "documentEvidence": {"decision": "SATISFIED", "reasons": []}}
+    },
+    {
+      "id": "same-bytes-different-hex-case",
+      "at": 250,
+      "observationIds": ["headA", "headB", "document", "signature", "mtcUppercaseHex", "status", "issuer", "timestamp"],
+      "expected": {"at": 250, "batchHeads": {"decision": "SATISFIED", "reasons": []}, "documentEvidence": {"decision": "SATISFIED", "reasons": []}}
+    },
+    {
+      "id": "unrelated-published-head-missing",
+      "at": 250,
+      "observationIds": ["headA", "document", "signature", "mtc", "status", "issuer", "timestamp"],
+      "expected": {"at": 250, "batchHeads": {"decision": "INDETERMINATE", "reasons": [{"id": "batch:B", "code": "ARCHIVE_RETRIEVAL_MISSING"}]}, "documentEvidence": {"decision": "SATISFIED", "reasons": []}}
+    },
+    {
+      "id": "history-lost-after-retirement",
+      "at": 250,
+      "observationIds": ["headA", "headB", "document", "signature", "mtc", "issuer", "timestamp"],
+      "expected": {"at": 250, "batchHeads": {"decision": "SATISFIED", "reasons": []}, "documentEvidence": {"decision": "INDETERMINATE", "reasons": [{"id": "status:1", "code": "ARCHIVE_RETRIEVAL_MISSING"}]}}
+    },
+    {
+      "id": "substituted-mtc-certificate-bytes",
+      "at": 250,
+      "observationIds": ["headA", "headB", "document", "signature", "mtcAltered", "status", "issuer", "timestamp"],
+      "expected": {"at": 250, "batchHeads": {"decision": "SATISFIED", "reasons": []}, "documentEvidence": {"decision": "REJECTED", "reasons": [{"id": "mtc:1", "code": "ARCHIVE_BYTES_MISMATCH"}]}}
+    },
+    {
+      "id": "substituted-published-head-bytes",
+      "at": 250,
+      "observationIds": ["headA", "headBAltered", "document", "signature", "mtc", "status", "issuer", "timestamp"],
+      "expected": {"at": 250, "batchHeads": {"decision": "REJECTED", "reasons": [{"id": "batch:B", "code": "ARCHIVE_BYTES_MISMATCH"}]}, "documentEvidence": {"decision": "SATISFIED", "reasons": []}}
+    },
+    {
+      "id": "issuer-endpoint-is-not-archive",
+      "at": 250,
+      "observationIds": ["headAFromIssuer", "headB", "document", "signature", "mtc", "status", "issuer", "timestamp"],
+      "expected": {"at": 250, "batchHeads": {"decision": "INDETERMINATE", "reasons": [{"id": "batch:A", "code": "ARCHIVE_SOURCE_UNADMITTED"}]}, "documentEvidence": {"decision": "SATISFIED", "reasons": []}}
+    },
+    {
+      "id": "published-head-inventory-not-closed",
+      "at": 250,
+      "inventoryCompleteThrough": 180,
+      "observationIds": ["headA", "headB", "document", "signature", "mtc", "status", "issuer", "timestamp"],
+      "expected": {"at": 250, "batchHeads": {"decision": "INDETERMINATE", "reasons": [{"code": "ARCHIVE_INVENTORY_UNPROVEN"}]}, "documentEvidence": {"decision": "SATISFIED", "reasons": []}}
+    },
+    {
+      "id": "document-horizon-outlasts-head-floor",
+      "at": 350,
+      "observationIds": ["documentLater", "signatureLater", "mtcLater", "statusLater", "issuerLater", "timestampLater"],
+      "expected": {"at": 350, "batchHeads": {"decision": "OUT_OF_SCOPE", "reasons": []}, "documentEvidence": {"decision": "SATISFIED", "reasons": []}}
+    },
+    {
+      "id": "document-check-outside-horizon",
+      "at": 250,
+      "documentThrough": 240,
+      "observationIds": ["headA", "headB", "document", "signature", "mtc", "status", "issuer", "timestamp"],
+      "expected": {"at": 250, "batchHeads": {"decision": "SATISFIED", "reasons": []}, "documentEvidence": {"decision": "OUT_OF_SCOPE", "reasons": []}}
+    },
+    {
+      "id": "ended-listed-floor-does-not-close-unknown-inventory",
+      "at": 350,
+      "inventoryCompleteThrough": 180,
+      "observationIds": ["documentLater", "signatureLater", "mtcLater", "statusLater", "issuerLater", "timestampLater"],
+      "expected": {"at": 350, "batchHeads": {"decision": "INDETERMINATE", "reasons": [{"code": "ARCHIVE_INVENTORY_UNPROVEN"}]}, "documentEvidence": {"decision": "SATISFIED", "reasons": []}}
+    },
+    {
+      "id": "malformed-retrieved-bytes",
+      "at": 250,
+      "observationIds": ["headA", "headB", "document", "signature", "mtcMalformed", "status", "issuer", "timestamp"],
+      "expected": {"error": "ARCHIVE_FACTS"}
+    },
+    {
+      "id": "empty-required-document-closure",
+      "at": 250,
+      "documentRequiredIds": [],
+      "observationIds": ["headA", "headB"],
+      "expected": {"error": "ARCHIVE_POLICY"}
+    },
+    {
+      "id": "null-inventory-proof-at-zero-retirement",
+      "at": 250,
+      "issuerRetiredAt": 0,
+      "inventoryCompleteThrough": null,
+      "observationIds": ["headA", "headB", "document", "signature", "mtc", "status", "issuer", "timestamp"],
+      "expected": {"at": 250, "batchHeads": {"decision": "INDETERMINATE", "reasons": [{"code": "ARCHIVE_INVENTORY_UNPROVEN"}]}, "documentEvidence": {"decision": "SATISFIED", "reasons": []}}
+    },
+    {
+      "id": "past-retrieval-does-not-prove-current-access",
+      "at": 251,
+      "observationIds": ["headA", "headB", "document", "signature", "mtc", "status", "issuer", "timestamp"],
+      "expected": {
+        "at": 251,
+        "batchHeads": {"decision": "INDETERMINATE", "reasons": [
+          {"id": "batch:A", "code": "ARCHIVE_OBSERVATION_STALE"},
+          {"id": "batch:B", "code": "ARCHIVE_OBSERVATION_STALE"}
+        ]},
+        "documentEvidence": {"decision": "INDETERMINATE", "reasons": [
+          {"id": "document:1", "code": "ARCHIVE_OBSERVATION_STALE"},
+          {"id": "signature:1", "code": "ARCHIVE_OBSERVATION_STALE"},
+          {"id": "mtc:1", "code": "ARCHIVE_OBSERVATION_STALE"},
+          {"id": "status:1", "code": "ARCHIVE_OBSERVATION_STALE"},
+          {"id": "issuer:1", "code": "ARCHIVE_OBSERVATION_STALE"},
+          {"id": "timestamp:1", "code": "ARCHIVE_OBSERVATION_STALE"}
+        ]}
+      }
+    },
+    {
+      "id": "future-dated-inventory-proof",
+      "at": 250,
+      "inventoryCompleteThrough": 300,
+      "observationIds": ["headA", "headB", "document", "signature", "mtc", "status", "issuer", "timestamp"],
+      "expected": {"error": "ARCHIVE_POLICY"}
+    }
+  ]
+}
