@@ -8,6 +8,8 @@ Long-term validation and preservation requirements for documents signed using Me
 
 This repository can be reviewed and used independently of the CertConcord framework. It does not require the framework's authority hierarchy, operation objects or deployment. The framework selects this work through a pinned dependency and adds its own integration policy.
 
+The [transfer-continuity vectors](vectors/transfer-continuity.json) test two successive custodians against an admitted original-object and prior-evidence inventory. Recorded responsibility and observed transfer-time bytes are separate results; neither proves present or future retrieval.
+
 Run with Node.js 24.15 or later:
 
     npm run check
