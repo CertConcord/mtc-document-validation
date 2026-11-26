@@ -8,6 +8,8 @@ Long-term validation and preservation requirements for documents signed using Me
 
 This repository can be reviewed and used independently of the CertConcord framework. It does not require the framework's authority hierarchy, operation objects or deployment. The framework selects this work through a pinned dependency and adds its own integration policy.
 
+The [frozen DER corpus](vectors/raw-status-der.json) and [positive and negative cases](vectors/raw-status-cases.json) constrain a narrow [raw-status reference](reference/raw-status.mjs) for RFC 6960 OCSP and RFC 5280 direct CRLs. It checks original signed bytes and their target, signer, request, scope and time bindings under externally admitted policy and receipt facts. A scoped `GOOD` observation does not prove certificate issuance, MTC issuer authorization, a complete history through the knowledge cutoff, or document validity. Unsupported CRL forms and cryptography fail explicitly.
+
 Run with Node.js 24.15 or later:
 
     npm run check

@@ -1,4 +1,5 @@
 import assert from 'node:assert/strict';
+import {createHash} from 'node:crypto';
 import {readFileSync,readdirSync} from 'node:fs';
 import {resolve,dirname,join} from 'node:path';
 import {fileURLToPath} from 'node:url';
@@ -7,6 +8,22 @@ const json=p=>JSON.parse(readFileSync(join(root,p),'utf8'));
 assert.equal(json('draft.json').stable,false);
 assert.equal(json('package.json').private,true);
 assert.equal(new Set(json('cases.json').cases.map(x=>x.id)).size,json('cases.json').cases.length);
+const rawStatus = json('vectors/raw-status-cases.json');
+const rawStatusCases = json('cases.json').cases.filter(x=>x.component==='raw-status');
+assert.equal(rawStatus.format,'original-der-status-observation-cases-v1');
+assert.deepEqual(rawStatusCases.map(x=>[x.id,x.expected]),
+  rawStatus.cases.map(x=>[x.id,x.expected]));
+const rawDer = json('vectors/raw-status-der.json');
+assert.equal(rawDer.format,'frozen-der-status-corpus-v1');
+for(const [id,item] of Object.entries(rawDer.objects)){
+  const bytes=Buffer.from(item.derBase64,'base64');
+  assert.equal(bytes.length,item.bytes,id);
+  assert.equal(createHash('sha256').update(bytes).digest('hex'),item.sha256,id);
+}
+for(const v of rawStatus.cases){
+  for(const id of [v.record,v.target,v.issuer,v.responder,v.request,v.policyIssuer,v.receiptRecord])
+    if(id!==undefined)assert(Object.hasOwn(rawDer.objects,id),`${v.id}: ${id}`);
+}
 for(const s of json('sources.json').sources){assert(s.url.startsWith('https://'));assert(/^[a-f0-9]{64}$/.test(s.sha256));}
 function walk(dir=''){for(const e of readdirSync(join(root,dir),{withFileTypes:true})){if(['.git','.runtime','node_modules'].includes(e.name))continue;const p=join(dir,e.name);if(e.isDirectory())walk(p);else{const t=readFileSync(join(root,p),'utf8');assert(!/\p{Script=Han}/u.test(t),p);assert(!/-----BEGIN (?:RSA |EC )?PRIVATE KEY-----/.test(t),p);assert(!/github_pat_[A-Za-z0-9_]{40,}|gh[pousr]_[A-Za-z0-9]{30,}/.test(t),p);}}}
 walk();console.log('Draft sources, cases and publication content verified');
