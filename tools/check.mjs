@@ -26,6 +26,28 @@ for(const v of timestampVectors.cases){
   if(v.request!==undefined&&v.request!==null)
     assert(Object.hasOwn(timestampDer.objects,v.request),`${v.id}: ${v.request}`);
 }
+const ersVectors=json('vectors/raw-ers-cases.json');
+const ersCases=json('cases.json').cases.filter(x=>x.component==='raw-ers');
+assert.equal(ersVectors.format,'original-rfc4998-one-object-cases-v1');
+assert.deepEqual(ersCases.map(x=>[x.id,x.expected]),
+  ersVectors.cases.map(x=>[x.id,x.expected]));
+const ersDer=json('vectors/raw-ers-der.json');
+assert.equal(ersDer.format,'frozen-rfc4998-original-der-corpus-v1');
+for(const [id,item] of Object.entries(ersDer.objects)){
+  const bytes=Buffer.from(item.base64,'base64');
+  assert.equal(bytes.length,item.bytes,id);
+  assert.equal(createHash('sha256').update(bytes).digest('hex'),item.sha256,id);
+}
+for(const v of ersVectors.cases){
+  for(const id of [v.record,v.object??ersVectors.defaults.object,
+      v.policyTsa??ersVectors.defaults.tsa,v.policyIssuer??ersVectors.defaults.issuer])
+    assert(Object.hasOwn(ersDer.objects,id),`${v.id}: ${id}`);
+  assert(Object.hasOwn(ersVectors.requestSets,v.requestSet),`${v.id}: requestSet`);
+  for(const row of ersVectors.requestSets[v.requestSet])for(const id of row)
+    if(id!==null)assert(Object.hasOwn(ersDer.objects,id),`${v.id}: ${id}`);
+  if(v.signedControl)assert(Object.hasOwn(ersDer.objects,v.signedControl.preimage),
+    `${v.id}: signed control`);
+}
 for(const s of json('sources.json').sources){assert(s.url.startsWith('https://'));assert(/^[a-f0-9]{64}$/.test(s.sha256));}
 function walk(dir=''){for(const e of readdirSync(join(root,dir),{withFileTypes:true})){if(['.git','.runtime','node_modules'].includes(e.name))continue;const p=join(dir,e.name);if(e.isDirectory())walk(p);else{const t=readFileSync(join(root,p),'utf8');assert(!/\p{Script=Han}/u.test(t),p);assert(!/-----BEGIN (?:RSA |EC )?PRIVATE KEY-----/.test(t),p);assert(!/github_pat_[A-Za-z0-9_]{40,}|gh[pousr]_[A-Za-z0-9]{30,}/.test(t),p);}}}
 walk();console.log('Draft sources, cases and publication content verified');

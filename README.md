@@ -10,6 +10,8 @@ This repository can be reviewed and used independently of the CertConcord framew
 
 The [frozen timestamp corpus](vectors/raw-timestamp-der.json) and [positive and negative cases](vectors/raw-timestamp-cases.json) constrain a bounded [timestamp reference](reference/raw-timestamp.mjs). It contains original DER records and exact covered bytes, and verifies a signed TSA claim about those bytes, including CMS attributes, ESS certificate identity and the original request when retained. `SIGNED_CLAIM` does not establish historical TSA status, clock reliability, signature coverage, full preservation continuity or document validity; those require independent application evidence.
 
+The [original binary ERS corpus](vectors/raw-ers-der.json) and [binding cases](vectors/raw-ers-cases.json) constrain a detached, one-object [ERS reference](reference/raw-ers.mjs). It checks original RFC 4998 DER, reduced trees, exact preceding timestamp bytes and data plus prior-chain hash renewal using the signed CMS tokens embedded in the record. `BOUND_CLAIMS` remains subject to independently authenticated TSA history, algorithm protection, renewal timing and document-signature validation.
+
 Run with Node.js 24.15 or later:
 
     npm run check

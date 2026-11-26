@@ -208,7 +208,8 @@ function tsaAuthority(tsa, issuer, policy, genTime) {
     bad('TIMESTAMP_TSA_CA_CONSTRAINT');
 }
 
-function signedData(value, tsa, issuer, policy, covered, requestBytes) {
+function signedData(value, tsa, issuer, policy, covered, requestBytes,
+  requireRequestForNonce = true) {
   const contentInfo = children(expect(value, 0x30));
   if (contentInfo.length !== 2 || oid(contentInfo[0]) !== OID.signedData)
     bad('TIMESTAMP_CONTENT_TYPE_UNSUPPORTED');
@@ -243,7 +244,7 @@ function signedData(value, tsa, issuer, policy, covered, requestBytes) {
     if (asked.nonce !== info.nonce) bad('TIMESTAMP_NONCE_MISMATCH');
     if (asked.certReq && !embedded.some(bytes => bytes.equals(tsa.encoded)))
       bad('TIMESTAMP_REQUEST_CERT_MISSING');
-  } else if (info.nonce) bad('TIMESTAMP_REQUEST_MISSING');
+  } else if (info.nonce && requireRequestForNonce) bad('TIMESTAMP_REQUEST_MISSING');
   if (info.accuracyMicros === null) bad('TIMESTAMP_ACCURACY_MISSING');
   if (info.accuracyMicros > policy.maxAccuracyMicros)
     bad('TIMESTAMP_ACCURACY_EXCEEDS_POLICY');
@@ -291,5 +292,33 @@ export function assessRawTimestamp({responseDer, requestDer, coveredDer,
     const unsupported = error.code.endsWith('_UNSUPPORTED') || error.code === 'DER_UNSUPPORTED';
     return {decision: unresolved ? 'INDETERMINATE' : unsupported ? 'UNSUPPORTED' : 'REJECTED',
       reasons: [error.code], recordSha256};
+  }
+}
+
+// ERS embeds the original CMS ContentInfo, not a TimeStampResp. The request is
+// checked when retained; no response status is inferred from a bare token.
+export function assessRawTimestampToken({tokenDer, requestDer, coveredDer,
+  tsaDer, issuerDer, policy}) {
+  if (![tokenDer, coveredDer, tsaDer, issuerDer].every(Buffer.isBuffer) ||
+      (requestDer !== undefined && !Buffer.isBuffer(requestDer)) ||
+      !policy || !/^[a-f0-9]{64}$/.test(policy.issuerSha256 ?? '') ||
+      !/^[a-f0-9]{64}$/.test(policy.tsaSha256 ?? '') ||
+      typeof policy.policyOid !== 'string' || !/^\d+(?:\.\d+)+$/.test(policy.policyOid) ||
+      !Number.isSafeInteger(policy.maxAccuracyMicros) || policy.maxAccuracyMicros < 0)
+    throw Object.assign(new Error('TIMESTAMP_INPUT'), {code: 'TIMESTAMP_INPUT'});
+  const tokenSha256 = digest(tokenDer);
+  try {
+    const tsa = certificate(tsaDer);
+    const issuer = certificate(issuerDer);
+    return {decision: 'SIGNED_CLAIM', reasons: [], tokenSha256,
+      ...signedData(one(Buffer.from(tokenDer), 0x30), tsa, issuer, policy,
+        coveredDer, requestDer, false),
+      requestBinding: requestDer ? 'CHECKED' : 'NOT_PROVIDED'};
+  } catch (error) {
+    if (!(error instanceof DerError)) throw error;
+    const unresolved = error.code === 'TIMESTAMP_ACCURACY_MISSING';
+    const unsupported = error.code.endsWith('_UNSUPPORTED') || error.code === 'DER_UNSUPPORTED';
+    return {decision: unresolved ? 'INDETERMINATE' : unsupported ? 'UNSUPPORTED' : 'REJECTED',
+      reasons: [error.code], tokenSha256};
   }
 }
