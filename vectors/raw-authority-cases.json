@@ -1,0 +1,194 @@
+{
+  "format": "original-signed-authority-history-cases-v1",
+  "cases": [
+    {
+      "id": "authority-original-signed-claims",
+      "stateAt": 120,
+      "knownAt": 205,
+      "records": [
+        "issuer-1",
+        "issuer-2",
+        "action-1",
+        "action-2"
+      ],
+      "expected": "BOUND_CLAIMS"
+    },
+    {
+      "id": "authority-retrospective-withdrawal",
+      "stateAt": 120,
+      "knownAt": 250,
+      "records": [
+        "issuer-1",
+        "issuer-2",
+        "issuer-3",
+        "issuer-4",
+        "action-1",
+        "action-2",
+        "action-3"
+      ],
+      "expected": "REJECTED",
+      "reason": "AUTHORITY_DENIED"
+    },
+    {
+      "id": "authority-missing-seal",
+      "stateAt": 120,
+      "knownAt": 205,
+      "records": [
+        "issuer-1",
+        "action-1",
+        "action-2"
+      ],
+      "expected": "INDETERMINATE",
+      "reason": "AUTHORITY_COVERAGE_MISSING"
+    },
+    {
+      "id": "authority-missing-action-stream",
+      "stateAt": 120,
+      "knownAt": 205,
+      "records": [
+        "issuer-1",
+        "issuer-2"
+      ],
+      "expected": "INDETERMINATE",
+      "reason": "AUTHORITY_SOURCE_MISSING"
+    },
+    {
+      "id": "authority-wrong-document-scope",
+      "stateAt": 120,
+      "knownAt": 205,
+      "records": [
+        "issuer-1",
+        "issuer-2",
+        "wrongdoc-1",
+        "wrongdoc-2"
+      ],
+      "expected": "INDETERMINATE",
+      "reason": "AUTHORITY_SOURCE_MISSING"
+    },
+    {
+      "id": "authority-stale-seal",
+      "stateAt": 120,
+      "knownAt": 205,
+      "records": [
+        "stale-1",
+        "stale-2",
+        "action-1",
+        "action-2"
+      ],
+      "expected": "INDETERMINATE",
+      "reason": "AUTHORITY_COVERAGE_MISSING"
+    },
+    {
+      "id": "authority-future-seal",
+      "stateAt": 120,
+      "knownAt": 205,
+      "records": [
+        "future-1",
+        "future-2",
+        "action-1",
+        "action-2"
+      ],
+      "expected": "INDETERMINATE",
+      "reason": "AUTHORITY_COVERAGE_MISSING"
+    },
+    {
+      "id": "authority-later-record-excluded-at-earlier-cutoff",
+      "stateAt": 120,
+      "knownAt": 205,
+      "records": [
+        "issuer-1",
+        "issuer-2",
+        "issuer-3",
+        "issuer-4",
+        "action-1",
+        "action-2"
+      ],
+      "expected": "BOUND_CLAIMS"
+    },
+    {
+      "id": "authority-unknown-claim",
+      "stateAt": 120,
+      "knownAt": 205,
+      "records": [
+        "unknown-1",
+        "unknown-2",
+        "action-1",
+        "action-2"
+      ],
+      "expected": "INDETERMINATE",
+      "reason": "AUTHORITY_UNKNOWN"
+    },
+    {
+      "id": "authority-sealed-without-event",
+      "stateAt": 120,
+      "knownAt": 205,
+      "records": [
+        "empty-1",
+        "action-1",
+        "action-2"
+      ],
+      "expected": "INDETERMINATE",
+      "reason": "AUTHORITY_DECISION_MISSING"
+    },
+    {
+      "id": "authority-wrong-key",
+      "stateAt": 120,
+      "knownAt": 205,
+      "records": [
+        "issuer-1",
+        "issuer-2",
+        "rogue-1",
+        "rogue-2"
+      ],
+      "error": "AUTHORITY_SIGNATURE"
+    },
+    {
+      "id": "authority-signature-corrupted",
+      "stateAt": 120,
+      "knownAt": 205,
+      "records": [
+        "flipped-issuer-1",
+        "issuer-2",
+        "action-1",
+        "action-2"
+      ],
+      "error": "AUTHORITY_SIGNATURE"
+    },
+    {
+      "id": "authority-signed-broken-link",
+      "stateAt": 120,
+      "knownAt": 205,
+      "records": [
+        "issuer-1",
+        "broken-2",
+        "action-1",
+        "action-2"
+      ],
+      "error": "AUTHORITY_CHAIN"
+    },
+    {
+      "id": "authority-signed-sequence-gap",
+      "stateAt": 120,
+      "knownAt": 205,
+      "records": [
+        "issuer-1",
+        "gap-2",
+        "action-1",
+        "action-2"
+      ],
+      "error": "AUTHORITY_CHAIN"
+    },
+    {
+      "id": "authority-duplicate-json-key",
+      "stateAt": 120,
+      "knownAt": 205,
+      "records": [
+        "duplicate-issuer-1",
+        "issuer-2",
+        "action-1",
+        "action-2"
+      ],
+      "error": "AUTHORITY_ENCODING"
+    }
+  ]
+}

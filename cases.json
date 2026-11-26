@@ -19,6 +19,21 @@
     {"id":"issuer-appointment-withdrawn","expected":"REJECTED","component":"history"},
     {"id":"conflicting-status-history","expected":"REJECTED","component":"history"},
     {"id":"future-only-history","expected":"INDETERMINATE","component":"history"},
-    {"id":"no-knowledge-closure","expected":"INDETERMINATE","component":"history"}
+    {"id":"no-knowledge-closure","expected":"INDETERMINATE","component":"history"},
+    {"id":"authority-original-signed-claims","expected":"BOUND_CLAIMS","component":"raw-authority-history"},
+    {"id":"authority-retrospective-withdrawal","expected":"REJECTED","component":"raw-authority-history"},
+    {"id":"authority-missing-seal","expected":"INDETERMINATE","component":"raw-authority-history"},
+    {"id":"authority-missing-action-stream","expected":"INDETERMINATE","component":"raw-authority-history"},
+    {"id":"authority-wrong-document-scope","expected":"INDETERMINATE","component":"raw-authority-history"},
+    {"id":"authority-stale-seal","expected":"INDETERMINATE","component":"raw-authority-history"},
+    {"id":"authority-future-seal","expected":"INDETERMINATE","component":"raw-authority-history"},
+    {"id":"authority-later-record-excluded-at-earlier-cutoff","expected":"BOUND_CLAIMS","component":"raw-authority-history"},
+    {"id":"authority-unknown-claim","expected":"INDETERMINATE","component":"raw-authority-history"},
+    {"id":"authority-sealed-without-event","expected":"INDETERMINATE","component":"raw-authority-history"},
+    {"id":"authority-wrong-key","expected":"AUTHORITY_SIGNATURE","component":"raw-authority-history"},
+    {"id":"authority-signature-corrupted","expected":"AUTHORITY_SIGNATURE","component":"raw-authority-history"},
+    {"id":"authority-signed-broken-link","expected":"AUTHORITY_CHAIN","component":"raw-authority-history"},
+    {"id":"authority-signed-sequence-gap","expected":"AUTHORITY_CHAIN","component":"raw-authority-history"},
+    {"id":"authority-duplicate-json-key","expected":"AUTHORITY_ENCODING","component":"raw-authority-history"}
   ]
 }

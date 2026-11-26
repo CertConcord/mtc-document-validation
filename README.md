@@ -10,6 +10,8 @@ The [history vectors](vectors/history.json) constrain the reference decision ove
 
 This repository can be reviewed and used independently of the CertConcord framework. It does not require the framework's authority hierarchy, operation objects or deployment. The framework selects this work through a pinned dependency and adds its own integration policy.
 
+The [original signed authority corpus](vectors/raw-authority-bytes.json) and [cases](vectors/raw-authority-cases.json) constrain a bounded [authority-history reference](reference/raw-authority-history.mjs). It checks exact source-signed appointment and document-action statements, source sequence links, claimed knowledge cutoffs and the exact document hash. `BOUND_CLAIMS` authenticates only those source claims and their internal binding. The application must independently admit each source and establish trustworthy time, actual source completeness, signer-to-document binding and succession before using them as historical facts or returning document validity.
+
 Run with Node.js 24.15 or later:
 
     npm run check
