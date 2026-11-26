@@ -1,5 +1,5 @@
 {
-  "reviewDate": "2026-10-25",
+  "reviewDate": "2026-11-26",
   "sources": [
     {
       "id": "mtc",
@@ -27,6 +27,24 @@
       "url": "https://www.rfc-editor.org/rfc/rfc3161.txt",
       "sha256": "39fd17644ff2d654bc83814a78b1c5b5e7517f496741f34ead5064943eb98240",
       "bytes": 54585
+    },
+    {
+      "id": "rfc5035",
+      "url": "https://www.rfc-editor.org/rfc/rfc5035.txt",
+      "sha256": "7c4a793911463367bd777e6d6104e52ec709f0c553da237cdf6782ee49b6d32b",
+      "bytes": 32674
+    },
+    {
+      "id": "rfc5652",
+      "url": "https://www.rfc-editor.org/rfc/rfc5652.txt",
+      "sha256": "dbd209ae7844031f51722c4d9e2d1fa3fff3081319851d581f914f5f0147f918",
+      "bytes": 126813
+    },
+    {
+      "id": "rfc5816",
+      "url": "https://www.rfc-editor.org/rfc/rfc5816.txt",
+      "sha256": "9a3eba6ecf14afc7820c51034a608d54d188344a43e9189b0e023d4a6a98f649",
+      "bytes": 10216
     },
     {
       "id": "rfc4998",

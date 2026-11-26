@@ -8,6 +8,8 @@ Long-term validation and preservation requirements for documents signed using Me
 
 This repository can be reviewed and used independently of the CertConcord framework. It does not require the framework's authority hierarchy, operation objects or deployment. The framework selects this work through a pinned dependency and adds its own integration policy.
 
+The [frozen timestamp corpus](vectors/raw-timestamp-der.json) and [positive and negative cases](vectors/raw-timestamp-cases.json) constrain a bounded [timestamp reference](reference/raw-timestamp.mjs). It contains original DER records and exact covered bytes, and verifies a signed TSA claim about those bytes, including CMS attributes, ESS certificate identity and the original request when retained. `SIGNED_CLAIM` does not establish historical TSA status, clock reliability, signature coverage, full preservation continuity or document validity; those require independent application evidence.
+
 Run with Node.js 24.15 or later:
 
     npm run check
