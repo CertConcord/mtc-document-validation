@@ -1,5 +1,5 @@
 {
-  "reviewDate": "2026-10-25",
+  "reviewDate": "2026-11-26",
   "sources": [
     {
       "id": "mtc",
@@ -7,6 +7,13 @@
       "sha256": "adb411d371dc3474d7cd8c6fc3555bba3e4d6f7b1333cbaa7b0bf86c8925ca74",
       "bytes": 234288,
       "retrievedAt": "2026-10-20T21:12:29.223Z"
+    },
+    {
+      "id": "mtcRevision08",
+      "url": "https://www.ietf.org/archive/id/draft-ietf-plants-merkle-tree-certs-08.txt",
+      "sha256": "fe50c3576e3f6f6891e43324a0dc16aa6ca56869ae5a6b9c94051ebd0895b9d1",
+      "bytes": 232748,
+      "retrievedAt": "2026-11-26T21:10:12.941810Z"
     },
     {
       "id": "mtcEditor",
@@ -21,6 +28,13 @@
       "sha256": "031f5603786593ab12a3ba1e1c039ce00c20e105751f76e4e4b5bcd4b219e177",
       "bytes": 60331,
       "retrievedAt": "2026-10-25T05:24:08.9594438Z"
+    },
+    {
+      "id": "mtcDeploymentUseCases01",
+      "url": "https://www.ietf.org/archive/id/draft-ietf-plants-mtc-deploy-use-cases-01.txt",
+      "sha256": "cd81178e04afeb4e64d26c4523d840c9d29f5ec2564b7c99fc72d859fd858bd3",
+      "bytes": 37977,
+      "retrievedAt": "2026-11-26T21:10:13.040111Z"
     },
     {
       "id": "rfc3161",
@@ -70,8 +84,9 @@
     }
   ],
   "reviewNotes": [
-    "MTC revision 07 was published on 7 October 2026 as an active Internet-Draft, not an RFC. Its assigned OIDs change certificate bytes; preserved evidence requires its original exact verifier.",
+    "Selected MTC revision 07 is a published Internet-Draft, not an RFC. Revision 08 was published on 2 November 2026; its own change log states that revision 07 and 08 have compatible wire formats. Revision 08 is recorded for comparison, not silently selected for preserved evidence.",
+    "Revision 07 assigned PKIX OIDs after revision 06 placeholders. Existing signed bytes must not be rewritten merely because a newer draft is published.",
     "The retained mtcEditor snapshot is a historical comparison, not the latest published baseline.",
-    "The deployment-use-cases selection is now the informational WG draft-00 published on 23 October 2026. Its body and references are unchanged from individual draft-gray-plants-mtc-deploy-use-cases-01; the existing archival minimum and post-retirement access obligations remain the starting point."
+    "The selected deployment-use-cases source remains informational WG draft-00. Revision 01 was published on 2 November 2026; its section 3.5.5 replaces draft-00's explicit all-published-heads validity floor and separate-infrastructure requirement with general archival-plan guidance. The earlier numeric floor requires independent application-profile selection when reasoning from revision 01."
   ]
 }
