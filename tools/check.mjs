@@ -183,6 +183,49 @@ for(const [id,item] of Object.entries(mtcMultileaf.checkpoints)){
 assert.notEqual(mtcMultileaf.selectedSubtree.rootSha256,
   mtcMultileaf.reference.rootSha256);
 assert(/^(?:[a-f0-9]{64})+$/.test(mtcMultileaf.selectedSubtree.proofHex));
+const mtcLogConsistency=json('vectors/raw-mtc-log-consistency.json');
+assert.equal(mtcLogConsistency.format,'frozen-original-rfc9162-mtc-log-consistency-v1');
+assert.deepEqual(json('cases.json').cases.filter(x=>x.component==='raw-mtc-log-consistency')
+  .map(x=>[x.id,x.expected]),mtcLogConsistency.cases.map(x=>[x.id,x.expected]));
+for(const item of mtcLogConsistency.leafInputs){
+  const raw=Buffer.from(item.base64,'base64');
+  assert.equal(raw.toString('base64'),item.base64,item.id);
+  assert.equal(raw.length,item.bytes,item.id);
+  assert.equal(createHash('sha256').update(Buffer.concat([Buffer.from([0]),raw]))
+    .digest('hex'),item.leafSha256,item.id);
+}
+for(const item of mtcLogConsistency.cases){
+  for(const field of ['firstRootHex','secondRootHex'])
+    assert(/^[a-f0-9]{64}$/.test(item[field]),item.id);
+  assert(/^(?:[a-f0-9]{2})*$/.test(item.proofHex),item.id);
+}
+const mtcLater=json('vectors/raw-mtc-later-checkpoint.json');
+const mtcLaterCases=json('vectors/raw-mtc-later-checkpoint-cases.json');
+assert.equal(mtcLater.format,'frozen-original-mtc07-later-checkpoint-corpus-v1');
+assert.equal(mtcLaterCases.format,'original-mtc07-later-checkpoint-cases-v1');
+assert.deepEqual(json('cases.json').cases.filter(x=>x.component==='raw-mtc-later-checkpoint')
+  .map(x=>[x.id,x.expected]),mtcLaterCases.cases.map(x=>[x.id,x.expected]));
+checkRelativeBytes(mtcLater.certificate,'later certificate');
+checkRelativeBytes(mtcLater.publication,'later publication');
+assert.equal(mtcLater.policy.landmarkPublicationSha256,
+  mtcLater.publication.sha256);
+for(const entry of mtcLater.logEntries){
+  checkRelativeBytes(entry,entry.id);
+  assert.equal(createHash('sha256').update(Buffer.concat([Buffer.from([0]),
+    Buffer.from(entry.base64,'base64')])).digest('hex'),entry.leafSha256,entry.id);
+}
+for(const [id,item] of Object.entries(mtcLater.checkpoints)){
+  checkRelativeBytes(item.message,`${id}: message`);
+  checkRelativeBytes(item.signature,`${id}: signature`);
+}
+for(const [id,hex] of Object.entries(mtcLater.logConsistency))
+  assert(/^(?:[a-f0-9]{64})+$/.test(hex),id);
+for(const vector of mtcLaterCases.cases){
+  for(const item of vector.signatures){
+    assert(Object.hasOwn(mtcLater.checkpoints,item.key),vector.id);
+    if(item.proof)assert(Object.hasOwn(mtcLater.logConsistency,item.proof),vector.id);
+  }
+}
 for(const s of json('sources.json').sources){assert(s.url.startsWith('https://'));assert(/^[a-f0-9]{64}$/.test(s.sha256));}
 function walk(dir=''){for(const e of readdirSync(join(root,dir),{withFileTypes:true})){if(['.git','.runtime','node_modules'].includes(e.name))continue;const p=join(dir,e.name);if(e.isDirectory())walk(p);else{const t=readFileSync(join(root,p),'utf8');assert(!/\p{Script=Han}/u.test(t),p);assert(!/-----BEGIN (?:RSA |EC )?PRIVATE KEY-----/.test(t),p);assert(!/github_pat_[A-Za-z0-9_]{40,}|gh[pousr]_[A-Za-z0-9]{30,}/.test(t),p);}}}
 walk();console.log('Draft sources, cases and publication content verified');
