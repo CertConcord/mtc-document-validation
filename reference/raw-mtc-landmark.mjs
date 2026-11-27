@@ -24,8 +24,10 @@ export function parseMtcLandmarkPublication(bytes, admittedAt) {
     const fields = lines[i].split(' ');
     if (fields.length !== 2 || !fields.every(decimal)) bad();
     const size = BigInt(fields[0]), expiration = BigInt(fields[1]);
-    if (size > maximum) bad();
     const number = latest - BigInt(i - 1);
+    // Every earlier landmark had a strictly smaller integral tree size;
+    // this necessary bound survives a publication that omits older rows.
+    if (size > maximum || size < number) bad();
     if (number === 0n ? (size !== 0n || expiration !== 0n) : size === 0n)
       bad();
     if (rows.length && (size >= rows.at(-1).treeSize ||

@@ -32,8 +32,9 @@ function parsedCheckpoint(message, cosignerName, logOrigin) {
 }
 
 // The caller must obtain admitted from an independent CA/cosigner policy.
-// Directly cosigned reference checkpoints are this first raw profile; a
-// cosigner on a later checkpoint needs a separately verified consistency edge.
+// Only signatures with independently admitted IDs participate in the quorum.
+// Unadmitted extra records cannot add a role or veto a complete admitted set.
+// A cosigner on a later checkpoint needs a separately verified consistency edge.
 export function verifyMtcReferenceCheckpoint({signatures, admitted, logOrigin,
   minimumTreeSize}) {
   if (!Array.isArray(signatures) || !admitted ||
@@ -45,13 +46,14 @@ export function verifyMtcReferenceCheckpoint({signatures, admitted, logOrigin,
   const seen = new Set(), roles = new Set(), parsedSignatures = [];
   let reference = null;
   for (const item of signatures) {
-    if (!item || typeof item.idHex !== 'string' || seen.has(item.idHex) ||
-        !Buffer.isBuffer(item.message) || !Buffer.isBuffer(item.signature) ||
-        item.signature.length !== 64)
+    if (!item || typeof item.idHex !== 'string')
+      fail('MTC_CHECKPOINT_FORMAT');
+    const cosigner = admitted.cosigners.get(item.idHex);
+    if (!cosigner) continue;
+    if (seen.has(item.idHex) || !Buffer.isBuffer(item.message) ||
+        !Buffer.isBuffer(item.signature) || item.signature.length !== 64)
       fail('MTC_CHECKPOINT_FORMAT');
     seen.add(item.idHex);
-    const cosigner = admitted.cosigners.get(item.idHex);
-    if (!cosigner) fail('MTC_CHECKPOINT_POLICY');
     const parsed = parsedCheckpoint(item.message, cosigner.name, logOrigin);
     if (!verify(null, item.message, cosigner.key, item.signature))
       fail('MTC_CHECKPOINT_SIGNATURE');

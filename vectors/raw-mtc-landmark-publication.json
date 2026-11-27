@@ -120,6 +120,29 @@
       "sha256": "4dc4fb1131e487c5e8e656ac3e9b17a2b093ef77876f187c018edb971208b0d4",
       "admittedAt": "150",
       "expected": "MTC_LANDMARK_FORMAT"
+    },
+    {
+      "id": "publication-omitted-older-valid",
+      "rawBase64": "NQo1IDMwMAo0IDEwMAo=",
+      "sha256": "69e549391fcc5980d50d5d6990a6ff9eace0371202d10d709bca89d22b7b993b",
+      "admittedAt": "150",
+      "expected": "PARSED",
+      "latest": 5,
+      "rowCount": 2
+    },
+    {
+      "id": "publication-omitted-older-latest-size-short",
+      "rawBase64": "NQo0IDMwMAozIDEwMAo=",
+      "sha256": "083a279d66dccd625069c08910d9cb01341cc00e9cee2c3f3e1a1e059fcfc34f",
+      "admittedAt": "150",
+      "expected": "MTC_LANDMARK_FORMAT"
+    },
+    {
+      "id": "publication-omitted-older-expired-size-short",
+      "rawBase64": "NQo1IDMwMAozIDEwMAo=",
+      "sha256": "b9e1809e8eed1bee23eda150a9c733f2d5987ef3ef9c0593a6b034f56a3375a1",
+      "admittedAt": "150",
+      "expected": "MTC_LANDMARK_FORMAT"
     }
   ],
   "selectionCases": [
@@ -206,6 +229,23 @@
       "id": "landmark-index-over-limit",
       "publication": "publication-two-active",
       "index": 281474976710656,
+      "expected": "MTC_LANDMARK_RANGE"
+    },
+    {
+      "id": "landmark-omitted-older-covered",
+      "publication": "publication-omitted-older-valid",
+      "index": 4,
+      "expected": "SELECTED",
+      "landmarkNumber": 5,
+      "subtree": {
+        "start": 4,
+        "end": 5
+      }
+    },
+    {
+      "id": "landmark-omitted-older-expired-index",
+      "publication": "publication-omitted-older-valid",
+      "index": 3,
       "expected": "MTC_LANDMARK_RANGE"
     }
   ]

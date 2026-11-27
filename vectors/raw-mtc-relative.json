@@ -111,8 +111,22 @@
         "bytes": 64,
         "sha256": "43f1070271262edc49471a1f3f3da9dc8fb02f8b5508479a72ab192f86f3f747"
       }
+    },
+    "observer": {
+      "idHex": "0104",
+      "message": {
+        "base64": "c3VidHJlZS92MQoAE29pZC8xLjMuNi4xLjQuMS4xLjQAAAAAahilCxdvaWQvMS4zLjYuMS40LjEuMS4yLjAuMQAAAAAAAAAAAAAAAAAAAAEut1twxiovRaCXc6i3TXsWSVm8jeII2OgSDxuL5Wptbw==",
+        "bytes": 112,
+        "sha256": "8f07576c44c4df8810c14a62b59faeb8d3a56e85c5318dd12d6df13699f585b8"
+      },
+      "signature": {
+        "base64": "pe9JKHPDmspAhgtZz+LCM6ra5zbJiPANUoNGwnP7HZhiBJE333ujX1mYnxcT+szm94juxVXMxMEYafi2sMB+DA==",
+        "bytes": 64,
+        "sha256": "fca753d540efd2f4cbf01a7caaed2869464a75975f1255cfd7265d5e70e15482"
+      }
     }
   },
   "subtreeProofHex": "",
-  "expectedLeafSha256": "2eb75b70c62a2f45a09773a8b74d7b164959bc8de208d8e8120f1b8be56a6d6f"
+  "expectedLeafSha256": "2eb75b70c62a2f45a09773a8b74d7b164959bc8de208d8e8120f1b8be56a6d6f",
+  "unadmittedObserverSpkiBase64": "MCowBQYDK2VwAyEA+dOA+gYIgRkqdBLtN55Rlv5PQxgMfMy+FLeJJYKxIOw="
 }

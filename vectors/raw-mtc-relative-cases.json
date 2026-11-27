@@ -9,6 +9,8 @@
     {"id":"relative-archive-claims-new-watermark","minimumTrustedTreeSize":"2","expected":"MTC_CHECKPOINT_SIZE"},
     {"id":"relative-missing-ca","checkpointKeys":["mirror"],"expected":"MTC_CHECKPOINT_QUORUM"},
     {"id":"relative-missing-mirror","checkpointKeys":["ca"],"expected":"MTC_CHECKPOINT_QUORUM"},
+    {"id":"relative-unadmitted-observer-ignored","checkpointKeys":["ca","mirror","observer"],"expected":"RELATIVE_ISSUANCE_BOUND"},
+    {"id":"relative-unadmitted-observer-cannot-certify","checkpointKeys":["mirror","observer"],"expected":"MTC_CHECKPOINT_QUORUM"},
     {"id":"relative-wrong-log-origin","checkpointKeys":["caWrongOrigin","mirror"],"expected":"MTC_CHECKPOINT_ORIGIN"},
     {"id":"relative-zero-checkpoint-timestamp","checkpointKeys":["caZeroTimestamp","mirror"],"expected":"MTC_CHECKPOINT_FORMAT"},
     {"id":"relative-cosigner-wrong-root","checkpointKeys":["ca","mirrorWrongRoot"],"expected":"MTC_CHECKPOINT_MISMATCH"},

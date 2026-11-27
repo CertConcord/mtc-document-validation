@@ -161,6 +161,28 @@ for(const v of mtcRelativeCases.cases){
   for(const key of v.checkpointKeys??['ca','mirror'])
     assert(Object.hasOwn(mtcRelative.checkpoints,key),v.id);
 }
+const mtcMultileaf=json('vectors/raw-mtc-relative-multileaf.json');
+const mtcMultileafCases=json('vectors/raw-mtc-relative-multileaf-cases.json');
+assert.equal(mtcMultileaf.format,'frozen-original-mtc07-relative-multileaf-direct-v1');
+assert.equal(mtcMultileafCases.format,'original-mtc07-relative-multileaf-direct-cases-v1');
+assert.deepEqual(json('cases.json').cases.filter(x=>x.component==='raw-mtc-relative-multileaf')
+  .map(x=>[x.id,x.expected]),mtcMultileafCases.cases.map(x=>[x.id,x.expected]));
+checkRelativeBytes(mtcMultileaf.certificate,'multileaf certificate');
+checkRelativeBytes(mtcMultileaf.publication,'multileaf publication');
+assert.equal(mtcMultileaf.policy.landmarkPublicationSha256,
+  mtcMultileaf.publication.sha256);
+for(const entry of mtcMultileaf.logEntries){
+  checkRelativeBytes(entry,entry.id);
+  assert.equal(createHash('sha256').update(Buffer.concat([Buffer.from([0]),
+    Buffer.from(entry.base64,'base64')])).digest('hex'),entry.leafSha256,entry.id);
+}
+for(const [id,item] of Object.entries(mtcMultileaf.checkpoints)){
+  checkRelativeBytes(item.message,`${id}: message`);
+  checkRelativeBytes(item.signature,`${id}: signature`);
+}
+assert.notEqual(mtcMultileaf.selectedSubtree.rootSha256,
+  mtcMultileaf.reference.rootSha256);
+assert(/^(?:[a-f0-9]{64})+$/.test(mtcMultileaf.selectedSubtree.proofHex));
 for(const s of json('sources.json').sources){assert(s.url.startsWith('https://'));assert(/^[a-f0-9]{64}$/.test(s.sha256));}
 function walk(dir=''){for(const e of readdirSync(join(root,dir),{withFileTypes:true})){if(['.git','.runtime','node_modules'].includes(e.name))continue;const p=join(dir,e.name);if(e.isDirectory())walk(p);else{const t=readFileSync(join(root,p),'utf8');assert(!/\p{Script=Han}/u.test(t),p);assert(!/-----BEGIN (?:RSA |EC )?PRIVATE KEY-----/.test(t),p);assert(!/github_pat_[A-Za-z0-9_]{40,}|gh[pousr]_[A-Za-z0-9]{30,}/.test(t),p);}}}
 walk();console.log('Draft sources, cases and publication content verified');

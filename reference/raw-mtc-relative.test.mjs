@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import {createHash} from 'node:crypto';
+import {createHash,createPublicKey,verify} from 'node:crypto';
 import {readFileSync} from 'node:fs';
 import {assessRawMtcRelativeIssuance} from './raw-mtc-relative.mjs';
 
@@ -10,6 +10,15 @@ const vectors = JSON.parse(readFileSync(new URL('../vectors/raw-mtc-relative-cas
   import.meta.url)));
 const decode = item => Buffer.from(item.base64, 'base64');
 const sha = bytes => createHash('sha256').update(bytes).digest('hex');
+
+test('unadmitted observer has an original valid signature but no policy role',()=>{
+  const observer=corpus.checkpoints.observer;
+  const key=createPublicKey({key:Buffer.from(corpus.unadmittedObserverSpkiBase64,'base64'),
+    format:'der',type:'spki'});
+  assert.equal(verify(null,decode(observer.message),key,
+    decode(observer.signature)),true);
+  assert.equal(corpus.policy.cosigners.some(x=>x.idHex===observer.idHex),false);
+});
 
 for (const vector of vectors.cases) test(vector.id, () => {
   const policy = structuredClone(corpus.policy);

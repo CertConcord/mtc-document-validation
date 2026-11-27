@@ -1,0 +1,12 @@
+{
+  "format": "original-mtc07-relative-multileaf-direct-cases-v1",
+  "cases": [
+    {"id":"relative-multileaf-direct-signed-root","expected":"RELATIVE_ISSUANCE_BOUND"},
+    {"id":"relative-multileaf-inclusion-node-mutant","mutateCertificatePath":true,"expected":"MTC_CONSISTENCY"},
+    {"id":"relative-multileaf-consistency-node-mutant","mutateSubtreeProof":true,"expected":"MTC_CONSISTENCY"},
+    {"id":"relative-multileaf-mirror-missing","omitMirror":true,"expected":"MTC_CHECKPOINT_QUORUM"},
+    {"id":"relative-multileaf-publication-byte-mismatch","mutatePublication":true,"expected":"MTC_LANDMARK_SOURCE"},
+    {"id":"relative-multileaf-watermark-over-reference","minimumTrustedTreeSize":"6","expected":"MTC_CHECKPOINT_SIZE"},
+    {"id":"relative-multileaf-wrong-log-scope","landmarkLogOrigin":"1.2.0.2","expected":"MTC_LANDMARK_SCOPE"}
+  ]
+}
