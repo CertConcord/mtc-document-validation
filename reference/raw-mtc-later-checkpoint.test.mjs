@@ -1,6 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {createHash,createPublicKey,verify} from 'node:crypto';
+import {types} from 'node:util';
 import {readFileSync} from 'node:fs';
 import {assessRawMtcRelativeIssuance} from './raw-mtc-relative.mjs';
 import {parseRawMtcCertificateCandidate} from './raw-mtc-issuance.mjs';
@@ -41,6 +42,12 @@ const spoofNativeBytes=(original,mode,target)=>{
   assert.deepEqual(Buffer.from(native),converted);
   assert.notDeepEqual(Uint8Array.prototype.slice.call(native),converted);
   return native;
+};
+const fakeBufferPrototype=()=>{
+  const fake=Object.create(Buffer.prototype);
+  assert.equal(Buffer.isBuffer(fake),true);
+  assert.equal(types.isUint8Array(fake),false);
+  return fake;
 };
 
 test('original seven-entry log, growth paths and signed controls',()=>{
@@ -100,6 +107,8 @@ for(const vector of vectors.cases)test(vector.id,()=>{
   if(vector.nativeSpoof?.target==='referenceRoot')
     referenceCheckpoint.rootHash=spoofNativeBytes(root,
       vector.nativeSpoof.mode,'referenceRoot');
+  if(vector.fakeBufferPrototype==='referenceRoot')
+    referenceCheckpoint.rootHash=fakeBufferPrototype();
   const mutationWitnesses=[],messageReads=[];
   const checkpointSignatures=vector.signatures.map(spec=>{
     const frozen=corpus.checkpoints[spec.key];
@@ -144,6 +153,8 @@ for(const vector of vectors.cases)test(vector.id,()=>{
       const target=vector.nativeSpoof.target;
       item[target]=spoofNativeBytes(item[target],vector.nativeSpoof.mode,target);
     }
+    if(vector.fakeBufferPrototypeKey===spec.key)
+      item[vector.fakeBufferPrototype]=fakeBufferPrototype();
     return item;
   });
   const subtreeConsistencyProof=Buffer.from(corpus.selectedSubtree.proofHex,'hex');

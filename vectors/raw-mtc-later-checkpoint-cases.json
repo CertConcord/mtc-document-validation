@@ -36,6 +36,10 @@
     {"id":"later-native-signature-short-converted-good","nativeSpoof":{"target":"signature","key":"mirrorLater7","mode":"native-short-converted-good"},"signatures":[{"key":"caReference5"},{"key":"mirrorLater7","proof":"fiveToSevenHex"}],"expected":"MTC_CHECKPOINT_FORMAT"},
     {"id":"later-native-proof-good-converted-bad","nativeSpoof":{"target":"consistencyProof","key":"mirrorLater7","mode":"native-good-converted-bad"},"signatures":[{"key":"caReference5"},{"key":"mirrorLater7","proof":"fiveToSevenHex"}],"expected":"RELATIVE_ISSUANCE_BOUND"},
     {"id":"later-native-proof-bad-converted-good","nativeSpoof":{"target":"consistencyProof","key":"mirrorLater7","mode":"native-bad-converted-good"},"signatures":[{"key":"caReference5"},{"key":"mirrorLater7","proof":"fiveToSevenHex"}],"expected":"MTC_LOG_CONSISTENCY"},
-    {"id":"later-native-proof-short-converted-good","nativeSpoof":{"target":"consistencyProof","key":"mirrorLater7","mode":"native-short-converted-good"},"signatures":[{"key":"caReference5"},{"key":"mirrorLater7","proof":"fiveToSevenHex"}],"expected":"MTC_LOG_CONSISTENCY"}
+    {"id":"later-native-proof-short-converted-good","nativeSpoof":{"target":"consistencyProof","key":"mirrorLater7","mode":"native-short-converted-good"},"signatures":[{"key":"caReference5"},{"key":"mirrorLater7","proof":"fiveToSevenHex"}],"expected":"MTC_LOG_CONSISTENCY"},
+    {"id":"later-fake-buffer-root-not-uint8","fakeBufferPrototype":"referenceRoot","signatures":[{"key":"caReference5"},{"key":"mirrorLater7","proof":"fiveToSevenHex"}],"expected":"MTC_CHECKPOINT_POLICY"},
+    {"id":"later-fake-buffer-message-not-uint8","fakeBufferPrototype":"message","fakeBufferPrototypeKey":"mirrorLater7","signatures":[{"key":"caReference5"},{"key":"mirrorLater7","proof":"fiveToSevenHex"}],"expected":"MTC_CHECKPOINT_FORMAT"},
+    {"id":"later-fake-buffer-signature-not-uint8","fakeBufferPrototype":"signature","fakeBufferPrototypeKey":"mirrorLater7","signatures":[{"key":"caReference5"},{"key":"mirrorLater7","proof":"fiveToSevenHex"}],"expected":"MTC_CHECKPOINT_FORMAT"},
+    {"id":"later-fake-buffer-proof-not-uint8","fakeBufferPrototype":"consistencyProof","fakeBufferPrototypeKey":"mirrorLater7","signatures":[{"key":"caReference5"},{"key":"mirrorLater7","proof":"fiveToSevenHex"}],"expected":"MTC_CHECKPOINT_FORMAT"}
   ]
 }

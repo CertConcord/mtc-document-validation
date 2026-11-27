@@ -1,4 +1,5 @@
 import {verify} from 'node:crypto';
+import {types} from 'node:util';
 import {DerError} from './der.mjs';
 import {verifyMtcLogConsistencyProof} from './raw-mtc-log-consistency.mjs';
 
@@ -12,7 +13,7 @@ const getByteLength = Object.getOwnPropertyDescriptor(nativeArray, 'byteLength')
 // Buffer.from(object) may call an input's valueOf. Capture the actual typed
 // array extent, bypassing caller-visible length, buffer and conversion hooks.
 function nativeBytes(value, code) {
-  if (!Buffer.isBuffer(value)) fail(code);
+  if (!Buffer.isBuffer(value) || !types.isUint8Array(value)) fail(code);
   try {
     const backing = getBuffer.call(value);
     const offset = getByteOffset.call(value);
