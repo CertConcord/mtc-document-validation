@@ -2,6 +2,7 @@
   "format": "original-mtc07-active-subtree-admission-cases-v1",
   "cases": [
     {"id":"active-five-two-complete","publication":"fiveTwoActive","acceptedHeadNumber":2,"expected":"ACTIVE_SUBTREE_SET_BOUND"},
+    {"id":"active-five-equal-expiration-still-active","publication":"fiveTwoActive","acceptedHeadNumber":2,"evaluatedAt":"1830297600","freshThrough":"1830297601","expected":"ACTIVE_SUBTREE_SET_BOUND"},
     {"id":"active-five-one-entry-empty-side","publication":"fiveOneEntry","acceptedHeadNumber":1,"expected":"ACTIVE_SUBTREE_SET_BOUND"},
     {"id":"active-six-three-mixed-later","publication":"sixThreeActive","acceptedHeadNumber":3,"expected":"ACTIVE_SUBTREE_SET_BOUND"},
     {"id":"active-six-older-contiguous-suffix","publication":"sixThreeActive","evidenceSet":"fiveTwoActive","acceptedHeadNumber":2,"maxActiveLandmarksForLog":2,"expected":"ACTIVE_SUBTREE_SUFFIX_BOUND"},

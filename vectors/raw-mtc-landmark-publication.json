@@ -115,6 +115,24 @@
       "expected": "MTC_LANDMARK_FORMAT"
     },
     {
+      "id": "publication-intermediate-equal-expiration-active",
+      "rawBase64": "Mgo4IDMwMAo1IDE1MAowIDAK",
+      "sha256": "8648b9e79475ca6db7cadff4fe4f2020c753bc28aa68fe369112ec8debdea3b6",
+      "admittedAt": "150",
+      "expected": "PARSED",
+      "latest": 2,
+      "rowCount": 3
+    },
+    {
+      "id": "publication-latest-equal-expiration-active",
+      "rawBase64": "Mgo4IDE1MAo1IDEwMAo=",
+      "sha256": "88e5c102cf65462de7704753b7b1a80d6777c808da02bdf91e1c697f02f7b491",
+      "admittedAt": "150",
+      "expected": "PARSED",
+      "latest": 2,
+      "rowCount": 2
+    },
+    {
       "id": "publication-size-over-limit",
       "rawBase64": "MQoyODE0NzQ5NzY3MTA2NTYgMzAwCjAgMAo=",
       "sha256": "4dc4fb1131e487c5e8e656ac3e9b17a2b093ef77876f187c018edb971208b0d4",

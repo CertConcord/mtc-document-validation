@@ -32,7 +32,9 @@ export function parseMtcLandmarkPublication(bytes, admittedAt) {
       bad();
     if (rows.length && (size >= rows.at(-1).treeSize ||
         expiration > rows.at(-1).expiration)) bad();
-    if (i < lines.length - 1 ? expiration <= time : expiration >= time) bad();
+    // Section 6.4.3 requires an expiration *before* current time: equality
+    // is active in a non-final row and cannot be the expired predecessor.
+    if (i < lines.length - 1 ? expiration < time : expiration >= time) bad();
     rows.push({number: Number(number), treeSize: Number(size), expiration});
   }
   return {latest: Number(latest), rows,
