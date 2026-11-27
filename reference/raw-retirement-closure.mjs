@@ -196,7 +196,7 @@ export function assessRawRetirementClosure({policy,publication,manifest,retrieve
       reasons.push({id,code:'RETIREMENT_BYTES_MISMATCH'});
       continue;
     }
-    if(!found.receipt){
+    if(found.receipt==null){
       reasons.push({id,code:'RETIREMENT_RECEIPT_MISSING'});
       continue;
     }

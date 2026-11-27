@@ -186,6 +186,33 @@ for(const [name,bundle] of Object.entries(retirement.bundles)){
 }
 for(const [id,item] of Object.entries(retirement.controls))
   checkSigned(item,`control: ${id}`);
+const coherent=json('vectors/coherent-document-evidence.json');
+assert.equal(coherent.format,'original-coherent-document-evidence-v1');
+assert.deepEqual(json('cases.json').cases.filter(x=>x.component==='coherent-document-evidence')
+  .map(x=>[x.id,x.expected]),coherent.cases.map(x=>[x.id,x.expected]));
+const coherentCore=coherent.original_core;
+const coherentRetirement=coherent.retirement;
+assert.equal(coherentCore.objects.document.sha256,
+  coherent.authority.documentSha256);
+assert.equal(coherentCore.objects.document.sha256,
+  coherentRetirement.originals.document.sha256);
+assert.equal(coherentCore.objects.signature.sha256,
+  coherent.timestamp.coveredSignatureSha256);
+assert.equal(coherentCore.objects.signature.sha256,
+  coherentRetirement.originals['document-signature'].sha256);
+assert.equal(coherent.ers.objects.document.evidence.sha256,
+  coherentRetirement.originals['preservation-document'].sha256);
+assert.equal(coherent.ers.objects.signature.evidence.sha256,
+  coherentRetirement.originals['preservation-signature'].sha256);
+const coherentAuthorityBytes=Buffer.concat(['issuer-allow','issuer-seal',
+  'action-allow','action-seal'].flatMap(id=>[
+    Buffer.from(coherent.authority.objects[id].rawBase64,'base64'),
+    Buffer.from(coherent.authority.objects[id].signatureBase64,'base64')]));
+assert.equal(createHash('sha256').update(coherentAuthorityBytes).digest('hex'),
+  coherentRetirement.originals['authority-history'].sha256);
+assert.equal(coherentRetirement.result.itemCount,23);
+assert.equal(coherentRetirement.publication.entryIds.length,4);
+assert(!coherentRetirement.publication.entryIds.includes('action-deny'));
 const mtcVectors=json('vectors/raw-mtc-cases.json');
 const mtcDer=json('vectors/raw-mtc-der.json');
 assert.equal(mtcVectors.format,'original-mtc07-issuance-cases-v1');
