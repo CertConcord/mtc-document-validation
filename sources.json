@@ -49,6 +49,12 @@
       "bytes": 54585
     },
     {
+      "id": "rfc9162",
+      "url": "https://www.rfc-editor.org/rfc/rfc9162.txt",
+      "sha256": "a0e432ce7580c99fcc8faf0cf3f6191f9ce6b4864f949158e020d4ecb295081f",
+      "bytes": 128266
+    },
+    {
       "id": "rfc4810",
       "url": "https://www.rfc-editor.org/rfc/rfc4810.txt",
       "sha256": "f9a4f78cb35d2fb6ac849303cf76992b46db252d79ee195423f327bbd27d2dfa",

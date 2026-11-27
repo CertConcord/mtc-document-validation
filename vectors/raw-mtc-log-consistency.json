@@ -1,0 +1,193 @@
+{
+  "format": "frozen-original-rfc9162-mtc-log-consistency-v1",
+  "leafInputs": [
+    {
+      "id": "entry-0",
+      "base64": "b3JpZ2luYWwgTVRDIGxvZyBzYW1wbGUgZW50cnkgMA==",
+      "bytes": 31,
+      "leafSha256": "86c9c885efc3a009554d7be40a907a6758b7d6fc1060eb0b596040dd6adf3a2b"
+    },
+    {
+      "id": "entry-1",
+      "base64": "b3JpZ2luYWwgTVRDIGxvZyBzYW1wbGUgZW50cnkgMQ==",
+      "bytes": 31,
+      "leafSha256": "0f6c91ec235fec1206a9351333d2d605c12c53a8725f94b65f59cdf8db123b89"
+    },
+    {
+      "id": "entry-2",
+      "base64": "b3JpZ2luYWwgTVRDIGxvZyBzYW1wbGUgZW50cnkgMg==",
+      "bytes": 31,
+      "leafSha256": "8c70f61825f070da7a80e364bc54f73a59f69ead7fb3ecc5e2c1c5b53f0411fa"
+    },
+    {
+      "id": "entry-3",
+      "base64": "b3JpZ2luYWwgTVRDIGxvZyBzYW1wbGUgZW50cnkgMw==",
+      "bytes": 31,
+      "leafSha256": "997d449532893707845c00eab157f7025082dbe3759e23b2524794627c3ac6c8"
+    },
+    {
+      "id": "entry-4",
+      "base64": "b3JpZ2luYWwgTVRDIGxvZyBzYW1wbGUgZW50cnkgNA==",
+      "bytes": 31,
+      "leafSha256": "a1077288c43928471ecfface05e140af27663b00dd46ef857e5d8a1ebcd109bc"
+    },
+    {
+      "id": "entry-5",
+      "base64": "b3JpZ2luYWwgTVRDIGxvZyBzYW1wbGUgZW50cnkgNQ==",
+      "bytes": 31,
+      "leafSha256": "a8c627396ac657cd6113cd7eb7d88d7de7a208cc25d000250867d9c2cdaa471a"
+    },
+    {
+      "id": "entry-6",
+      "base64": "b3JpZ2luYWwgTVRDIGxvZyBzYW1wbGUgZW50cnkgNg==",
+      "bytes": 31,
+      "leafSha256": "8127d6e2a2b0c5987f3a5a3686fb818a183f1a38b86f87cb492aa3eb93922389"
+    }
+  ],
+  "cases": [
+    {
+      "id": "one-to-two",
+      "firstSize": 1,
+      "secondSize": 2,
+      "firstRootHex": "86c9c885efc3a009554d7be40a907a6758b7d6fc1060eb0b596040dd6adf3a2b",
+      "secondRootHex": "8d08a076efeb0d5a03566d2899245fe9282c6e7cc147f3a363b78081885145d3",
+      "proofHex": "0f6c91ec235fec1206a9351333d2d605c12c53a8725f94b65f59cdf8db123b89",
+      "expected": "VERIFIED"
+    },
+    {
+      "id": "three-to-seven-rfc-shape",
+      "firstSize": 3,
+      "secondSize": 7,
+      "firstRootHex": "818e682180e3e36949876bb229d27aa53f006af5b9eacf3f77a79c31bc040a24",
+      "secondRootHex": "fb71dba65c030a8614ace43b3baae22ace85a629bb9ce8cb6866091bfdeb3b8a",
+      "proofHex": "8c70f61825f070da7a80e364bc54f73a59f69ead7fb3ecc5e2c1c5b53f0411fa997d449532893707845c00eab157f7025082dbe3759e23b2524794627c3ac6c88d08a076efeb0d5a03566d2899245fe9282c6e7cc147f3a363b78081885145d3442812b41a143e5db4661b899304a51c6086a25d4e3952c4e428b4fb3ff593fa",
+      "expected": "VERIFIED"
+    },
+    {
+      "id": "four-to-seven-power-of-two",
+      "firstSize": 4,
+      "secondSize": 7,
+      "firstRootHex": "e5679b9d6eda47d50873e0e6ac65b7c326cbdea20eb270994b42d81d0b5a7268",
+      "secondRootHex": "fb71dba65c030a8614ace43b3baae22ace85a629bb9ce8cb6866091bfdeb3b8a",
+      "proofHex": "442812b41a143e5db4661b899304a51c6086a25d4e3952c4e428b4fb3ff593fa",
+      "expected": "VERIFIED"
+    },
+    {
+      "id": "five-to-seven-reference",
+      "firstSize": 5,
+      "secondSize": 7,
+      "firstRootHex": "584bb2f1edc6b7edea857dac98972ba20bb4a44d28fe03201b5f9e1d23cc270a",
+      "secondRootHex": "fb71dba65c030a8614ace43b3baae22ace85a629bb9ce8cb6866091bfdeb3b8a",
+      "proofHex": "a1077288c43928471ecfface05e140af27663b00dd46ef857e5d8a1ebcd109bca8c627396ac657cd6113cd7eb7d88d7de7a208cc25d000250867d9c2cdaa471a8127d6e2a2b0c5987f3a5a3686fb818a183f1a38b86f87cb492aa3eb93922389e5679b9d6eda47d50873e0e6ac65b7c326cbdea20eb270994b42d81d0b5a7268",
+      "expected": "VERIFIED"
+    },
+    {
+      "id": "six-to-seven-rfc-shape",
+      "firstSize": 6,
+      "secondSize": 7,
+      "firstRootHex": "7a077a09ce267af788b25afa22fa9fc442b9bfba74fd9f03f14c39d47a525029",
+      "secondRootHex": "fb71dba65c030a8614ace43b3baae22ace85a629bb9ce8cb6866091bfdeb3b8a",
+      "proofHex": "19d085d11f9020a1702476912de9f2e186c6424d6563fe3e62ae8b0139e3ab128127d6e2a2b0c5987f3a5a3686fb818a183f1a38b86f87cb492aa3eb93922389e5679b9d6eda47d50873e0e6ac65b7c326cbdea20eb270994b42d81d0b5a7268",
+      "expected": "VERIFIED"
+    },
+    {
+      "id": "first-root-mutant",
+      "firstSize": 5,
+      "secondSize": 7,
+      "firstRootHex": "084bb2f1edc6b7edea857dac98972ba20bb4a44d28fe03201b5f9e1d23cc270a",
+      "secondRootHex": "fb71dba65c030a8614ace43b3baae22ace85a629bb9ce8cb6866091bfdeb3b8a",
+      "proofHex": "a1077288c43928471ecfface05e140af27663b00dd46ef857e5d8a1ebcd109bca8c627396ac657cd6113cd7eb7d88d7de7a208cc25d000250867d9c2cdaa471a8127d6e2a2b0c5987f3a5a3686fb818a183f1a38b86f87cb492aa3eb93922389e5679b9d6eda47d50873e0e6ac65b7c326cbdea20eb270994b42d81d0b5a7268",
+      "expected": "MTC_LOG_CONSISTENCY"
+    },
+    {
+      "id": "second-root-mutant",
+      "firstSize": 5,
+      "secondSize": 7,
+      "firstRootHex": "584bb2f1edc6b7edea857dac98972ba20bb4a44d28fe03201b5f9e1d23cc270a",
+      "secondRootHex": "0b71dba65c030a8614ace43b3baae22ace85a629bb9ce8cb6866091bfdeb3b8a",
+      "proofHex": "a1077288c43928471ecfface05e140af27663b00dd46ef857e5d8a1ebcd109bca8c627396ac657cd6113cd7eb7d88d7de7a208cc25d000250867d9c2cdaa471a8127d6e2a2b0c5987f3a5a3686fb818a183f1a38b86f87cb492aa3eb93922389e5679b9d6eda47d50873e0e6ac65b7c326cbdea20eb270994b42d81d0b5a7268",
+      "expected": "MTC_LOG_CONSISTENCY"
+    },
+    {
+      "id": "proof-first-node-mutant",
+      "firstSize": 5,
+      "secondSize": 7,
+      "firstRootHex": "584bb2f1edc6b7edea857dac98972ba20bb4a44d28fe03201b5f9e1d23cc270a",
+      "secondRootHex": "fb71dba65c030a8614ace43b3baae22ace85a629bb9ce8cb6866091bfdeb3b8a",
+      "proofHex": "01077288c43928471ecfface05e140af27663b00dd46ef857e5d8a1ebcd109bca8c627396ac657cd6113cd7eb7d88d7de7a208cc25d000250867d9c2cdaa471a8127d6e2a2b0c5987f3a5a3686fb818a183f1a38b86f87cb492aa3eb93922389e5679b9d6eda47d50873e0e6ac65b7c326cbdea20eb270994b42d81d0b5a7268",
+      "expected": "MTC_LOG_CONSISTENCY"
+    },
+    {
+      "id": "proof-last-node-missing",
+      "firstSize": 5,
+      "secondSize": 7,
+      "firstRootHex": "584bb2f1edc6b7edea857dac98972ba20bb4a44d28fe03201b5f9e1d23cc270a",
+      "secondRootHex": "fb71dba65c030a8614ace43b3baae22ace85a629bb9ce8cb6866091bfdeb3b8a",
+      "proofHex": "a1077288c43928471ecfface05e140af27663b00dd46ef857e5d8a1ebcd109bca8c627396ac657cd6113cd7eb7d88d7de7a208cc25d000250867d9c2cdaa471a8127d6e2a2b0c5987f3a5a3686fb818a183f1a38b86f87cb492aa3eb93922389",
+      "expected": "MTC_LOG_CONSISTENCY"
+    },
+    {
+      "id": "proof-extra-node",
+      "firstSize": 5,
+      "secondSize": 7,
+      "firstRootHex": "584bb2f1edc6b7edea857dac98972ba20bb4a44d28fe03201b5f9e1d23cc270a",
+      "secondRootHex": "fb71dba65c030a8614ace43b3baae22ace85a629bb9ce8cb6866091bfdeb3b8a",
+      "proofHex": "a1077288c43928471ecfface05e140af27663b00dd46ef857e5d8a1ebcd109bca8c627396ac657cd6113cd7eb7d88d7de7a208cc25d000250867d9c2cdaa471a8127d6e2a2b0c5987f3a5a3686fb818a183f1a38b86f87cb492aa3eb93922389e5679b9d6eda47d50873e0e6ac65b7c326cbdea20eb270994b42d81d0b5a72680000000000000000000000000000000000000000000000000000000000000000",
+      "expected": "MTC_LOG_CONSISTENCY"
+    },
+    {
+      "id": "proof-empty",
+      "firstSize": 5,
+      "secondSize": 7,
+      "firstRootHex": "584bb2f1edc6b7edea857dac98972ba20bb4a44d28fe03201b5f9e1d23cc270a",
+      "secondRootHex": "fb71dba65c030a8614ace43b3baae22ace85a629bb9ce8cb6866091bfdeb3b8a",
+      "proofHex": "",
+      "expected": "MTC_LOG_CONSISTENCY"
+    },
+    {
+      "id": "proof-truncated-node",
+      "firstSize": 5,
+      "secondSize": 7,
+      "firstRootHex": "584bb2f1edc6b7edea857dac98972ba20bb4a44d28fe03201b5f9e1d23cc270a",
+      "secondRootHex": "fb71dba65c030a8614ace43b3baae22ace85a629bb9ce8cb6866091bfdeb3b8a",
+      "proofHex": "a1077288c43928471ecfface05e140af27663b00dd46ef857e5d8a1ebcd109bca8c627396ac657cd6113cd7eb7d88d7de7a208cc25d000250867d9c2cdaa471a8127d6e2a2b0c5987f3a5a3686fb818a183f1a38b86f87cb492aa3eb93922389e5679b9d6eda47d50873e0e6ac65b7c326cbdea20eb270994b42d81d0b5a72",
+      "expected": "MTC_LOG_CONSISTENCY"
+    },
+    {
+      "id": "sizes-reversed",
+      "firstSize": 7,
+      "secondSize": 5,
+      "firstRootHex": "584bb2f1edc6b7edea857dac98972ba20bb4a44d28fe03201b5f9e1d23cc270a",
+      "secondRootHex": "fb71dba65c030a8614ace43b3baae22ace85a629bb9ce8cb6866091bfdeb3b8a",
+      "proofHex": "a1077288c43928471ecfface05e140af27663b00dd46ef857e5d8a1ebcd109bca8c627396ac657cd6113cd7eb7d88d7de7a208cc25d000250867d9c2cdaa471a8127d6e2a2b0c5987f3a5a3686fb818a183f1a38b86f87cb492aa3eb93922389e5679b9d6eda47d50873e0e6ac65b7c326cbdea20eb270994b42d81d0b5a7268",
+      "expected": "MTC_LOG_CONSISTENCY"
+    },
+    {
+      "id": "sizes-equal",
+      "firstSize": 5,
+      "secondSize": 5,
+      "firstRootHex": "584bb2f1edc6b7edea857dac98972ba20bb4a44d28fe03201b5f9e1d23cc270a",
+      "secondRootHex": "fb71dba65c030a8614ace43b3baae22ace85a629bb9ce8cb6866091bfdeb3b8a",
+      "proofHex": "a1077288c43928471ecfface05e140af27663b00dd46ef857e5d8a1ebcd109bca8c627396ac657cd6113cd7eb7d88d7de7a208cc25d000250867d9c2cdaa471a8127d6e2a2b0c5987f3a5a3686fb818a183f1a38b86f87cb492aa3eb93922389e5679b9d6eda47d50873e0e6ac65b7c326cbdea20eb270994b42d81d0b5a7268",
+      "expected": "MTC_LOG_CONSISTENCY"
+    },
+    {
+      "id": "old-size-zero",
+      "firstSize": 0,
+      "secondSize": 7,
+      "firstRootHex": "584bb2f1edc6b7edea857dac98972ba20bb4a44d28fe03201b5f9e1d23cc270a",
+      "secondRootHex": "fb71dba65c030a8614ace43b3baae22ace85a629bb9ce8cb6866091bfdeb3b8a",
+      "proofHex": "a1077288c43928471ecfface05e140af27663b00dd46ef857e5d8a1ebcd109bca8c627396ac657cd6113cd7eb7d88d7de7a208cc25d000250867d9c2cdaa471a8127d6e2a2b0c5987f3a5a3686fb818a183f1a38b86f87cb492aa3eb93922389e5679b9d6eda47d50873e0e6ac65b7c326cbdea20eb270994b42d81d0b5a7268",
+      "expected": "MTC_LOG_CONSISTENCY"
+    },
+    {
+      "id": "new-size-over-log-limit",
+      "firstSize": 5,
+      "secondSize": 281474976710656,
+      "firstRootHex": "584bb2f1edc6b7edea857dac98972ba20bb4a44d28fe03201b5f9e1d23cc270a",
+      "secondRootHex": "fb71dba65c030a8614ace43b3baae22ace85a629bb9ce8cb6866091bfdeb3b8a",
+      "proofHex": "a1077288c43928471ecfface05e140af27663b00dd46ef857e5d8a1ebcd109bca8c627396ac657cd6113cd7eb7d88d7de7a208cc25d000250867d9c2cdaa471a8127d6e2a2b0c5987f3a5a3686fb818a183f1a38b86f87cb492aa3eb93922389e5679b9d6eda47d50873e0e6ac65b7c326cbdea20eb270994b42d81d0b5a7268",
+      "expected": "MTC_LOG_CONSISTENCY"
+    }
+  ]
+}

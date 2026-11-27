@@ -1,5 +1,6 @@
 import {verify} from 'node:crypto';
 import {DerError} from './der.mjs';
+import {verifyMtcLogConsistencyProof} from './raw-mtc-log-consistency.mjs';
 
 const label = Buffer.from('subtree/v1\n\0', 'ascii');
 const fail = code => { throw new DerError(code); };
@@ -32,43 +33,63 @@ function parsedCheckpoint(message, cosignerName, logOrigin) {
 }
 
 // The caller must obtain admitted from an independent CA/cosigner policy.
-// Only signatures with independently admitted IDs participate in the quorum.
-// Unadmitted extra records cannot add a role or veto a complete admitted set.
-// A cosigner on a later checkpoint needs a separately verified consistency edge.
-export function verifyMtcReferenceCheckpoint({signatures, admitted, logOrigin,
-  minimumTreeSize}) {
+// A supplied reference tuple is untrusted until every required cosigner's
+// signed direct checkpoint or signed later checkpoint plus RFC 9162 edge
+// binds it. When omitted, the first direct signature supplies that tuple.
+// Only independently admitted IDs participate; an unadmitted extra record
+// cannot add a role or veto the admitted quorum.
+export function verifyMtcReferenceCheckpoint({reference, signatures, admitted,
+  logOrigin, minimumTreeSize}) {
   if (!Array.isArray(signatures) || !admitted ||
       !(admitted.cosigners instanceof Map) ||
       !Array.isArray(admitted.requiredRoles) ||
       !Number.isSafeInteger(minimumTreeSize) || minimumTreeSize < 1 ||
-      minimumTreeSize >= 2 ** 48 || typeof logOrigin !== 'string')
+      minimumTreeSize >= 2 ** 48 || typeof logOrigin !== 'string' ||
+      (reference !== undefined && (!reference ||
+        !Number.isSafeInteger(reference.treeSize) ||
+        reference.treeSize < 1 || reference.treeSize >= 2 ** 48 ||
+        !Buffer.isBuffer(reference.rootHash) ||
+        reference.rootHash.length !== 32)))
     fail('MTC_CHECKPOINT_POLICY');
   const seen = new Set(), roles = new Set(), parsedSignatures = [];
-  let reference = null;
+  let selected = reference ?? null;
   for (const item of signatures) {
     if (!item || typeof item.idHex !== 'string')
       fail('MTC_CHECKPOINT_FORMAT');
     const cosigner = admitted.cosigners.get(item.idHex);
     if (!cosigner) continue;
     if (seen.has(item.idHex) || !Buffer.isBuffer(item.message) ||
-        !Buffer.isBuffer(item.signature) || item.signature.length !== 64)
+        !Buffer.isBuffer(item.signature) || item.signature.length !== 64 ||
+        (item.consistencyProof !== undefined &&
+          !Buffer.isBuffer(item.consistencyProof)))
       fail('MTC_CHECKPOINT_FORMAT');
     seen.add(item.idHex);
     const parsed = parsedCheckpoint(item.message, cosigner.name, logOrigin);
     if (!verify(null, item.message, cosigner.key, item.signature))
       fail('MTC_CHECKPOINT_SIGNATURE');
-    if (!reference && cosigner.role === 'ca') reference = parsed;
+    if (!selected && item.consistencyProof === undefined)
+      selected = {treeSize: parsed.treeSize, rootHash: parsed.root};
     roles.add(cosigner.role);
-    parsedSignatures.push({idHex: item.idHex, ...parsed});
+    parsedSignatures.push({idHex: item.idHex, ...parsed,
+      consistencyProof: item.consistencyProof});
   }
-  if (!reference || !admitted.requiredRoles.every(role => roles.has(role)))
+  if (!selected || !admitted.requiredRoles.every(role => roles.has(role)))
     fail('MTC_CHECKPOINT_QUORUM');
-  if (reference.treeSize < minimumTreeSize) fail('MTC_CHECKPOINT_SIZE');
+  if (selected.treeSize < minimumTreeSize) fail('MTC_CHECKPOINT_SIZE');
   for (const parsed of parsedSignatures) {
-    if (parsed.treeSize !== reference.treeSize ||
-        !parsed.root.equals(reference.root)) fail('MTC_CHECKPOINT_MISMATCH');
+    if (parsed.treeSize === selected.treeSize) {
+      if (parsed.consistencyProof !== undefined)
+        fail('MTC_CHECKPOINT_FORMAT');
+      if (!parsed.root.equals(selected.rootHash))
+        fail('MTC_CHECKPOINT_MISMATCH');
+    } else if (parsed.treeSize > selected.treeSize) {
+      if (!parsed.consistencyProof) fail('MTC_CHECKPOINT_CONSISTENCY');
+      verifyMtcLogConsistencyProof({firstSize: selected.treeSize,
+        secondSize: parsed.treeSize, firstRoot: selected.rootHash,
+        secondRoot: parsed.root, proof: parsed.consistencyProof});
+    } else fail('MTC_CHECKPOINT_SIZE');
   }
-  return {treeSize: reference.treeSize, rootHash: reference.root,
+  return {treeSize: selected.treeSize, rootHash: selected.rootHash,
     admittedRoles: [...roles].sort(),
     claimedTimestamps: parsedSignatures.map(item => ({idHex: item.idHex,
       timestamp: item.timestamp.toString()}))};

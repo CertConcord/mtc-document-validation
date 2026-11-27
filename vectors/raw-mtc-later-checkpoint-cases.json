@@ -1,0 +1,23 @@
+{
+  "format": "original-mtc07-later-checkpoint-cases-v1",
+  "cases": [
+    {"id":"later-ca-direct-mirror-later","signatures":[{"key":"caReference5"},{"key":"mirrorLater7","proof":"fiveToSevenHex"}],"expected":"RELATIVE_ISSUANCE_BOUND"},
+    {"id":"later-both-different-later","signatures":[{"key":"caLater6","proof":"fiveToSixHex"},{"key":"mirrorLater7","proof":"fiveToSevenHex"}],"expected":"RELATIVE_ISSUANCE_BOUND"},
+    {"id":"later-both-direct","signatures":[{"key":"caReference5"},{"key":"mirrorReference5"}],"expected":"RELATIVE_ISSUANCE_BOUND"},
+    {"id":"later-direct-reference-inferred","omitReference":true,"signatures":[{"key":"caReference5"},{"key":"mirrorLater7","proof":"fiveToSevenHex"}],"expected":"RELATIVE_ISSUANCE_BOUND"},
+    {"id":"later-all-later-reference-unprovided","omitReference":true,"signatures":[{"key":"caLater6","proof":"fiveToSixHex"},{"key":"mirrorLater7","proof":"fiveToSevenHex"}],"expected":"MTC_CHECKPOINT_QUORUM"},
+    {"id":"later-mirror-proof-missing","signatures":[{"key":"caReference5"},{"key":"mirrorLater7"}],"expected":"MTC_CHECKPOINT_CONSISTENCY"},
+    {"id":"later-mirror-proof-mutant","mutateProof":"mirrorLater7","signatures":[{"key":"caReference5"},{"key":"mirrorLater7","proof":"fiveToSevenHex"}],"expected":"MTC_LOG_CONSISTENCY"},
+    {"id":"later-mirror-wrong-root-signed","signatures":[{"key":"caReference5"},{"key":"mirrorLater7WrongRoot","proof":"fiveToSevenHex"}],"expected":"MTC_LOG_CONSISTENCY"},
+    {"id":"later-mirror-wrong-origin-signed","signatures":[{"key":"caReference5"},{"key":"mirrorLater7WrongOrigin","proof":"fiveToSevenHex"}],"expected":"MTC_CHECKPOINT_ORIGIN"},
+    {"id":"later-mirror-earlier-than-reference","signatures":[{"key":"caReference5"},{"key":"mirrorEarlier4"}],"expected":"MTC_CHECKPOINT_SIZE"},
+    {"id":"later-reference-root-mutant","mutateReferenceRoot":true,"signatures":[{"key":"caReference5"},{"key":"mirrorLater7","proof":"fiveToSevenHex"}],"expected":"MTC_CHECKPOINT_MISMATCH"},
+    {"id":"later-subtree-proof-mutant","mutateSubtreeProof":true,"signatures":[{"key":"caReference5"},{"key":"mirrorLater7","proof":"fiveToSevenHex"}],"expected":"MTC_CONSISTENCY"},
+    {"id":"later-checkpoint-signature-mutant","mutateSignature":"mirrorLater7","signatures":[{"key":"caReference5"},{"key":"mirrorLater7","proof":"fiveToSevenHex"}],"expected":"MTC_CHECKPOINT_SIGNATURE"},
+    {"id":"later-watermark-over-reference","minimumTrustedTreeSize":"6","signatures":[{"key":"caReference5"},{"key":"mirrorLater7","proof":"fiveToSevenHex"}],"expected":"MTC_CHECKPOINT_SIZE"},
+    {"id":"later-publication-one-byte-diff","mutatePublication":true,"signatures":[{"key":"caReference5"},{"key":"mirrorLater7","proof":"fiveToSevenHex"}],"expected":"MTC_LANDMARK_SOURCE"},
+    {"id":"later-duplicate-required-cosigner","signatures":[{"key":"caReference5"},{"key":"mirrorLater7","proof":"fiveToSevenHex"},{"key":"mirrorReference5"}],"expected":"MTC_CHECKPOINT_FORMAT"},
+    {"id":"later-equal-size-proof-supplied","signatures":[{"key":"caReference5"},{"key":"mirrorReference5","proof":"fiveToSevenHex"}],"expected":"MTC_CHECKPOINT_FORMAT"},
+    {"id":"later-equal-size-empty-proof-supplied","signatures":[{"key":"caReference5"},{"key":"mirrorReference5","emptyProof":true}],"expected":"MTC_CHECKPOINT_FORMAT"}
+  ]
+}

@@ -14,7 +14,8 @@ const decimal = value => typeof value === 'string' && /^(?:0|[1-9][0-9]*)$/.test
 // The publication digest, admission time, and minimum tree-size watermark
 // must come from independently admitted policy, never the archive package.
 export function assessRawMtcRelativeIssuance({certificateDer, policy,
-  landmarkPublication, checkpointSignatures, subtreeConsistencyProof}) {
+  landmarkPublication, referenceCheckpoint, checkpointSignatures,
+  subtreeConsistencyProof}) {
   if (!Buffer.isBuffer(certificateDer)) fail('MTC_INPUT');
   const certificateSha256 = createHash('sha256').update(certificateDer)
     .digest('hex');
@@ -41,6 +42,7 @@ export function assessRawMtcRelativeIssuance({certificateDer, policy,
         candidate.parsed.end !== selection.subtree.end)
       fail('MTC_RELATIVE_SUBTREE');
     const checkpoint = verifyMtcReferenceCheckpoint({
+      reference: referenceCheckpoint,
       signatures: checkpointSignatures,
       admitted: candidate.admitted,
       logOrigin: candidate.logId.origin,
