@@ -34,6 +34,9 @@
     {"id":"issuer-appointment-withdrawn","stateAt":120,"knownAt":250,"factIds":["statusGoodLate","issuerDenied"],"expected":{"decision":"REJECTED","stateAt":120,"knownAt":250,"reasons":[{"role":"issuer-authorization","code":"HISTORY_DENIED"}]}},
     {"id":"conflicting-status-history","stateAt":120,"knownAt":250,"factIds":["statusGoodLate","statusDenied","issuerAllowed"],"expected":{"decision":"REJECTED","stateAt":120,"knownAt":250,"reasons":[{"role":"certificate-status","code":"HISTORY_CONFLICT"}]}},
     {"id":"future-only-history","stateAt":120,"knownAt":250,"factIds":["statusFuture","issuerAllowed"],"expected":{"decision":"INDETERMINATE","stateAt":120,"knownAt":250,"reasons":[{"role":"certificate-status","code":"HISTORY_COVERAGE_MISSING"}]}},
-    {"id":"no-knowledge-closure","stateAt":120,"knownAt":250,"factIds":["statusNoClosure","issuerAllowed"],"expected":{"decision":"INDETERMINATE","stateAt":120,"knownAt":250,"reasons":[{"role":"certificate-status","code":"HISTORY_COVERAGE_MISSING"}]}}
+    {"id":"no-knowledge-closure","stateAt":120,"knownAt":250,"factIds":["statusNoClosure","issuerAllowed"],"expected":{"decision":"INDETERMINATE","stateAt":120,"knownAt":250,"reasons":[{"role":"certificate-status","code":"HISTORY_COVERAGE_MISSING"}]}},
+    {"id":"required-status-question-cannot-disappear","stateAt":120,"knownAt":250,"factIds":["issuerAllowed"],"policyControl":"shrinking-requirements","expected":{"decision":"INDETERMINATE","stateAt":120,"knownAt":250,"reasons":[{"role":"certificate-status","code":"HISTORY_COVERAGE_MISSING"}]}},
+    {"id":"cross-profile-facts-cannot-be-combined","stateAt":120,"knownAt":250,"factIds":["statusOtherProfile","issuerAllowed"],"policyControl":"alternating-profile","expected":{"decision":"INDETERMINATE","stateAt":120,"knownAt":250,"reasons":[{"role":"certificate-status","code":"HISTORY_COVERAGE_MISSING"}]}},
+    {"id":"denial-fact-cannot-change-during-evaluation","stateAt":120,"knownAt":250,"factIds":["statusDenied","issuerAllowed"],"factControl":"moving-denial","expected":{"decision":"REJECTED","stateAt":120,"knownAt":250,"reasons":[{"role":"certificate-status","code":"HISTORY_DENIED"}]}}
   ]
 }

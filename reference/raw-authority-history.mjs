@@ -78,19 +78,23 @@ function link(raw, signature) {
 
 // Authenticity and internal continuity of source claims only. External source
 // admission, clock evidence, actual completeness and document coverage remain separate.
-export function assessRawAuthorityHistory({stateAt, knownAt, policy, records, document}) {
+export function assessRawAuthorityHistory(input) {
+  if (!input || typeof input !== 'object') error('AUTHORITY_INPUT');
+  const documentBytes = originalDocument(input.document);
+  const {stateAt, knownAt, policy, records} = input;
   if (!instant(stateAt) || !instant(knownAt) || knownAt < stateAt ||
       !policy || !Array.isArray(records))
     error('AUTHORITY_INPUT');
-  const documentBytes = originalDocument(document);
   const documentScope = `sha256:${sha(documentBytes)}`;
   const profileId = policy.profileId;
   const sourceRequirements = policy.requirements;
-  if (!printable(profileId) || !Array.isArray(sourceRequirements) ||
-      sourceRequirements.length === 0) error('AUTHORITY_INPUT');
+  if (!printable(profileId) || !Array.isArray(sourceRequirements))
+    error('AUTHORITY_INPUT');
   const requirements = new Map();
   const roles = new Set();
   const requirementCount = sourceRequirements.length;
+  if (!Number.isSafeInteger(requirementCount) || requirementCount === 0)
+    error('AUTHORITY_INPUT');
   for (let index = 0; index < requirementCount; index++) {
     const source = sourceRequirements[index];
     if (!source) error('AUTHORITY_INPUT');

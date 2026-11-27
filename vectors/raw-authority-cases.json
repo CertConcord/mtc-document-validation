@@ -48,6 +48,39 @@
       "expected": "BOUND_CLAIMS"
     },
     {
+      "id": "authority-selected-question-length-captured-once",
+      "stateAt": 120,
+      "knownAt": 205,
+      "records": ["issuer-1", "issuer-2", "action-1", "action-2"],
+      "policyControl": "moving-requirement-length",
+      "error": "AUTHORITY_INPUT"
+    },
+    {
+      "id": "authority-document-captured-before-top-level-policy",
+      "stateAt": 120,
+      "knownAt": 205,
+      "records": ["issuer-1", "issuer-2", "action-1", "action-2"],
+      "inputControl": "policy-mutates-document",
+      "expected": "BOUND_CLAIMS"
+    },
+    {
+      "id": "authority-additional-selected-question-missing",
+      "stateAt": 120,
+      "knownAt": 205,
+      "records": ["issuer-1", "issuer-2", "action-1", "action-2"],
+      "extraRequirement": "backup-issuer-registry",
+      "expected": "INDETERMINATE",
+      "reason": "AUTHORITY_SOURCE_MISSING"
+    },
+    {
+      "id": "authority-shared-document-backing-rejected",
+      "stateAt": 120,
+      "knownAt": 205,
+      "records": ["issuer-1", "issuer-2", "action-1", "action-2"],
+      "documentControl": "shared-backing",
+      "error": "AUTHORITY_INPUT"
+    },
+    {
       "id": "authority-same-second-seal-then-allow",
       "stateAt": 120,
       "knownAt": 205,

@@ -33,7 +33,15 @@ test('signed original positive and negative authority-history controls', () => {
     const policy={...bytes.policy,requirements:bytes.policy.requirements.map(x=>
       x.role==='issuer-authorization' && v.issuerKey ? {...x,
         publicKeySpkiBase64:bytes[v.issuerKey]} : {...x})};
-    const suppliedDocument=Buffer.from(document);
+    if(v.extraRequirement==='backup-issuer-registry')
+      policy.requirements.push({...policy.requirements[0],
+        sourceId:'backup-issuer-registry'});
+    let suppliedDocument=Buffer.from(document);
+    if(v.documentControl==='shared-backing'){
+      const shared=new SharedArrayBuffer(document.length);
+      suppliedDocument=Buffer.from(shared);
+      Uint8Array.prototype.set.call(suppliedDocument,document);
+    }
     let policyReads=0;
     if(v.policyControl==='moving-profile')
       Object.defineProperty(policy,'profileId',{get(){
@@ -59,8 +67,25 @@ test('signed original positive and negative authority-history controls', () => {
         suppliedDocument[0]^=1;
         return 'documents:v1';
       }});
+    if(v.policyControl==='moving-requirement-length') {
+      const selected=policy.requirements;
+      policy.requirements=new Proxy(selected,{get(target,key,receiver){
+        if(key==='length'){
+          policyReads++;
+          return policyReads===1 ? 1 : 2;
+        }
+        return Reflect.get(target,key,receiver);
+      }});
+    }
     const input={stateAt:v.stateAt,knownAt:v.knownAt,policy,records,
       document:suppliedDocument};
+    let inputReads=0;
+    if(v.inputControl==='policy-mutates-document')
+      Object.defineProperty(input,'policy',{get(){
+        inputReads++;
+        suppliedDocument[0]^=1;
+        return policy;
+      }});
     if(v.error)assert.throws(()=>assessRawAuthorityHistory(input),{code:v.error},v.id);
     else {
       const actual=assessRawAuthorityHistory(input);
@@ -77,6 +102,7 @@ test('signed original positive and negative authority-history controls', () => {
       }
     }
     if(v.policyControl)assert.equal(policyReads,1,v.id);
+    if(v.inputControl)assert.equal(inputReads,1,v.id);
   }
 });
 
