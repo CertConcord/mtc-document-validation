@@ -23,6 +23,25 @@ const proof=(m,nodes,complete=true)=>{
     ?[...proof(m,nodes.slice(0,k),complete),tree(nodes.slice(k))]
     :[...proof(m-k,nodes.slice(k),false),tree(nodes.slice(0,k))];
 };
+const spoofNativeBytes=(original,mode,target)=>{
+  const good=Buffer.from(original);
+  const bad=mode==='native-short-converted-good'?
+    good.subarray(0,good.length-1):Buffer.from(good);
+  if(mode!=='native-short-converted-good')
+    bad[target==='message'?bad.length-1:0]^=1;
+  const native=mode==='native-good-converted-bad'?good:bad;
+  const converted=mode==='native-good-converted-bad'?bad:good;
+  Object.defineProperties(native,{
+    length:{get:()=>converted.length},
+    byteLength:{get:()=>converted.length},
+    byteOffset:{get:()=>converted.byteOffset},
+    buffer:{get:()=>converted.buffer},
+    valueOf:{value:()=>converted}
+  });
+  assert.deepEqual(Buffer.from(native),converted);
+  assert.notDeepEqual(Uint8Array.prototype.slice.call(native),converted);
+  return native;
+};
 
 test('original seven-entry log, growth paths and signed controls',()=>{
   const leaves=corpus.logEntries.map(entry=>{
@@ -78,6 +97,9 @@ for(const vector of vectors.cases)test(vector.id,()=>{
         return referenceRootReads===1?first:later;}
     };
   }
+  if(vector.nativeSpoof?.target==='referenceRoot')
+    referenceCheckpoint.rootHash=spoofNativeBytes(root,
+      vector.nativeSpoof.mode,'referenceRoot');
   const mutationWitnesses=[],messageReads=[];
   const checkpointSignatures=vector.signatures.map(spec=>{
     const frozen=corpus.checkpoints[spec.key];
@@ -117,6 +139,11 @@ for(const vector of vectors.cases)test(vector.id,()=>{
       if(vector.mutateProof===spec.key)item.consistencyProof[0]^=1;
     }
     if(spec.emptyProof)item.consistencyProof=Buffer.alloc(0);
+    if(vector.nativeSpoof?.key===spec.key &&
+        vector.nativeSpoof.target!=='referenceRoot'){
+      const target=vector.nativeSpoof.target;
+      item[target]=spoofNativeBytes(item[target],vector.nativeSpoof.mode,target);
+    }
     return item;
   });
   const subtreeConsistencyProof=Buffer.from(corpus.selectedSubtree.proofHex,'hex');
