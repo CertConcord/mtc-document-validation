@@ -588,6 +588,13 @@
     {"id":"crl-not-yet-known","expected":"INDETERMINATE","component":"raw-tsa-retirement"},
     {"id":"crl-signature-tampered","expected":"REJECTED","component":"raw-tsa-retirement"},
     {"id":"timestamp-covered-bytes-wrong","expected":"REJECTED","component":"raw-tsa-retirement"},
-    {"id":"source-issuer-unadmitted","expected":"INDETERMINATE","component":"raw-tsa-retirement"}
+    {"id":"source-issuer-unadmitted","expected":"INDETERMINATE","component":"raw-tsa-retirement"},
+    {"id":"revocation-date-after-crl-issue","expected":"REJECTED","component":"raw-tsa-retirement"},
+    {"id":"signed-invalidity-before-initial","expected":"BOUNDED_PRE_REVOCATION_CLAIM","component":"raw-tsa-retirement"},
+    {"id":"signed-invalidity-overlaps-renewal","expected":"INDETERMINATE","component":"raw-tsa-retirement"},
+    {"id":"v1-entry-extension-forbidden","expected":"REJECTED","component":"raw-tsa-retirement"},
+    {"id":"v1-crl-extension-forbidden","expected":"REJECTED","component":"raw-tsa-retirement"},
+    {"id":"v1-without-extensions-no-reason","expected":"REJECTED","component":"raw-tsa-retirement"},
+    {"id":"request-omitted","expected":"INDETERMINATE","component":"raw-tsa-retirement"}
   ]
 }

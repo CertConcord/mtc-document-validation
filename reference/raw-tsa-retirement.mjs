@@ -20,8 +20,9 @@ export function assessRawTsaRetirement(input) {
   const tsaDer = snapshotMtcBuffer(input.tsaDer, 'TSA_RETIREMENT_INPUT');
   const issuerDer = snapshotMtcBuffer(input.issuerDer, 'TSA_RETIREMENT_INPUT');
   const crlDer = snapshotMtcBuffer(input.crlDer, 'TSA_RETIREMENT_INPUT');
-  const requestDer = input.requestDer === undefined ? undefined
-    : snapshotMtcBuffer(input.requestDer, 'TSA_RETIREMENT_INPUT');
+  const suppliedRequest = input.requestDer;
+  const requestDer = suppliedRequest === undefined ? undefined
+    : snapshotMtcBuffer(suppliedRequest, 'TSA_RETIREMENT_INPUT');
   const tp = input.timestampPolicy;
   const sp = input.sourcePolicy;
   const receipt = input.admittedReceipt;
@@ -78,7 +79,9 @@ export function assessRawTsaRetirement(input) {
   const observed = {...base, ...token, sourceId: sourcePolicy.sourceId,
     crlThisUpdate: crl.thisUpdate, crlNextUpdate: crl.nextUpdate,
     revocationTime: crl.revocationTime, reasonCode: crl.reason,
-    targetSerial: crl.targetSerial};
+    invalidityDate: crl.invalidityDate, targetSerial: crl.targetSerial};
+  if (crl.status === 'REVOKED' && crl.revocationTime > crl.thisUpdate)
+    return result('REJECTED', 'TSA_CRL_REVOCATION_AFTER_ISSUE', observed);
   if (!admittedReceipt)
     return result('INDETERMINATE', 'TSA_CRL_RECEIPT_MISSING', observed);
   if (admittedReceipt.recordSha256 !== crlSha256)
@@ -102,5 +105,8 @@ export function assessRawTsaRetirement(input) {
     return result('REJECTED', 'TSA_TOKEN_NOT_BEFORE_REVOCATION', observed);
   if (BigInt(timestamp.claimedUpperBoundMicros) >= revocationMicros)
     return result('INDETERMINATE', 'TSA_TOKEN_INTERVAL_OVERLAPS_REVOCATION', observed);
+  if (crl.invalidityDate !== null &&
+      BigInt(timestamp.claimedUpperBoundMicros) >= BigInt(crl.invalidityDate) * 1_000_000n)
+    return result('INDETERMINATE', 'TSA_TOKEN_AFTER_SIGNED_INVALIDITY', observed);
   return result('BOUNDED_PRE_REVOCATION_CLAIM', null, observed);
 }

@@ -39,8 +39,8 @@ test('frozen CRLs are original signed controls for the same no-CDP TSA', () => {
   assert.equal(vectors.format, 'original-rfc3161-tsa-retirement-crl-v1');
   assert.equal(vectors.sourceCorpus, 'vectors/coherent-document-evidence.json');
   assert.equal(vectors.renewalCorpus, 'vectors/coherent-ers-renewal.json');
-  assert.equal(Object.keys(vectors.crls).length, 10);
-  assert.equal(vectors.cases.length, 19);
+  assert.equal(Object.keys(vectors.crls).length, 15);
+  assert.equal(vectors.cases.length, 26);
   const tsa = certificate(tsaDer);
   const issuer = certificate(issuerDer);
   assert(!tsa.extensions.has(OID.crlDistributionPoints));
@@ -48,6 +48,11 @@ test('frozen CRLs are original signed controls for the same no-CDP TSA', () => {
   assert.equal(tsa.x509.verify(issuer.x509.publicKey), true);
   for (const [name, item] of Object.entries(vectors.crls)) {
     const bytes = frozen(item, 'derBase64');
+    if (['v1-entry-extension', 'v1-crl-extension'].includes(name)) {
+      assert.throws(() => parseCrl({recordDer: bytes, target: tsa, issuer,
+        allowNoDistributionPoint: true}), {code: 'CRL_VERSION_REQUIRED'}, name);
+      continue;
+    }
     assert.throws(() => parseCrl({recordDer: bytes, target: tsa, issuer}),
       {code: 'CRL_TARGET_SCOPE_UNPROVEN'}, name);
     const parsed = parseCrl({recordDer: bytes, target: tsa, issuer,
@@ -55,6 +60,8 @@ test('frozen CRLs are original signed controls for the same no-CDP TSA', () => {
     assert.equal(parsed.distributionPoint, null, name);
     assert.equal(parsed.targetSerial, tsa.serial, name);
     assert.equal(parsed.recordSha256, item.sha256, name);
+    if (name === 'invalidity-between-tokens')
+      assert.equal(parsed.invalidityDate, Date.parse('2026-11-27T20:00:00Z') / 1000);
   }
 });
 
@@ -78,6 +85,7 @@ test('signed timestamp and CRL reasons remain bounded observations', async t => 
         case 'crl-signature-tampered': received[received.length - 1] ^= 1; break;
         case 'timestamp-covered-bytes-wrong': token.coveredDer = originalDocument; break;
         case 'source-issuer-unadmitted': source.issuerSha256 = '0'.repeat(64); break;
+        case 'request-omitted': delete token.requestDer; break;
       }
       const actual = assessRawTsaRetirement({...token,
         tsaDer, issuerDer, crlDer: received, timestampPolicy,
@@ -87,6 +95,8 @@ test('signed timestamp and CRL reasons remain bounded observations', async t => 
       assert.equal(actual.decision, vector.expected);
       assert.deepEqual(actual.reasons, vector.reason ? [vector.reason] : []);
       assert.equal(actual.crlSha256, sha(received));
+      if (vector.crl === 'invalidity-between-tokens')
+        assert.equal(actual.invalidityDate, Date.parse('2026-11-27T20:00:00Z') / 1000);
       for (const forbidden of ['VALID', 'knowledgeThrough', 'documentValidity',
         'poeUpperBoundMicros'])
         assert(!Object.hasOwn(actual, forbidden));
@@ -95,6 +105,23 @@ test('signed timestamp and CRL reasons remain bounded observations', async t => 
           BigInt(actual.revocationTime) * 1_000_000n);
     });
   }
+});
+
+test('the retained request is read once and a missing cutoff is input failure', () => {
+  const crlDer = frozen(vectors.crls.cessation, 'derBase64');
+  const base = {...signed.initial, tsaDer, issuerDer, crlDer,
+    timestampPolicy, sourcePolicy,
+    admittedReceipt: {recordSha256: sha(crlDer), sourceId: vectors.sourceId,
+      observedAt: vectors.observedAt}, knownAt: vectors.knownAt};
+  let reads = 0;
+  Object.defineProperty(base, 'requestDer', {enumerable: true, get() {
+    reads++;
+    return signed.initial.requestDer;
+  }});
+  assert.equal(assessRawTsaRetirement(base).decision, 'BOUNDED_PRE_REVOCATION_CLAIM');
+  assert.equal(reads, 1);
+  assert.throws(() => assessRawTsaRetirement({...base, knownAt: undefined}),
+    {code: 'TSA_RETIREMENT_INPUT'});
 });
 
 test('a caller cannot silently activate no-CDP scope or replace signed bytes', () => {
