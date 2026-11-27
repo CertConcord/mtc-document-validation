@@ -549,6 +549,23 @@
     {"id":"supplied-original-mismatch-with-incomplete-observation","expected":"REJECTED","component":"raw-transfer-claims"},
     {"id":"signed-observer-mismatch-with-original-missing","expected":"REJECTED","component":"raw-transfer-claims"},
     {"id":"second-observation-and-original-both-missing","expected":"INDETERMINATE","component":"raw-transfer-claims"},
-    {"id":"incomplete-observation-with-matching-original","expected":"INDETERMINATE","component":"raw-transfer-claims"}
+    {"id":"incomplete-observation-with-matching-original","expected":"INDETERMINATE","component":"raw-transfer-claims"},
+    {"id":"updated-set-second-handoff","expected":"BOUND_CLAIMS","component":"raw-transfer-set-evolution"},
+    {"id":"second-handoff-omits-new-signed-manifest","expected":"INDETERMINATE","component":"raw-transfer-set-evolution"},
+    {"id":"second-handoff-reuses-old-set","expected":"INDETERMINATE","component":"raw-transfer-set-evolution"},
+    {"id":"new-manifest-original-missing","expected":"INDETERMINATE","component":"raw-transfer-set-evolution"},
+    {"id":"new-manifest-original-substituted","expected":"REJECTED","component":"raw-transfer-set-evolution"},
+    {"id":"first-handoff-supplies-future-manifest","expected":"TRANSFER_INPUT","component":"raw-transfer-set-evolution"},
+    {"id":"old-item-digest-rewritten","expected":"TRANSFER_SET_MONOTONIC","component":"raw-transfer-set-evolution"},
+    {"id":"old-item-removed","expected":"TRANSFER_SET_MONOTONIC","component":"raw-transfer-set-evolution"},
+    {"id":"previous-set-hash-broken","expected":"TRANSFER_SET_LINK","component":"raw-transfer-set-evolution"},
+    {"id":"set-selected-before-new-original","expected":"TRANSFER_SET_TIME","component":"raw-transfer-set-evolution"},
+    {"id":"set-selected-after-second-handoff","expected":"TRANSFER_SET_TIME","component":"raw-transfer-set-evolution"},
+    {"id":"duplicate-new-item-id","expected":"TRANSFER_SET_STRUCTURE","component":"raw-transfer-set-evolution"},
+    {"id":"unadmitted-successor-set","expected":"TRANSFER_POLICY","component":"raw-transfer-set-evolution"},
+    {"id":"independent-successor-anchor-mismatch","expected":"TRANSFER_SET_ANCHOR","component":"raw-transfer-set-evolution"},
+    {"id":"new-item-admitted-before-first-handoff","expected":"TRANSFER_SET_TIME","component":"raw-transfer-set-evolution"},
+    {"id":"fixed-set-valid-digest-control","expected":"BOUND_CLAIMS","component":"raw-transfer-set-evolution"},
+    {"id":"fixed-set-signed-null-set-digest","expected":"TRANSFER_HANDOFF","component":"raw-transfer-set-evolution"}
   ]
 }
