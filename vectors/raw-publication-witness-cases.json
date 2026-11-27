@@ -1,0 +1,15 @@
+{
+  "format": "original-publication-witness-cases-v1",
+  "cases": [
+    {"id":"witness-five-original-entries","head":"five","expected":"MONITORED_STREAM_THROUGH"},
+    {"id":"witness-four-valid-entries-cannot-reveal-withheld-action","head":"four","expected":"MONITORED_STREAM_THROUGH"},
+    {"id":"witness-missing-logged-entry","head":"five","omitLastEntry":true,"expected":"PUBLICATION_HEAD"},
+    {"id":"witness-mutated-source-record","head":"five","mutateEntry":true,"expected":"PUBLICATION_HEAD"},
+    {"id":"witness-head-signature-mutation","head":"five","mutateHeadSignature":true,"expected":"PUBLICATION_HEAD"},
+    {"id":"witness-monitor-signature-mutation","head":"five","mutateMonitorSignature":true,"expected":"PUBLICATION_MONITOR"},
+    {"id":"witness-monitor-for-other-head","head":"five","monitor":"four","expected":"PUBLICATION_MONITOR"},
+    {"id":"witness-monitor-after-knowledge-cutoff","head":"five","knownAt":212,"expected":"PUBLICATION_MONITOR"},
+    {"id":"witness-untrusted-earlier-root","head":"five","mutateAnchor":true,"expected":"PUBLICATION_ANCHOR"},
+    {"id":"witness-invalid-consistency-path","head":"five","mutateProof":true,"expected":"PUBLICATION_CONSISTENCY"}
+  ]
+}

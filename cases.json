@@ -427,6 +427,16 @@
     {"id":"authority-signature-corrupted","expected":"AUTHORITY_SIGNATURE","component":"raw-authority-history"},
     {"id":"authority-signed-broken-link","expected":"AUTHORITY_CHAIN","component":"raw-authority-history"},
     {"id":"authority-signed-sequence-gap","expected":"AUTHORITY_CHAIN","component":"raw-authority-history"},
-    {"id":"authority-duplicate-json-key","expected":"AUTHORITY_ENCODING","component":"raw-authority-history"}
+    {"id":"authority-duplicate-json-key","expected":"AUTHORITY_ENCODING","component":"raw-authority-history"},
+    {"id":"witness-five-original-entries","expected":"MONITORED_STREAM_THROUGH","component":"raw-publication-witness"},
+    {"id":"witness-four-valid-entries-cannot-reveal-withheld-action","expected":"MONITORED_STREAM_THROUGH","component":"raw-publication-witness"},
+    {"id":"witness-missing-logged-entry","expected":"PUBLICATION_HEAD","component":"raw-publication-witness"},
+    {"id":"witness-mutated-source-record","expected":"PUBLICATION_HEAD","component":"raw-publication-witness"},
+    {"id":"witness-head-signature-mutation","expected":"PUBLICATION_HEAD","component":"raw-publication-witness"},
+    {"id":"witness-monitor-signature-mutation","expected":"PUBLICATION_MONITOR","component":"raw-publication-witness"},
+    {"id":"witness-monitor-for-other-head","expected":"PUBLICATION_MONITOR","component":"raw-publication-witness"},
+    {"id":"witness-monitor-after-knowledge-cutoff","expected":"PUBLICATION_MONITOR","component":"raw-publication-witness"},
+    {"id":"witness-untrusted-earlier-root","expected":"PUBLICATION_ANCHOR","component":"raw-publication-witness"},
+    {"id":"witness-invalid-consistency-path","expected":"PUBLICATION_CONSISTENCY","component":"raw-publication-witness"}
   ]
 }

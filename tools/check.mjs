@@ -103,6 +103,33 @@ for(const [id,item] of Object.entries(authorityBytes.objects)){
 }
 for(const v of rawAuthority.cases)for(const id of v.records)
   assert(Object.hasOwn(authorityBytes.objects,id),`${v.id}: ${id}`);
+const witness=json('vectors/raw-publication-witness.json');
+const witnessCases=json('vectors/raw-publication-witness-cases.json');
+assert.equal(witness.format,'frozen-original-publication-witness-v1');
+assert.equal(witnessCases.format,'original-publication-witness-cases-v1');
+assert.deepEqual(json('cases.json').cases.filter(x=>x.component==='raw-publication-witness')
+  .map(x=>[x.id,x.expected]),witnessCases.cases.map(x=>[x.id,x.expected]));
+for(const entry of witness.entries){
+  const original=authorityBytes.objects[entry.id];
+  assert(original,entry.id);
+  const bytes=Buffer.from(entry.base64,'base64');
+  assert.equal(bytes.toString('base64'),entry.base64,entry.id);
+  assert.equal(bytes.length,entry.bytes,entry.id);
+  assert.equal(createHash('sha256').update(bytes).digest('hex'),entry.sha256,entry.id);
+  assert(bytes.equals(Buffer.concat([Buffer.from(original.rawBase64,'base64'),
+    Buffer.from(original.signatureBase64,'base64')])),entry.id);
+}
+for(const [kind,records] of [['heads',witness.heads],
+    ['observations',witness.observations]])
+  for(const [name,item] of Object.entries(records)){
+    const raw=Buffer.from(item.rawBase64,'base64');
+    const signature=Buffer.from(item.signatureBase64,'base64');
+    assert.equal(raw.length,item.rawBytes,`${kind}: ${name}`);
+    assert.equal(createHash('sha256').update(raw).digest('hex'),item.rawSha256,
+      `${kind}: ${name}`);
+    assert.equal(createHash('sha256').update(signature).digest('hex'),
+      item.signatureSha256,`${kind}: ${name}`);
+  }
 const mtcVectors=json('vectors/raw-mtc-cases.json');
 const mtcDer=json('vectors/raw-mtc-der.json');
 assert.equal(mtcVectors.format,'original-mtc07-issuance-cases-v1');
