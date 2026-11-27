@@ -1,29 +1,10 @@
 import {verify} from 'node:crypto';
-import {types} from 'node:util';
 import {DerError} from './der.mjs';
 import {verifyMtcLogConsistencyProof} from './raw-mtc-log-consistency.mjs';
+import {snapshotMtcBuffer} from './raw-mtc-native-bytes.mjs';
 
 const label = Buffer.from('subtree/v1\n\0', 'ascii');
 const fail = code => { throw new DerError(code); };
-const nativeArray = Object.getPrototypeOf(Uint8Array.prototype);
-const getBuffer = Object.getOwnPropertyDescriptor(nativeArray, 'buffer').get;
-const getByteOffset = Object.getOwnPropertyDescriptor(nativeArray, 'byteOffset').get;
-const getByteLength = Object.getOwnPropertyDescriptor(nativeArray, 'byteLength').get;
-
-// Buffer.from(object) may call an input's valueOf. Capture the actual typed
-// array extent, bypassing caller-visible length, buffer and conversion hooks.
-function nativeBytes(value, code) {
-  if (!Buffer.isBuffer(value) || !types.isUint8Array(value)) fail(code);
-  try {
-    const backing = getBuffer.call(value);
-    const offset = getByteOffset.call(value);
-    const length = getByteLength.call(value);
-    const owned = Buffer.alloc(length);
-    Uint8Array.prototype.set.call(owned,
-      new Uint8Array(backing, offset, length));
-    return owned;
-  } catch { fail(code); }
-}
 
 function parsedCheckpoint(message, cosignerName, logOrigin) {
   if (!Buffer.isBuffer(message)) fail('MTC_CHECKPOINT_FORMAT');
@@ -73,7 +54,7 @@ export function verifyMtcReferenceCheckpoint({reference, signatures, admitted,
   if (reference !== undefined) {
     if (!reference) fail('MTC_CHECKPOINT_POLICY');
     const treeSize = reference.treeSize;
-    const rootHash = nativeBytes(reference.rootHash,
+    const rootHash = snapshotMtcBuffer(reference.rootHash,
       'MTC_CHECKPOINT_POLICY');
     if (!Number.isSafeInteger(treeSize) || treeSize < 1 ||
         treeSize >= 2 ** 48 ||
@@ -89,13 +70,13 @@ export function verifyMtcReferenceCheckpoint({reference, signatures, admitted,
     const cosigner = cosigners.get(idHex);
     if (!cosigner) continue;
     if (seen.has(idHex)) fail('MTC_CHECKPOINT_FORMAT');
-    const message = nativeBytes(item.message, 'MTC_CHECKPOINT_FORMAT');
-    const signature = nativeBytes(item.signature, 'MTC_CHECKPOINT_FORMAT');
+    const message = snapshotMtcBuffer(item.message, 'MTC_CHECKPOINT_FORMAT');
+    const signature = snapshotMtcBuffer(item.signature, 'MTC_CHECKPOINT_FORMAT');
     if (signature.length !== 64)
       fail('MTC_CHECKPOINT_FORMAT');
     const rawProof = item.consistencyProof;
     const consistencyProof = rawProof === undefined ? undefined :
-      nativeBytes(rawProof, 'MTC_CHECKPOINT_FORMAT');
+      snapshotMtcBuffer(rawProof, 'MTC_CHECKPOINT_FORMAT');
     seen.add(idHex);
     const parsed = parsedCheckpoint(message, cosigner.name, logOrigin);
     if (!verify(null, message, cosigner.key, signature))

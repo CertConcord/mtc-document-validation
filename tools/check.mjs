@@ -226,6 +226,30 @@ for(const vector of mtcLaterCases.cases){
     if(item.proof)assert(Object.hasOwn(mtcLater.logConsistency,item.proof),vector.id);
   }
 }
+const activeSet=json('vectors/raw-mtc-active-subtree-set.json');
+const activeCases=json('vectors/raw-mtc-active-subtree-cases.json');
+assert.equal(activeSet.format,'frozen-original-mtc07-active-subtree-set-v1');
+assert.equal(activeCases.format,'original-mtc07-active-subtree-admission-cases-v1');
+assert.deepEqual(json('cases.json').cases.filter(x=>x.component==='raw-mtc-active-subtrees')
+  .map(x=>[x.id,x.expected]),activeCases.cases.map(x=>[x.id,x.expected]));
+for(const [id,item] of Object.entries(activeSet.publications)){
+  checkRelativeBytes(item,`${id}: publication`);
+  assert(activeSet.sourceCorpora.includes(item.sourceCorpus),id);
+  assert(/^[a-f0-9]{64}$/.test(item.referenceRootHex),id);
+  const source=item.sourceCorpus==='raw-mtc-later-checkpoint.json'?
+    mtcLater:mtcMultileaf;
+  for(const key of item.checkpointKeys)
+    assert(Object.hasOwn(source.checkpoints,key),`${id}: ${key}`);
+  for(const row of item.subtrees){
+    assert(/^[a-f0-9]{64}$/.test(row.subtreeHashHex),id);
+    assert(/^(?:[a-f0-9]{64})*$/.test(row.proofHex),id);
+  }
+}
+for(const vector of activeCases.cases){
+  assert(Object.hasOwn(activeSet.publications,vector.publication),vector.id);
+  for(const field of ['evidenceSet','previousPublication','previousEvidenceSet'])
+    if(vector[field])assert(Object.hasOwn(activeSet.publications,vector[field]),vector.id);
+}
 for(const s of json('sources.json').sources){assert(s.url.startsWith('https://'));assert(/^[a-f0-9]{64}$/.test(s.sha256));}
 function walk(dir=''){for(const e of readdirSync(join(root,dir),{withFileTypes:true})){if(['.git','.runtime','node_modules'].includes(e.name))continue;const p=join(dir,e.name);if(e.isDirectory())walk(p);else{const t=readFileSync(join(root,p),'utf8');assert(!/\p{Script=Han}/u.test(t),p);assert(!/-----BEGIN (?:RSA |EC )?PRIVATE KEY-----/.test(t),p);assert(!/github_pat_[A-Za-z0-9_]{40,}|gh[pousr]_[A-Za-z0-9]{30,}/.test(t),p);}}}
 walk();console.log('Draft sources, cases and publication content verified');
