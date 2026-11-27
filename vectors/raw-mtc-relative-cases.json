@@ -1,0 +1,22 @@
+{
+  "format": "original-mtc07-relative-issuance-cases-v1",
+  "cases": [
+    {"id":"relative-original-one-leaf-two-roles","expected":"RELATIVE_ISSUANCE_BOUND"},
+    {"id":"relative-original-subject-mutant","certificate":"relative-subject-mutant","expected":"MTC_CONSISTENCY"},
+    {"id":"relative-publication-byte-mismatch","publicationText":"1\n1 1830297601\n0 0\n","expected":"MTC_LANDMARK_SOURCE"},
+    {"id":"relative-publication-wrong-log-scope","landmarkLogOrigin":"1.2.0.2","expected":"MTC_LANDMARK_SCOPE"},
+    {"id":"relative-landmark-expires-before-certificate","publicationText":"1\n1 1780000001\n0 0\n","admitPublication":true,"expected":"MTC_LANDMARK_EXPIRY"},
+    {"id":"relative-archive-claims-new-watermark","minimumTrustedTreeSize":"2","expected":"MTC_CHECKPOINT_SIZE"},
+    {"id":"relative-missing-ca","checkpointKeys":["mirror"],"expected":"MTC_CHECKPOINT_QUORUM"},
+    {"id":"relative-missing-mirror","checkpointKeys":["ca"],"expected":"MTC_CHECKPOINT_QUORUM"},
+    {"id":"relative-unadmitted-observer-ignored","checkpointKeys":["ca","mirror","observer"],"expected":"RELATIVE_ISSUANCE_BOUND"},
+    {"id":"relative-unadmitted-observer-cannot-certify","checkpointKeys":["mirror","observer"],"expected":"MTC_CHECKPOINT_QUORUM"},
+    {"id":"relative-wrong-log-origin","checkpointKeys":["caWrongOrigin","mirror"],"expected":"MTC_CHECKPOINT_ORIGIN"},
+    {"id":"relative-zero-checkpoint-timestamp","checkpointKeys":["caZeroTimestamp","mirror"],"expected":"MTC_CHECKPOINT_FORMAT"},
+    {"id":"relative-cosigner-wrong-root","checkpointKeys":["ca","mirrorWrongRoot"],"expected":"MTC_CHECKPOINT_MISMATCH"},
+    {"id":"relative-checkpoint-signature-mutant","mutateSignature":"ca","expected":"MTC_CHECKPOINT_SIGNATURE"},
+    {"id":"relative-duplicate-cosigner","checkpointKeys":["ca","ca","mirror"],"expected":"MTC_CHECKPOINT_FORMAT"},
+    {"id":"relative-subtree-consistency-mutant","subtreeProofHex":"00","expected":"MTC_CONSISTENCY"},
+    {"id":"relative-checkpoint-not-admitted","checkpointKeys":["ca","mirror"],"removeMirrorKey":true,"expected":"MTC_POLICY"}
+  ]
+}

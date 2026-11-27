@@ -1,0 +1,303 @@
+{
+  "format": "original-mtc07-subtree-consistency-cases-v1",
+  "hash": "sha256",
+  "leafInputs": [
+    {
+      "id": "leaf-0",
+      "base64": "YWxwaGEgbGVhZg==",
+      "sha256": "fc0fd14d6d03fc31d446d6b99253a4fffe1739ee27bbc7218ae18c96810ce1e6"
+    },
+    {
+      "id": "leaf-1",
+      "base64": "YnJhdm8gbGVhZg==",
+      "sha256": "a3476d36758a334ce320cd67d119e933602a34e26eefaf33914cc62a353281b9"
+    },
+    {
+      "id": "leaf-2",
+      "base64": "Y2hhcmxpZSBsZWFm",
+      "sha256": "2789e5c578b682de37009881342b3b76649b52bef2afb59545fc9417a04b1b9f"
+    },
+    {
+      "id": "leaf-3",
+      "base64": "ZGVsdGEgbGVhZg==",
+      "sha256": "db480343afdd0b4bbd9302b96270e637d7f21f7fac6e279d92d7c095fd8ebea1"
+    },
+    {
+      "id": "leaf-4",
+      "base64": "ZWNobyBsZWFm",
+      "sha256": "29dbedea11dd4156a87ea2e49c81192879c84d2629ce5197c3780f31a4d07cac"
+    }
+  ],
+  "cases": [
+    {
+      "id": "middle-single-leaf",
+      "start": 1,
+      "end": 2,
+      "treeSize": 3,
+      "subtreeHashHex": "a3476d36758a334ce320cd67d119e933602a34e26eefaf33914cc62a353281b9",
+      "rootHashHex": "c25ea5ffbd705acdb74a829f6739467786ffc6a2a1e6fa834a892438ddb07d55",
+      "proofHex": "fc0fd14d6d03fc31d446d6b99253a4fffe1739ee27bbc7218ae18c96810ce1e62789e5c578b682de37009881342b3b76649b52bef2afb59545fc9417a04b1b9f",
+      "expected": "VERIFIED"
+    },
+    {
+      "id": "prefix-two-leaves",
+      "start": 0,
+      "end": 2,
+      "treeSize": 3,
+      "subtreeHashHex": "ede4c367dee7dcf0425f6bd15f6b2e596cb3e2cebe330a7015462cf9757e3a43",
+      "rootHashHex": "c25ea5ffbd705acdb74a829f6739467786ffc6a2a1e6fa834a892438ddb07d55",
+      "proofHex": "2789e5c578b682de37009881342b3b76649b52bef2afb59545fc9417a04b1b9f",
+      "expected": "VERIFIED"
+    },
+    {
+      "id": "rightmost-leaf",
+      "start": 4,
+      "end": 5,
+      "treeSize": 5,
+      "subtreeHashHex": "29dbedea11dd4156a87ea2e49c81192879c84d2629ce5197c3780f31a4d07cac",
+      "rootHashHex": "424f31c23f884602e70044be1c839821f5cec010b5e50da61f72640e31158025",
+      "proofHex": "c2be87d7b710a379e6edfcd941d2c67fb4ac75f15d8e00324e4e431ef4a92316",
+      "expected": "VERIFIED"
+    },
+    {
+      "id": "partial-three-leaves",
+      "start": 0,
+      "end": 3,
+      "treeSize": 5,
+      "subtreeHashHex": "c25ea5ffbd705acdb74a829f6739467786ffc6a2a1e6fa834a892438ddb07d55",
+      "rootHashHex": "424f31c23f884602e70044be1c839821f5cec010b5e50da61f72640e31158025",
+      "proofHex": "2789e5c578b682de37009881342b3b76649b52bef2afb59545fc9417a04b1b9fdb480343afdd0b4bbd9302b96270e637d7f21f7fac6e279d92d7c095fd8ebea1ede4c367dee7dcf0425f6bd15f6b2e596cb3e2cebe330a7015462cf9757e3a4329dbedea11dd4156a87ea2e49c81192879c84d2629ce5197c3780f31a4d07cac",
+      "expected": "VERIFIED"
+    },
+    {
+      "id": "whole-five-leaf-tree",
+      "start": 0,
+      "end": 5,
+      "treeSize": 5,
+      "subtreeHashHex": "424f31c23f884602e70044be1c839821f5cec010b5e50da61f72640e31158025",
+      "rootHashHex": "424f31c23f884602e70044be1c839821f5cec010b5e50da61f72640e31158025",
+      "proofHex": "",
+      "expected": "VERIFIED"
+    },
+    {
+      "id": "empty-subtree",
+      "start": 0,
+      "end": 0,
+      "treeSize": 5,
+      "subtreeHashHex": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "rootHashHex": "424f31c23f884602e70044be1c839821f5cec010b5e50da61f72640e31158025",
+      "proofHex": "",
+      "expected": "VERIFIED"
+    },
+    {
+      "id": "changed-subtree-hash",
+      "start": 1,
+      "end": 2,
+      "treeSize": 3,
+      "subtreeHashHex": "a2476d36758a334ce320cd67d119e933602a34e26eefaf33914cc62a353281b9",
+      "rootHashHex": "c25ea5ffbd705acdb74a829f6739467786ffc6a2a1e6fa834a892438ddb07d55",
+      "proofHex": "fc0fd14d6d03fc31d446d6b99253a4fffe1739ee27bbc7218ae18c96810ce1e62789e5c578b682de37009881342b3b76649b52bef2afb59545fc9417a04b1b9f",
+      "expected": "MTC_CONSISTENCY"
+    },
+    {
+      "id": "changed-full-root",
+      "start": 1,
+      "end": 2,
+      "treeSize": 3,
+      "subtreeHashHex": "a3476d36758a334ce320cd67d119e933602a34e26eefaf33914cc62a353281b9",
+      "rootHashHex": "c35ea5ffbd705acdb74a829f6739467786ffc6a2a1e6fa834a892438ddb07d55",
+      "proofHex": "fc0fd14d6d03fc31d446d6b99253a4fffe1739ee27bbc7218ae18c96810ce1e62789e5c578b682de37009881342b3b76649b52bef2afb59545fc9417a04b1b9f",
+      "expected": "MTC_CONSISTENCY"
+    },
+    {
+      "id": "changed-first-sibling",
+      "start": 1,
+      "end": 2,
+      "treeSize": 3,
+      "subtreeHashHex": "a3476d36758a334ce320cd67d119e933602a34e26eefaf33914cc62a353281b9",
+      "rootHashHex": "c25ea5ffbd705acdb74a829f6739467786ffc6a2a1e6fa834a892438ddb07d55",
+      "proofHex": "fd0fd14d6d03fc31d446d6b99253a4fffe1739ee27bbc7218ae18c96810ce1e62789e5c578b682de37009881342b3b76649b52bef2afb59545fc9417a04b1b9f",
+      "expected": "MTC_CONSISTENCY"
+    },
+    {
+      "id": "missing-last-sibling",
+      "start": 1,
+      "end": 2,
+      "treeSize": 3,
+      "subtreeHashHex": "a3476d36758a334ce320cd67d119e933602a34e26eefaf33914cc62a353281b9",
+      "rootHashHex": "c25ea5ffbd705acdb74a829f6739467786ffc6a2a1e6fa834a892438ddb07d55",
+      "proofHex": "fc0fd14d6d03fc31d446d6b99253a4fffe1739ee27bbc7218ae18c96810ce1e6",
+      "expected": "MTC_CONSISTENCY"
+    },
+    {
+      "id": "extra-sibling",
+      "start": 1,
+      "end": 2,
+      "treeSize": 3,
+      "subtreeHashHex": "a3476d36758a334ce320cd67d119e933602a34e26eefaf33914cc62a353281b9",
+      "rootHashHex": "c25ea5ffbd705acdb74a829f6739467786ffc6a2a1e6fa834a892438ddb07d55",
+      "proofHex": "fc0fd14d6d03fc31d446d6b99253a4fffe1739ee27bbc7218ae18c96810ce1e62789e5c578b682de37009881342b3b76649b52bef2afb59545fc9417a04b1b9ffc0fd14d6d03fc31d446d6b99253a4fffe1739ee27bbc7218ae18c96810ce1e6",
+      "expected": "MTC_CONSISTENCY"
+    },
+    {
+      "id": "truncated-hash",
+      "start": 1,
+      "end": 2,
+      "treeSize": 3,
+      "subtreeHashHex": "a3476d36758a334ce320cd67d119e933602a34e26eefaf33914cc62a353281b9",
+      "rootHashHex": "c25ea5ffbd705acdb74a829f6739467786ffc6a2a1e6fa834a892438ddb07d55",
+      "proofHex": "fc0fd14d6d03fc31d446d6b99253a4fffe1739ee27bbc7218ae18c96810ce1e62789e5c578b682de37009881342b3b76649b52bef2afb59545fc9417a04b1b",
+      "expected": "MTC_CONSISTENCY"
+    },
+    {
+      "id": "unaligned-subtree",
+      "start": 1,
+      "end": 3,
+      "treeSize": 3,
+      "subtreeHashHex": "a3476d36758a334ce320cd67d119e933602a34e26eefaf33914cc62a353281b9",
+      "rootHashHex": "c25ea5ffbd705acdb74a829f6739467786ffc6a2a1e6fa834a892438ddb07d55",
+      "proofHex": "fc0fd14d6d03fc31d446d6b99253a4fffe1739ee27bbc7218ae18c96810ce1e62789e5c578b682de37009881342b3b76649b52bef2afb59545fc9417a04b1b9f",
+      "expected": "MTC_CONSISTENCY"
+    },
+    {
+      "id": "end-beyond-tree",
+      "start": 4,
+      "end": 5,
+      "treeSize": 4,
+      "subtreeHashHex": "29dbedea11dd4156a87ea2e49c81192879c84d2629ce5197c3780f31a4d07cac",
+      "rootHashHex": "c2be87d7b710a379e6edfcd941d2c67fb4ac75f15d8e00324e4e431ef4a92316",
+      "proofHex": "c2be87d7b710a379e6edfcd941d2c67fb4ac75f15d8e00324e4e431ef4a92316",
+      "expected": "MTC_CONSISTENCY"
+    },
+    {
+      "id": "empty-subtree-wrong-hash",
+      "start": 0,
+      "end": 0,
+      "treeSize": 5,
+      "subtreeHashHex": "e2b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "rootHashHex": "424f31c23f884602e70044be1c839821f5cec010b5e50da61f72640e31158025",
+      "proofHex": "",
+      "expected": "MTC_CONSISTENCY"
+    },
+    {
+      "id": "empty-subtree-extra-proof",
+      "start": 0,
+      "end": 0,
+      "treeSize": 5,
+      "subtreeHashHex": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "rootHashHex": "424f31c23f884602e70044be1c839821f5cec010b5e50da61f72640e31158025",
+      "proofHex": "fc0fd14d6d03fc31d446d6b99253a4fffe1739ee27bbc7218ae18c96810ce1e6",
+      "expected": "MTC_CONSISTENCY"
+    }
+  ],
+  "coveringCases": [
+    {
+      "id": "cover-empty-interval",
+      "start": 0,
+      "end": 0,
+      "expected": "COVERED",
+      "left": {
+        "start": 0,
+        "end": 0
+      },
+      "right": {
+        "start": 0,
+        "end": 0
+      }
+    },
+    {
+      "id": "cover-one-leaf",
+      "start": 0,
+      "end": 1,
+      "expected": "COVERED",
+      "left": {
+        "start": 0,
+        "end": 1
+      },
+      "right": {
+        "start": 1,
+        "end": 1
+      }
+    },
+    {
+      "id": "cover-unaligned-two-leaves",
+      "start": 7,
+      "end": 9,
+      "expected": "COVERED",
+      "left": {
+        "start": 7,
+        "end": 8
+      },
+      "right": {
+        "start": 8,
+        "end": 9
+      }
+    },
+    {
+      "id": "cover-crossing-small",
+      "start": 1,
+      "end": 3,
+      "expected": "COVERED",
+      "left": {
+        "start": 1,
+        "end": 2
+      },
+      "right": {
+        "start": 2,
+        "end": 3
+      }
+    },
+    {
+      "id": "cover-mid-range",
+      "start": 9,
+      "end": 19,
+      "expected": "COVERED",
+      "left": {
+        "start": 8,
+        "end": 16
+      },
+      "right": {
+        "start": 16,
+        "end": 19
+      }
+    },
+    {
+      "id": "cover-near-130",
+      "start": 100,
+      "end": 130,
+      "expected": "COVERED",
+      "left": {
+        "start": 96,
+        "end": 128
+      },
+      "right": {
+        "start": 128,
+        "end": 130
+      }
+    },
+    {
+      "id": "cover-reversed",
+      "start": 3,
+      "end": 2,
+      "expected": "MTC_COVERING"
+    },
+    {
+      "id": "cover-negative-start",
+      "start": -1,
+      "end": 0,
+      "expected": "MTC_COVERING"
+    },
+    {
+      "id": "cover-end-over-log-limit",
+      "start": 0,
+      "end": 281474976710656,
+      "expected": "MTC_COVERING"
+    },
+    {
+      "id": "cover-fractional-start",
+      "start": 0.5,
+      "end": 2,
+      "expected": "MTC_COVERING"
+    }
+  ]
+}

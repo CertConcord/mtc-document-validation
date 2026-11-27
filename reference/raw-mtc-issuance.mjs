@@ -55,10 +55,10 @@ function caName(caId) {
   return Buffer.concat([Buffer.from([0x30, set.length]), set]);
 }
 
-function admittedPolicy(policy) {
+function admittedPolicy(policy, representation = 'standalone') {
   if (!policy || typeof policy.mtcRevision !== 'string' ||
       typeof policy.logHash !== 'string' ||
-      policy.representation !== 'standalone' ||
+      policy.representation !== representation ||
       !hex(policy.caIdHex) || !Array.isArray(policy.cosigners) ||
       !Array.isArray(policy.requiredRoles) || !Array.isArray(policy.revokedRanges) ||
       !decimal(policy.minSerial) || !decimal(policy.maxSerial))
@@ -235,27 +235,44 @@ function cosignedSubtree(name, origin, start, end, root) {
     bounds.subarray(8), root]);
 }
 
+function rawMtcCertificateCandidate(certificateDer, admitted) {
+  const x509 = certificate(certificateDer);
+  const cert = certificateParts(certificateDer, admitted.caId);
+  if (cert.serial < admitted.minSerial || cert.serial > admitted.maxSerial ||
+      admitted.revokedRanges.some(({start, end}) => start <= cert.serial && cert.serial < end))
+    fail('MTC_SERIAL');
+  const logNumber = cert.serial >> 48n;
+  if (logNumber === 0n) fail('MTC_SERIAL');
+  const logId = deriveMtcLogId(admitted.caId, Number(logNumber));
+  const index = Number(cert.serial & ((1n << 48n) - 1n));
+  const parsed = proof(cert.signature);
+  const entry = Buffer.concat([parsed.extensions, Buffer.from([0, 1]),
+    cert.logEntryContents]);
+  if (entry.length > 65535) fail('MTC_LOG_ENTRY');
+  const leaf = hash(Buffer.from([0]), entry);
+  const root = evaluateMtcSubtreeProof(leaf, index, parsed.start,
+    parsed.end, parsed.path);
+  return {logNumber: Number(logNumber), logId, index, parsed, root,
+    certificateNotAfter: x509.validUntil};
+}
+
+// This helper returns untrusted inputs to the relative-provenance verifier.
+// A candidate root never establishes CA certification by itself.
+export function parseRawMtcCertificateCandidate({certificateDer, policy}) {
+  if (!Buffer.isBuffer(certificateDer)) fail('MTC_INPUT');
+  const admitted = admittedPolicy(policy, 'relative');
+  const certificateSha256 = hash(certificateDer).toString('hex');
+  return {admitted, certificateSha256,
+    ...rawMtcCertificateCandidate(certificateDer, admitted)};
+}
+
 export function assessRawMtcIssuance({certificateDer, policy}) {
   if (!Buffer.isBuffer(certificateDer)) fail('MTC_INPUT');
   const admitted = admittedPolicy(policy);
   const certificateSha256 = hash(certificateDer).toString('hex');
   try {
-    certificate(certificateDer);
-    const cert = certificateParts(certificateDer, admitted.caId);
-    if (cert.serial < admitted.minSerial || cert.serial > admitted.maxSerial ||
-        admitted.revokedRanges.some(({start, end}) => start <= cert.serial && cert.serial < end))
-      fail('MTC_SERIAL');
-    const logNumber = cert.serial >> 48n;
-    if (logNumber === 0n) fail('MTC_SERIAL');
-    const logId = deriveMtcLogId(admitted.caId, Number(logNumber));
-    const index = Number(cert.serial & ((1n << 48n) - 1n));
-    const parsed = proof(cert.signature);
-    const entry = Buffer.concat([parsed.extensions, Buffer.from([0, 1]),
-      cert.logEntryContents]);
-    if (entry.length > 65535) fail('MTC_LOG_ENTRY');
-    const leaf = hash(Buffer.from([0]), entry);
-    const root = evaluateMtcSubtreeProof(leaf, index, parsed.start,
-      parsed.end, parsed.path);
+    const {logNumber, logId, index, parsed, root} =
+      rawMtcCertificateCandidate(certificateDer, admitted);
     const roles = new Set();
     for (const signature of parsed.signatures) {
       const cosigner = admitted.cosigners.get(signature.id.toString('hex'));
@@ -268,7 +285,7 @@ export function assessRawMtcIssuance({certificateDer, policy}) {
     if (!admitted.requiredRoles.every(role => roles.has(role)))
       fail('MTC_COSIGNER_QUORUM');
     return {decision: 'ISSUANCE_PROVEN', reason: null, certificateSha256,
-      logNumber: Number(logNumber), index, start: parsed.start, end: parsed.end,
+      logNumber, index, start: parsed.start, end: parsed.end,
       subtreeSha256: root.toString('hex'), admittedRoles: [...roles].sort()};
   } catch (error) {
     if (!(error instanceof DerError)) throw error;
