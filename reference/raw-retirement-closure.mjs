@@ -68,10 +68,9 @@ function snapshotPublication(value){
   const sourceEntries=value.entries;
   const sourceHead=value.head;
   const sourceMonitor=value.monitor;
-  const sourceAnchor=value.anchor;
   const sourceProof=value.proof;
-  if(!Array.isArray(sourceEntries)||!sourceHead||!sourceMonitor||
-     !sourceAnchor)fail('RETIREMENT_INPUT');
+  if(!Array.isArray(sourceEntries)||!sourceHead||!sourceMonitor)
+    fail('RETIREMENT_INPUT');
   const count=sourceEntries.length;
   const entries=[];
   for(let i=0;i<count;i++)entries.push(bytes(sourceEntries[i],'RETIREMENT_INPUT'));
@@ -79,9 +78,8 @@ function snapshotPublication(value){
     signature:bytes(sourceHead.signature,'RETIREMENT_INPUT')};
   const monitor={raw:bytes(sourceMonitor.raw,'RETIREMENT_INPUT'),
     signature:bytes(sourceMonitor.signature,'RETIREMENT_INPUT')};
-  const anchor={treeSize:sourceAnchor.treeSize,rootSha256:sourceAnchor.rootSha256};
   const proof=bytes(sourceProof,'RETIREMENT_INPUT');
-  return {entries,head,monitor,anchor,proof};
+  return {entries,head,monitor,proof};
 }
 function expectedPublicationItems(publication){
   const expected=new Map();
@@ -111,7 +109,10 @@ export function assessRawRetirementClosure({policy,publication,manifest,retrieve
   const inventorySpki=policy.inventoryPublicKeySpkiBase64;
   const archiveSpki=policy.archivePublicKeySpkiBase64;
   const publicationPolicy=policy.publicationPolicy;
-  if(!publicationPolicy)fail('RETIREMENT_INPUT');
+  const selectedAnchor=policy.publicationAnchor;
+  if(!publicationPolicy||!selectedAnchor)fail('RETIREMENT_INPUT');
+  const anchor={treeSize:selectedAnchor.treeSize,
+    rootSha256:selectedAnchor.rootSha256};
   const logId=publicationPolicy.logId,monitorId=publicationPolicy.monitorId;
   const logSpki=publicationPolicy.logPublicKeySpkiBase64;
   const monitorSpki=publicationPolicy.monitorPublicKeySpkiBase64;
@@ -137,7 +138,7 @@ export function assessRawRetirementClosure({policy,publication,manifest,retrieve
   const original=snapshotPublication(publication);
   const witness=assessRawPublicationWitness({
     policy:{logId,monitorId,logPublicKeySpkiBase64:logSpki,
-      monitorPublicKeySpkiBase64:monitorSpki},...original,knownAt:checkAt});
+      monitorPublicKeySpkiBase64:monitorSpki},...original,anchor,knownAt:checkAt});
   const claim=signed(manifest,MANIFEST_DOMAIN,inventoryKey.parsed,
     manifestKeys,'RETIREMENT_MANIFEST');
   const m=claim.record;
@@ -178,13 +179,18 @@ export function assessRawRetirementClosure({policy,publication,manifest,retrieve
     const id=item?.id;
     if(!label(id)||!byId.has(id)||provided.has(id))
       fail('RETIREMENT_RETRIEVAL');
-    provided.set(id,{bytes:bytes(item.bytes,'RETIREMENT_RETRIEVAL'),
+    const originalBytes=item.bytes;
+    provided.set(id,{bytes:originalBytes==null?null:
+      bytes(originalBytes,'RETIREMENT_RETRIEVAL'),
       receipt:item.receipt});
   }
   const reasons=[];
   for(const [id,item] of byId){
     const found=provided.get(id);
-    if(!found){reasons.push({id,code:'RETIREMENT_BYTES_MISSING'});continue;}
+    if(!found||found.bytes===null){
+      reasons.push({id,code:'RETIREMENT_BYTES_MISSING'});
+      continue;
+    }
     const actual=sha(found.bytes);
     if(actual!==item.sha256){
       reasons.push({id,code:'RETIREMENT_BYTES_MISMATCH'});

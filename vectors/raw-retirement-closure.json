@@ -15,6 +15,10 @@
       "logPublicKeySpkiBase64": "MCowBQYDK2VwAyEABeiqnuQDbzPmDUtDT0P0crcsVkSyfxMoc48YcLxmsIw=",
       "monitorPublicKeySpkiBase64": "MCowBQYDK2VwAyEAJnbBFUS2EypnnqssCVy/RDLlsDzgh/qyLsQCqM/x3Hs="
     },
+    "publicationAnchor": {
+      "treeSize": 2,
+      "rootSha256": "e975b6bb9c0200376ec83426349f8fefe565d30d878ac3d48992dbe5f8e8bfec"
+    },
     "required": [
       {
         "id": "document",

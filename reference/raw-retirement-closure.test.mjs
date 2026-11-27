@@ -106,7 +106,12 @@ for(const vector of vectors.cases)test(vector.id,()=>{
   const retrieved=Object.entries(bundle.receipts).map(([id,item])=>({id,
     bytes:Buffer.from(original[id]),receipt:envelope(item)}));
   if(vector.omit)retrieved.splice(retrieved.findIndex(x=>x.id===vector.omit),1);
+  if(vector.omitBytes)delete retrieved.find(x=>x.id===vector.omitBytes).bytes;
+  if(vector.malformedBytes)retrieved.find(x=>x.id===vector.malformedBytes).bytes='not raw bytes';
   if(vector.mutate)retrieved.find(x=>x.id===vector.mutate).bytes[0]^=1;
+  if(vector.mutateArchiveAnchor)publication.anchor.rootSha256='00'.repeat(32);
+  if(vector.mutateSelectedAnchor)policy.publicationAnchor.rootSha256='00'.repeat(32);
+  if(vector.omitSelectedAnchor)delete policy.publicationAnchor;
   if(vector.omitReceipt)retrieved.find(x=>x.id===vector.omitReceipt).receipt=null;
   if(vector.receiptControl)
     retrieved.find(x=>x.id==='historical-status').receipt=envelope(corpus.controls[vector.receiptControl]);

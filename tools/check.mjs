@@ -134,6 +134,7 @@ const retirement=json('vectors/raw-retirement-closure.json');
 const retirementCases=json('vectors/raw-retirement-closure-cases.json');
 assert.equal(retirement.format,'frozen-original-retirement-closure-v1');
 assert.equal(retirementCases.format,'original-retirement-closure-cases-v1');
+assert.deepEqual(retirement.policy.publicationAnchor,witness.anchor);
 assert.deepEqual(json('cases.json').cases.filter(x=>x.component==='raw-retirement-closure')
   .map(x=>[x.id,x.expected]),retirementCases.cases.map(x=>[x.id,x.expected]));
 const retirementObjectSources={
