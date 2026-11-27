@@ -73,6 +73,10 @@ function replay(vector, override = {}) {
       supplied.push({handoffId: row.id, itemId: item.id, bytes});
     }
   }
+  if (vector.extraAtFirst)
+    supplied.push({handoffId: JSON.parse(handoffs[0].raw.toString('utf8')).id,
+      itemId: vector.extraAtFirst,
+      bytes: Buffer.from(originals[vector.extraAtFirst])});
   return assessRawTransferClaims({policy: override.policy ?? policy,
     requiredSetRaw: oldSetRaw,
     successorSetRaw: override.successorSetRaw ?? newSetRaw,
@@ -128,6 +132,10 @@ test('original 23-to-24 item corpus, independent anchors and signatures', () => 
 });
 
 for (const vector of fixture.cases) test(vector.id, () => {
+  if (vector.expectedError) {
+    assert.throws(() => replay(vector), {code: vector.expectedError});
+    return;
+  }
   const result = replay(vector);
   assert.equal(result.responsibility.decision,
     vector.expectedResponsibility);
@@ -136,6 +144,55 @@ for (const vector of fixture.cases) test(vector.id, () => {
   assert.equal(result.handoffCount, 2);
   assert.equal(result.successorSetSha256, fixture.newSet.sha256);
   assert(!Object.hasOwn(result, 'documentValid'));
+});
+
+const fixed = fixture.fixedSetDigestControls;
+test('fixed-set controls have authentic original signatures and retained bytes', () => {
+  assert.equal(fixed.sourceCorpus, fixture.sourceCorpus);
+  const setRaw = checked(fixed.requiredSetRaw);
+  assert.equal(sha(setRaw), fixed.policy.requiredSetSha256);
+  assert.equal(JSON.parse(setRaw.toString('utf8')).items.length, 2);
+  assert(checked(fixed.originals.document).equals(
+    original(corpus.retirement.originals.document)));
+  assert(checked(fixed.originals['preservation-evidence']).equals(
+    original(corpus.retirement.originals['preservation-document'])));
+  for (const name of ['validHandoff', 'nullHandoff']) {
+    const record = fixed.signedRecords[name];
+    const raw = checked(record.raw);
+    const value = JSON.parse(raw.toString('utf8'));
+    const message = Buffer.concat([
+      Buffer.from('MTC-DV-TRANSFER-HANDOFF-v1\0', 'ascii'), raw]);
+    for (const [id, signature] of [[value.fromId,
+      record.predecessorSignature], [value.toId, record.successorSignature]]) {
+      const row = fixed.policy.custodianKeys.find(item => item.id === id);
+      const signer = createPublicKey({key: Buffer.from(
+        row.publicKeySpkiBase64, 'base64'), format: 'der', type: 'spki'});
+      assert(verify(null, message, signer, checked(signature)), name);
+    }
+  }
+  const observed = fixed.signedRecords.validObservation;
+  const observer = createPublicKey({key: Buffer.from(
+    fixed.policy.observerPublicKeySpkiBase64, 'base64'),
+    format: 'der', type: 'spki'});
+  assert(verify(null, Buffer.concat([
+    Buffer.from('MTC-DV-TRANSFER-OBSERVATION-v1\0', 'ascii'),
+    checked(observed.raw)]), observer, checked(observed.signature)));
+});
+for (const vector of fixed.cases) test(vector.id, () => {
+  const record = fixed.signedRecords[vector.handoff];
+  const observed = fixed.signedRecords.validObservation;
+  const call = () => assessRawTransferClaims({policy: fixed.policy,
+    requiredSetRaw: decode(fixed.requiredSetRaw),
+    handoffs: [{raw: checked(record.raw),
+      predecessorSignature: checked(record.predecessorSignature),
+      successorSignature: checked(record.successorSignature)}],
+    observations: [{raw: checked(observed.raw),
+      signature: checked(observed.signature)}],
+    supplied: Object.entries(fixed.originals).map(([itemId, value]) =>
+      ({handoffId: 'handoff-control', itemId, bytes: checked(value)}))});
+  if (vector.expectedError)
+    assert.throws(call, {code: vector.expectedError});
+  else assert.equal(call().decision, vector.expected);
 });
 
 for (const vector of fixture.setControls) test(vector.id, () => {

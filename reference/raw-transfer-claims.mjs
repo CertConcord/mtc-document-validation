@@ -248,8 +248,9 @@ export function assessRawTransferClaims({policy, requiredSetRaw, handoffs,
         row.acceptedAt >= successor.selectedAt) || (index === 1 &&
         row.acceptedAt <= successor.selectedAt)))
       fail('TRANSFER_SET_TIME');
-    if (![requiredSetSha256, successorSha256].includes(
-        row.requiredSetSha256) ||
+    if (!digest(row.requiredSetSha256) ||
+        (row.requiredSetSha256 !== requiredSetSha256 &&
+          (!hasSuccessor || row.requiredSetSha256 !== successorSha256)) ||
         row.itemIds.some(id => !(row.requiredSetSha256 ===
           requiredSetSha256 ? requiredById : allRequiredById).has(id)))
       fail('TRANSFER_HANDOFF');
@@ -284,15 +285,20 @@ export function assessRawTransferClaims({policy, requiredSetRaw, handoffs,
     observationsById.set(row.handoffId, row);
   }
   const suppliedById = new Map();
+  const handoffIndexById = new Map(handoffRows.map((row, index) =>
+    [row.id, index]));
   for (let index = 0; index < suppliedInputs.length; index++) {
     const value = suppliedInputs[index];
     if (!value) fail('TRANSFER_INPUT');
     const handoffId = value.handoffId;
     const itemId = value.itemId;
     const original = bytes(value.bytes, 'TRANSFER_INPUT');
+    const handoffIndex = handoffIndexById.get(handoffId);
+    const applicableById = hasSuccessor && handoffIndex === 1 ?
+      allRequiredById : requiredById;
     if (!label(handoffId) || !label(itemId) ||
-        !handoffById.has(handoffId) ||
-        !allRequiredById.has(itemId)) fail('TRANSFER_INPUT');
+        handoffIndex === undefined ||
+        !applicableById.has(itemId)) fail('TRANSFER_INPUT');
     const key = `${handoffId}\0${itemId}`;
     if (suppliedById.has(key)) fail('TRANSFER_INPUT');
     suppliedById.set(key, original);

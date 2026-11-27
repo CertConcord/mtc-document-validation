@@ -243,7 +243,9 @@ assert.deepEqual(json('cases.json').cases.filter(x=>
   x.component==='raw-transfer-set-evolution').map(x=>[x.id,x.expected]),
   [...transferEvolution.cases.map(x=>[x.id,transferExpected(x)]),
     ...transferEvolution.setControls.map(x=>[x.id,x.expected]),
-    ...transferEvolution.inputControls.map(x=>[x.id,x.expected])]);
+    ...transferEvolution.inputControls.map(x=>[x.id,x.expected]),
+    ...transferEvolution.fixedSetDigestControls.cases.map(x=>
+      [x.id,x.expectedError??x.expected])]);
 for(const item of [transferEvolution.oldSet,transferEvolution.newSet,
     transferEvolution.manifestOriginal]){
   const raw=Buffer.from(item.base64,'base64');
@@ -269,6 +271,19 @@ for(const row of Object.values(transferEvolution.signedRecords))
     assert.equal(createHash('sha256').update(raw).digest('hex'),
       row[part].sha256);
   }
+const fixedDigest=transferEvolution.fixedSetDigestControls;
+assert.equal(fixedDigest.sourceCorpus,transferEvolution.sourceCorpus);
+const fixedRaw=Buffer.from(fixedDigest.requiredSetRaw.base64,'base64');
+assert.equal(fixedRaw.length,fixedDigest.requiredSetRaw.bytes);
+assert.equal(createHash('sha256').update(fixedRaw).digest('hex'),
+  fixedDigest.policy.requiredSetSha256);
+for(const item of [...Object.values(fixedDigest.originals),
+    ...Object.values(fixedDigest.signedRecords).flatMap(row=>
+      Object.values(row))]){
+  const raw=Buffer.from(item.base64,'base64');
+  assert.equal(raw.length,item.bytes);
+  assert.equal(createHash('sha256').update(raw).digest('hex'),item.sha256);
+}
 const mtcVectors=json('vectors/raw-mtc-cases.json');
 const mtcDer=json('vectors/raw-mtc-der.json');
 assert.equal(mtcVectors.format,'original-mtc07-issuance-cases-v1');
