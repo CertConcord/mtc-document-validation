@@ -1,0 +1,32 @@
+{
+  "format": "original-synthetic-authenticated-ers-facts-v1",
+  "cases": [
+    {
+      "id": "same-chain-hash-preserved",
+      "expected": "VALID",
+      "policy": {"at": 250, "dataValidUntil": 150, "hashValidUntil": {"sha256": 500, "sha512": 600}},
+      "records": [
+        {"chain": 0, "genTime": 100, "accuracy": 1, "poeUpperBound": 101, "validUntil": 400, "hashOID": "sha256"},
+        {"chain": 0, "genTime": 200, "accuracy": 1, "poeUpperBound": 201, "validUntil": 500, "hashOID": "sha256"}
+      ]
+    },
+    {
+      "id": "same-chain-hash-changed",
+      "expected": "ERS_CHAIN_HASH_MISMATCH",
+      "policy": {"at": 250, "dataValidUntil": 150, "hashValidUntil": {"sha256": 500, "sha512": 600}},
+      "records": [
+        {"chain": 0, "genTime": 100, "accuracy": 1, "poeUpperBound": 101, "validUntil": 400, "hashOID": "sha256"},
+        {"chain": 0, "genTime": 200, "accuracy": 1, "poeUpperBound": 201, "validUntil": 500, "hashOID": "sha512"}
+      ]
+    },
+    {
+      "id": "new-chain-hash-changed",
+      "expected": "VALID",
+      "policy": {"at": 250, "dataValidUntil": 150, "hashValidUntil": {"sha256": 500, "sha512": 600}},
+      "records": [
+        {"chain": 0, "genTime": 100, "accuracy": 1, "poeUpperBound": 101, "validUntil": 400, "hashOID": "sha256"},
+        {"chain": 1, "genTime": 200, "accuracy": 1, "poeUpperBound": 201, "validUntil": 500, "hashOID": "sha512"}
+      ]
+    }
+  ]
+}

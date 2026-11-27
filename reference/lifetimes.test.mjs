@@ -14,7 +14,7 @@ test('protection deadlines and interval ordering reject gaps',()=>{
     [(r)=>r[0].validUntil=201,'ERS_RENEWAL_LATE'],
     [(r,p)=>p.at=500,'ERS_FINAL_PROTECTION_EXPIRED'],
     [(r,p)=>delete p.hashValidUntil.sha256,'ERS_HASH_LIFETIME_REQUIRED'],
-    [(r)=>r[1].chain=0,'ERS_HASH_RENEWAL_LATE'],
+    [(r)=>{r[1].chain=0;r[1].hashOID='sha256';},'ERS_HASH_RENEWAL_LATE'],
   ]) {const r=facts(),p=policy();change(r,p);assert.throws(()=>validate(r,p),{code});}
 });
 test('unverified malformed facts are not accepted as a preservation result',()=>{

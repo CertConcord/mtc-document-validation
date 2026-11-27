@@ -12,6 +12,8 @@ export function assertPreservationLifetimes(records, {at, dataValidUntil, hashVa
       r.poeUpperBound <= at && r.poeUpperBound < r.validUntil &&
       (i === 0 ? r.chain === 0 : r.chain >= records[i-1].chain && r.chain <= records[i-1].chain+1),
       'ERS_RECORD_FACTS');
+    if (i > 0 && r.chain === records[i-1].chain)
+      need(r.hashOID === records[i-1].hashOID, 'ERS_CHAIN_HASH_MISMATCH');
   }
   need(records[0].poeUpperBound < dataValidUntil, 'ERS_INITIAL_PROTECTION_LATE');
   for (let i = 0; i < records.length; i++) {
