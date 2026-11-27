@@ -1,0 +1,47 @@
+{
+  "description": "Original synthetic facts independently admitted before transfer-continuity evaluation; no wire format or signature fixture",
+  "base": {
+    "policy": {
+      "initialCustodianId": "issuer",
+      "retiredAt": 200,
+      "documentThrough": 500,
+      "required": [
+        {"id": "document:1", "role": "original-object", "bytesHex": "00a1", "createdAt": 0},
+        {"id": "ers:prior", "role": "prior-evidence", "bytesHex": "00b2", "createdAt": 100},
+        {"id": "status:1", "role": "history", "bytesHex": "00c3", "createdAt": 100}
+      ]
+    },
+    "transfers": [
+      {"id": "handoff:A", "fromId": "issuer", "toId": "archive-A", "acceptedAt": 190, "responsibleThrough": 350, "itemIds": ["document:1", "ers:prior", "status:1"]},
+      {"id": "handoff:B", "fromId": "archive-A", "toId": "archive-B", "acceptedAt": 300, "responsibleThrough": 500, "itemIds": ["document:1", "ers:prior", "status:1"]}
+    ],
+    "observations": [
+      {"id": "a-document", "handoffId": "handoff:A", "itemId": "document:1", "holderId": "archive-A", "at": 190, "bytesHex": "00a1"},
+      {"id": "a-ers", "handoffId": "handoff:A", "itemId": "ers:prior", "holderId": "archive-A", "at": 190, "bytesHex": "00b2"},
+      {"id": "a-status", "handoffId": "handoff:A", "itemId": "status:1", "holderId": "archive-A", "at": 190, "bytesHex": "00c3"},
+      {"id": "b-document", "handoffId": "handoff:B", "itemId": "document:1", "holderId": "archive-B", "at": 300, "bytesHex": "00a1"},
+      {"id": "b-ers", "handoffId": "handoff:B", "itemId": "ers:prior", "holderId": "archive-B", "at": 300, "bytesHex": "00b2"},
+      {"id": "b-status", "handoffId": "handoff:B", "itemId": "status:1", "holderId": "archive-B", "at": 300, "bytesHex": "00c3"}
+    ]
+  },
+  "cases": [
+    {"id": "two-complete-provider-transfers", "expected": {"responsibility": {"decision": "SATISFIED", "reasons": []}, "evidence": {"decision": "SATISFIED", "reasons": []}}},
+    {"id": "same-original-bytes-uppercase", "observationEdits": {"b-ers": {"bytesHex": "00B2"}}, "expected": {"responsibility": {"decision": "SATISFIED", "reasons": []}, "evidence": {"decision": "SATISFIED", "reasons": []}}},
+    {"id": "prior-evidence-not-received-by-second-provider", "removeObservationIds": ["b-ers"], "expected": {"responsibility": {"decision": "SATISFIED", "reasons": []}, "evidence": {"decision": "INDETERMINATE", "reasons": [{"handoffId": "handoff:B", "itemId": "ers:prior", "code": "TRANSFER_ITEM_MISSING"}]}}},
+    {"id": "prior-evidence-substituted-at-second-provider", "observationEdits": {"b-ers": {"bytesHex": "ffff"}}, "expected": {"responsibility": {"decision": "SATISFIED", "reasons": []}, "evidence": {"decision": "REJECTED", "reasons": [{"handoffId": "handoff:B", "itemId": "ers:prior", "code": "TRANSFER_BYTES_MISMATCH"}]}}},
+    {"id": "receipt-omits-prior-evidence-despite-possession", "transferEdits": {"handoff:B": {"itemIds": ["document:1", "status:1"]}}, "expected": {"responsibility": {"decision": "INDETERMINATE", "reasons": [{"handoffId": "handoff:B", "itemId": "ers:prior", "code": "TRANSFER_SCOPE_MISSING"}]}, "evidence": {"decision": "SATISFIED", "reasons": []}}},
+    {"id": "signed-handoffs-without-second-provider-bytes", "removeObservationIds": ["b-document", "b-ers", "b-status"], "expected": {"responsibility": {"decision": "SATISFIED", "reasons": []}, "evidence": {"decision": "INDETERMINATE", "reasons": [{"handoffId": "handoff:B", "itemId": "document:1", "code": "TRANSFER_ITEM_MISSING"}, {"handoffId": "handoff:B", "itemId": "ers:prior", "code": "TRANSFER_ITEM_MISSING"}, {"handoffId": "handoff:B", "itemId": "status:1", "code": "TRANSFER_ITEM_MISSING"}]}}},
+    {"id": "issuer-exits-before-successor-accepts", "transferEdits": {"handoff:A": {"acceptedAt": 201}}, "observationEdits": {"a-document": {"at": 201}, "a-ers": {"at": 201}, "a-status": {"at": 201}}, "expected": {"responsibility": {"decision": "INDETERMINATE", "reasons": [{"handoffId": "handoff:A", "code": "TRANSFER_RESPONSIBILITY_GAP"}]}, "evidence": {"decision": "SATISFIED", "reasons": []}}},
+    {"id": "gap-between-successive-custodians", "transferEdits": {"handoff:A": {"responsibleThrough": 250}}, "expected": {"responsibility": {"decision": "INDETERMINATE", "reasons": [{"handoffId": "handoff:B", "code": "TRANSFER_RESPONSIBILITY_GAP"}]}, "evidence": {"decision": "SATISFIED", "reasons": []}}},
+    {"id": "successor-commitment-shorter-than-document-horizon", "transferEdits": {"handoff:B": {"responsibleThrough": 450}}, "expected": {"responsibility": {"decision": "INDETERMINATE", "reasons": [{"handoffId": "handoff:B", "code": "TRANSFER_HORIZON_SHORT"}]}, "evidence": {"decision": "SATISFIED", "reasons": []}}},
+    {"id": "unrelated-predecessor-cannot-extend-chain", "transferEdits": {"handoff:B": {"fromId": "other-archive"}}, "expected": {"responsibility": {"decision": "INDETERMINATE", "reasons": [{"handoffId": "handoff:B", "code": "TRANSFER_PREDECESSOR_MISMATCH"}]}, "evidence": {"decision": "SATISFIED", "reasons": []}}},
+    {"id": "evidence-generated-between-handoffs-is-retained", "additionalRequired": [{"id": "ers:renewed", "role": "prior-evidence", "bytesHex": "00d4", "createdAt": 250}], "transferEdits": {"handoff:B": {"itemIds": ["document:1", "ers:prior", "status:1", "ers:renewed"]}}, "additionalObservations": [{"handoffId": "handoff:B", "itemId": "ers:renewed", "holderId": "archive-B", "at": 300, "bytesHex": "00d4"}], "expected": {"responsibility": {"decision": "SATISFIED", "reasons": []}, "evidence": {"decision": "SATISFIED", "reasons": []}}},
+    {"id": "renewed-record-omitted-from-second-scope", "additionalRequired": [{"id": "ers:renewed", "role": "prior-evidence", "bytesHex": "00d4", "createdAt": 250}], "additionalObservations": [{"handoffId": "handoff:B", "itemId": "ers:renewed", "holderId": "archive-B", "at": 300, "bytesHex": "00d4"}], "expected": {"responsibility": {"decision": "INDETERMINATE", "reasons": [{"handoffId": "handoff:B", "itemId": "ers:renewed", "code": "TRANSFER_SCOPE_MISSING"}]}, "evidence": {"decision": "SATISFIED", "reasons": []}}},
+    {"id": "renewed-record-listed-but-not-received", "additionalRequired": [{"id": "ers:renewed", "role": "prior-evidence", "bytesHex": "00d4", "createdAt": 250}], "transferEdits": {"handoff:B": {"itemIds": ["document:1", "ers:prior", "status:1", "ers:renewed"]}}, "expected": {"responsibility": {"decision": "SATISFIED", "reasons": []}, "evidence": {"decision": "INDETERMINATE", "reasons": [{"handoffId": "handoff:B", "itemId": "ers:renewed", "code": "TRANSFER_ITEM_MISSING"}]}}},
+    {"id": "original-object-dated-after-first-handoff", "requiredEdits": {"document:1": {"createdAt": 200}}, "expected": {"error": "TRANSFER_FACTS"}},
+    {"id": "receipt-claims-evidence-before-creation", "additionalRequired": [{"id": "ers:renewed", "role": "prior-evidence", "bytesHex": "00d4", "createdAt": 250}], "transferEdits": {"handoff:A": {"itemIds": ["document:1", "ers:prior", "status:1", "ers:renewed"]}}, "expected": {"error": "TRANSFER_FACTS"}},
+    {"id": "no-successor-record", "transfers": [], "expected": {"responsibility": {"decision": "INDETERMINATE", "reasons": [{"code": "TRANSFER_NOT_RECORDED"}]}, "evidence": {"decision": "INDETERMINATE", "reasons": [{"code": "TRANSFER_NOT_RECORDED"}]}}},
+    {"id": "malformed-successor-byte-fact", "observationEdits": {"b-ers": {"bytesHex": "xyz"}}, "expected": {"error": "TRANSFER_FACTS"}},
+    {"id": "policy-without-prior-evidence-closure", "policyEdits": {"required": [{"id": "document:1", "role": "original-object", "bytesHex": "00a1", "createdAt": 0}]}, "expected": {"error": "TRANSFER_POLICY"}}
+  ]
+}
