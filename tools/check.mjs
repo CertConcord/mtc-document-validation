@@ -85,6 +85,21 @@ for(const [id,item] of Object.entries(authorityBytes.objects)){
 }
 for(const v of rawAuthority.cases)for(const id of v.records)
   assert(Object.hasOwn(authorityBytes.objects,id),`${v.id}: ${id}`);
+const mtcVectors=json('vectors/raw-mtc-cases.json');
+const mtcDer=json('vectors/raw-mtc-der.json');
+assert.equal(mtcVectors.format,'original-mtc07-issuance-cases-v1');
+assert.equal(mtcDer.format,'frozen-original-mtc07-der-corpus-v1');
+assert.deepEqual(json('cases.json').cases.filter(x=>x.component==='raw-mtc-issuance')
+  .map(x=>[x.id,x.expected]),mtcVectors.cases.map(x=>[x.id,x.expected]));
+for(const [id,item] of Object.entries(mtcDer.objects)){
+  const bytes=Buffer.from(item.base64,'base64');
+  assert.equal(bytes.length,item.bytes,id);
+  assert.equal(createHash('sha256').update(bytes).digest('hex'),item.sha256,id);
+}
+for(const v of mtcVectors.cases){
+  assert(Object.hasOwn(mtcDer.objects,v.certificate),`${v.id}: certificate`);
+  assert(Object.hasOwn(mtcDer.policies,v.policy),`${v.id}: policy`);
+}
 for(const s of json('sources.json').sources){assert(s.url.startsWith('https://'));assert(/^[a-f0-9]{64}$/.test(s.sha256));}
 function walk(dir=''){for(const e of readdirSync(join(root,dir),{withFileTypes:true})){if(['.git','.runtime','node_modules'].includes(e.name))continue;const p=join(dir,e.name);if(e.isDirectory())walk(p);else{const t=readFileSync(join(root,p),'utf8');assert(!/\p{Script=Han}/u.test(t),p);assert(!/-----BEGIN (?:RSA |EC )?PRIVATE KEY-----/.test(t),p);assert(!/github_pat_[A-Za-z0-9_]{40,}|gh[pousr]_[A-Za-z0-9]{30,}/.test(t),p);}}}
 walk();console.log('Draft sources, cases and publication content verified');

@@ -1,0 +1,143 @@
+{
+  "format": "original-mtc07-issuance-cases-v1",
+  "cases": [
+    {
+      "id": "mtc-standalone-single-leaf",
+      "certificate": "standalone-one",
+      "policy": "caOnly",
+      "expected": "ISSUANCE_PROVEN"
+    },
+    {
+      "id": "mtc-standalone-two-role-and-grease",
+      "certificate": "standalone-two-role",
+      "policy": "caAndMirror",
+      "expected": "ISSUANCE_PROVEN"
+    },
+    {
+      "id": "mtc-standalone-three-leaf-skipped-level",
+      "certificate": "standalone-three-leaf",
+      "policy": "caOnly",
+      "expected": "ISSUANCE_PROVEN"
+    },
+    {
+      "id": "mtc-three-leaf-missing-sibling",
+      "certificate": "three-leaf-missing-sibling",
+      "policy": "caOnly",
+      "expected": "MTC_PATH"
+    },
+    {
+      "id": "mtc-required-mirror-missing",
+      "certificate": "standalone-one",
+      "policy": "caAndMirror",
+      "expected": "MTC_COSIGNER_QUORUM"
+    },
+    {
+      "id": "mtc-revoked-range",
+      "certificate": "standalone-one",
+      "policy": "revoked",
+      "expected": "MTC_SERIAL"
+    },
+    {
+      "id": "mtc-original-subject-changed",
+      "certificate": "changed-subject",
+      "policy": "caOnly",
+      "expected": "MTC_COSIGNER_QUORUM"
+    },
+    {
+      "id": "mtc-original-spki-changed",
+      "certificate": "changed-spki",
+      "policy": "caOnly",
+      "expected": "MTC_COSIGNER_QUORUM"
+    },
+    {
+      "id": "mtc-original-extension-changed",
+      "certificate": "changed-x509-extension",
+      "policy": "caOnly",
+      "expected": "MTC_COSIGNER_QUORUM"
+    },
+    {
+      "id": "mtc-proof-trailing-byte",
+      "certificate": "trailing-proof",
+      "policy": "caAndMirror",
+      "expected": "MTC_PROOF_ENCODING"
+    },
+    {
+      "id": "mtc-proof-unsorted-cosigners",
+      "certificate": "unsorted-cosigners",
+      "policy": "caAndMirror",
+      "expected": "MTC_PROOF_ENCODING"
+    },
+    {
+      "id": "mtc-proof-duplicate-cosigner",
+      "certificate": "duplicate-cosigner",
+      "policy": "caAndMirror",
+      "expected": "MTC_PROOF_ENCODING"
+    },
+    {
+      "id": "mtc-proof-non-octet-bitstring",
+      "certificate": "non-octet-bitstring",
+      "policy": "caOnly",
+      "expected": "MTC_PROOF_ENCODING"
+    },
+    {
+      "id": "mtc-signature-nonzero-timestamp",
+      "certificate": "wrong-timestamp",
+      "policy": "caOnly",
+      "expected": "MTC_COSIGNER_QUORUM"
+    },
+    {
+      "id": "mtc-signature-wrong-log-origin",
+      "certificate": "wrong-log-origin",
+      "policy": "caOnly",
+      "expected": "MTC_COSIGNER_QUORUM"
+    },
+    {
+      "id": "mtc-signature-wrong-range",
+      "certificate": "wrong-range-signature",
+      "policy": "caOnly",
+      "expected": "MTC_COSIGNER_QUORUM"
+    },
+    {
+      "id": "mtc-original-inclusion-path-changed",
+      "certificate": "wrong-path",
+      "policy": "caAndMirror",
+      "expected": "MTC_COSIGNER_QUORUM"
+    },
+    {
+      "id": "mtc-unknown-grease-cannot-certify",
+      "certificate": "unknown-only",
+      "policy": "caOnly",
+      "expected": "MTC_COSIGNER_QUORUM"
+    },
+    {
+      "id": "mtc-unaligned-subtree",
+      "certificate": "un-aligned-subtree",
+      "policy": "caOnly",
+      "expected": "MTC_SUBTREE"
+    },
+    {
+      "id": "mtc-wrong-leaf-index",
+      "certificate": "wrong-index",
+      "policy": "caAndMirror",
+      "expected": "MTC_COSIGNER_QUORUM"
+    },
+    {
+      "id": "mtc-wrong-ca-name",
+      "certificate": "wrong-issuer",
+      "policy": "caOnly",
+      "expected": "MTC_ISSUER"
+    },
+    {
+      "id": "mtc-proof-algorithm-parameters",
+      "certificate": "algorithm-with-parameters",
+      "policy": "caOnly",
+      "expected": "MTC_CERTIFICATE"
+    },
+    {
+      "id": "mtc-extension-type-order",
+      "certificate": "extension-order",
+      "policy": "caOnly",
+      "expected": "MTC_PROOF_ENCODING"
+    }
+  ]
+}
