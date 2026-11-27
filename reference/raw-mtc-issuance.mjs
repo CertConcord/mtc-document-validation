@@ -1,5 +1,6 @@
 import {createHash, createPublicKey, verify} from 'node:crypto';
-import {DerError, bitString, children, content, expect, one, positiveInteger, raw} from './der.mjs';
+import {DerError, bitString, children, expect, one, positiveInteger, raw} from './der.mjs';
+import {certificate} from './cert-der.mjs';
 
 // A bounded revision-07 certificate-signature check. It does not perform PKIX
 // path, status, document-signature, time, or archive validation.
@@ -9,14 +10,15 @@ const LABEL = Buffer.from('subtree/v1\n\0', 'ascii');
 const fail = code => { throw new DerError(code); };
 const hash = (...parts) => createHash('sha256').update(Buffer.concat(parts)).digest();
 const hex = value => typeof value === 'string' && /^(?:[a-f0-9]{2})+$/.test(value);
+const decimal = value => typeof value === 'string' && /^(?:0|[1-9][0-9]*)$/.test(value);
 
-function relativeOid(bytes) {
-  if (!bytes.length || bytes.length > 32) fail('MTC_POLICY');
+function relativeOid(bytes, errorCode = 'MTC_POLICY') {
+  if (!bytes.length || bytes.length > 32) fail(errorCode);
   const arcs = [];
   let value = 0n;
   let first = true;
   for (const byte of bytes) {
-    if (first && byte === 0x80) fail('MTC_POLICY');
+    if (first && byte === 0x80) fail(errorCode);
     value = (value << 7n) | BigInt(byte & 0x7f);
     first = false;
     if (!(byte & 0x80)) {
@@ -25,8 +27,24 @@ function relativeOid(bytes) {
       first = true;
     }
   }
-  if (!first) fail('MTC_POLICY');
+  if (!first) fail(errorCode);
   return arcs.join('.');
+}
+
+export function deriveMtcLogId(caId, logNumber) {
+  if (!Buffer.isBuffer(caId) ||
+      !Number.isInteger(logNumber) || logNumber < 1 || logNumber > 65535)
+    fail('MTC_POLICY');
+  const arcs = relativeOid(caId);
+  let number = BigInt(logNumber);
+  const encodedNumber = [Number(number & 127n)];
+  while (number > 127n) {
+    number >>= 7n;
+    encodedNumber.unshift(0x80 | Number(number & 127n));
+  }
+  const binary = Buffer.concat([caId, Buffer.from([0, ...encodedNumber])]);
+  if (binary.length > 32) fail('MTC_POLICY');
+  return {binary, origin: `${arcs}.0.${logNumber}`};
 }
 
 function caName(caId) {
@@ -42,12 +60,17 @@ function admittedPolicy(policy) {
       typeof policy.logHash !== 'string' ||
       policy.representation !== 'standalone' ||
       !hex(policy.caIdHex) || !Array.isArray(policy.cosigners) ||
-      !Array.isArray(policy.requiredRoles) || !Array.isArray(policy.revokedRanges))
+      !Array.isArray(policy.requiredRoles) || !Array.isArray(policy.revokedRanges) ||
+      !decimal(policy.minSerial) || !decimal(policy.maxSerial))
     fail('MTC_POLICY');
   if (policy.mtcRevision !== '07' || policy.logHash !== 'sha256')
     fail('MTC_UNSUPPORTED');
+  const minSerial = BigInt(policy.minSerial);
+  const maxSerial = BigInt(policy.maxSerial);
+  if (minSerial < (1n << 48n) || maxSerial > (1n << 64n) - 1n ||
+      minSerial > maxSerial) fail('MTC_POLICY');
   const caId = Buffer.from(policy.caIdHex, 'hex');
-  const caNameText = relativeOid(caId);
+  relativeOid(caId);
   const cosigners = new Map();
   for (const entry of policy.cosigners) {
     if (!entry || !hex(entry.idHex) || typeof entry.role !== 'string' ||
@@ -73,14 +96,14 @@ function admittedPolicy(policy) {
         typeof role === 'string' && [...cosigners.values()].some(x => x.role === role)))
     fail('MTC_POLICY');
   const revokedRanges = policy.revokedRanges.map(range => {
-    if (!range || !/^[0-9]+$/.test(range.start) || !/^[0-9]+$/.test(range.end))
+    if (!range || !decimal(range.start) || !decimal(range.end))
       fail('MTC_POLICY');
     const start = BigInt(range.start), end = BigInt(range.end);
     if (start < 0n || end > (1n << 64n) || start >= end) fail('MTC_POLICY');
     return {start, end};
   });
-  return {caId, caNameText, cosigners, requiredRoles: policy.requiredRoles,
-    revokedRanges};
+  return {caId, cosigners, requiredRoles: policy.requiredRoles,
+    minSerial, maxSerial, revokedRanges};
 }
 
 function certificateParts(der, caId) {
@@ -162,6 +185,7 @@ function proof(bytes) {
         (previous && (id.length < previous.length ||
           (id.length === previous.length && Buffer.compare(id, previous) <= 0))))
       fail('MTC_PROOF_ENCODING');
+    relativeOid(id, 'MTC_PROOF_ENCODING');
     signatures.push({id, value: take(u16())});
     previous = id;
   }
@@ -216,12 +240,14 @@ export function assessRawMtcIssuance({certificateDer, policy}) {
   const admitted = admittedPolicy(policy);
   const certificateSha256 = hash(certificateDer).toString('hex');
   try {
+    certificate(certificateDer);
     const cert = certificateParts(certificateDer, admitted.caId);
-    if (cert.serial > (1n << 64n) - 1n ||
+    if (cert.serial < admitted.minSerial || cert.serial > admitted.maxSerial ||
         admitted.revokedRanges.some(({start, end}) => start <= cert.serial && cert.serial < end))
       fail('MTC_SERIAL');
     const logNumber = cert.serial >> 48n;
     if (logNumber === 0n) fail('MTC_SERIAL');
+    const logId = deriveMtcLogId(admitted.caId, Number(logNumber));
     const index = Number(cert.serial & ((1n << 48n) - 1n));
     const parsed = proof(cert.signature);
     const entry = Buffer.concat([parsed.extensions, Buffer.from([0, 1]),
@@ -235,7 +261,7 @@ export function assessRawMtcIssuance({certificateDer, policy}) {
       const cosigner = admitted.cosigners.get(signature.id.toString('hex'));
       if (!cosigner) continue;
       const message = cosignedSubtree(cosigner.name,
-        `${admitted.caNameText}.0.${logNumber}`, parsed.start, parsed.end, root);
+        logId.origin, parsed.start, parsed.end, root);
       if (verify(null, message, cosigner.key, signature.value))
         roles.add(cosigner.role);
     }

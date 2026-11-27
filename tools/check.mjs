@@ -91,6 +91,13 @@ assert.equal(mtcVectors.format,'original-mtc07-issuance-cases-v1');
 assert.equal(mtcDer.format,'frozen-original-mtc07-der-corpus-v1');
 assert.deepEqual(json('cases.json').cases.filter(x=>x.component==='raw-mtc-issuance')
   .map(x=>[x.id,x.expected]),mtcVectors.cases.map(x=>[x.id,x.expected]));
+assert.deepEqual(json('cases.json').cases.filter(x=>x.component==='raw-mtc-log-id')
+  .map(x=>[x.id,x.expected]),mtcVectors.logIdCases.map(x=>[x.id,x.expected]));
+for(const v of mtcVectors.logIdCases){
+  assert(/^(?:[a-f0-9]{2})+$/.test(v.caIdHex),v.id);
+  if(v.expected==='ADMITTED')
+    assert.equal(Buffer.from(v.expectedBinaryHex,'hex').length,32,v.id);
+}
 for(const [id,item] of Object.entries(mtcDer.objects)){
   const bytes=Buffer.from(item.base64,'base64');
   assert.equal(bytes.length,item.bytes,id);

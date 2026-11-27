@@ -105,6 +105,41 @@
       "base64": "MIIBIDCBrKADAgECAgcBAAAAAAAAMAoGCCsGAQUFBwZDMBQxEjAQBggrBgEFBQcZAw0Egf1ZATAeFw0yNjAxMDEwMDAwMDBaFw0yNzAxMDEwMDAwMDBaMBoxGDAWBgNVBAMMD0RvY3VtZW50IFNpZ25lcjAqMAUGAytlcAMhAPdU31kSZ37l9AE7A6UCoJARvZUXji0KhOpfOILQIaqJoxIwEDAOBgNVHQ8BAf8EBAMCB4AwCgYIKwYBBQUHBkMDYwAACAACAAAAAQAAAAAAAAAAAAAAAAABAAAAAEcEgf1ZAQBAC+ONmROJKRy+gp7HITse0I4rHGhwQmGViNXP1V5WUBeBzLqGyYxFk83vBH43rN37Uvq9rQNsReIFGJWww3DADg==",
       "bytes": 292,
       "sha256": "db6bfb1bd53ea1bee231356c511b3ab6d5c236cc36472df73f0f1f00e2ae8304"
+    },
+    "invalid-validity-tag": {
+      "base64": "MIIBGDCBrKADAgECAgcBAAAAAAAAMAoGCCsGAQUFBwZDMBQxEjAQBggrBgEFBQcZAw0Egf1ZATAeFg0yNjAxMDEwMDAwMDBaFw0yNzAxMDEwMDAwMDBaMBoxGDAWBgNVBAMMD0RvY3VtZW50IFNpZ25lcjAqMAUGAytlcAMhAPdU31kSZ37l9AE7A6UCoJARvZUXji0KhOpfOILQIaqJoxIwEDAOBgNVHQ8BAf8EBAMCB4AwCgYIKwYBBQUHBkMDWwAAAAAAAAAAAAAAAAAAAQAAAABHBIH9WQEAQAvjjZkTiSkcvoKexyE7HtCOKxxocEJhlYjVz9VeVlAXgcy6hsmMRZPN7wR+N6zd+1L6va0DbEXiBRiVsMNwwA4=",
+      "bytes": 284,
+      "sha256": "69756a443cde8e7be05080be8d3c6630d2c14bd5739b3babec37e00f13b0f567"
+    },
+    "invalid-spki-algorithm-tag": {
+      "base64": "MIIBGDCBrKADAgECAgcBAAAAAAAAMAoGCCsGAQUFBwZDMBQxEjAQBggrBgEFBQcZAw0Egf1ZATAeFw0yNjAxMDEwMDAwMDBaFw0yNzAxMDEwMDAwMDBaMBoxGDAWBgNVBAMMD0RvY3VtZW50IFNpZ25lcjAqMAUEAytlcAMhAPdU31kSZ37l9AE7A6UCoJARvZUXji0KhOpfOILQIaqJoxIwEDAOBgNVHQ8BAf8EBAMCB4AwCgYIKwYBBQUHBkMDWwAAAAAAAAAAAAAAAAAAAQAAAABHBIH9WQEAQAvjjZkTiSkcvoKexyE7HtCOKxxocEJhlYjVz9VeVlAXgcy6hsmMRZPN7wR+N6zd+1L6va0DbEXiBRiVsMNwwA4=",
+      "bytes": 284,
+      "sha256": "2c7183dc0d3063ae34ee313772dcd54554579ab709e6c25e834485032a86ed1e"
+    },
+    "invalid-extension-oid-tag": {
+      "base64": "MIIBGDCBrKADAgECAgcBAAAAAAAAMAoGCCsGAQUFBwZDMBQxEjAQBggrBgEFBQcZAw0Egf1ZATAeFw0yNjAxMDEwMDAwMDBaFw0yNzAxMDEwMDAwMDBaMBoxGDAWBgNVBAMMD0RvY3VtZW50IFNpZ25lcjAqMAUGAytlcAMhAPdU31kSZ37l9AE7A6UCoJARvZUXji0KhOpfOILQIaqJoxIwEDAOBANVHQ8BAf8EBAMCB4AwCgYIKwYBBQUHBkMDWwAAAAAAAAAAAAAAAAAAAQAAAABHBIH9WQEAQAvjjZkTiSkcvoKexyE7HtCOKxxocEJhlYjVz9VeVlAXgcy6hsmMRZPN7wR+N6zd+1L6va0DbEXiBRiVsMNwwA4=",
+      "bytes": 284,
+      "sha256": "6fa0a114d140a87ba687950c489e449cfce3d46f6e656a19b282c5689d9bc583"
+    },
+    "unknown-malformed-cosigner-id": {
+      "base64": "MIIBHDCBrKADAgECAgcBAAAAAAAAMAoGCCsGAQUFBwZDMBQxEjAQBggrBgEFBQcZAw0Egf1ZATAeFw0yNjAxMDEwMDAwMDBaFw0yNzAxMDEwMDAwMDBaMBoxGDAWBgNVBAMMD0RvY3VtZW50IFNpZ25lcjAqMAUGAytlcAMhAPdU31kSZ37l9AE7A6UCoJARvZUXji0KhOpfOILQIaqJoxIwEDAOBgNVHQ8BAf8EBAMCB4AwCgYIKwYBBQUHBkMDXwAAAAAAAAAAAAAAAAAAAQAAAABLAYAAAASB/VkBAEAL442ZE4kpHL6CnschOx7QjiscaHBCYZWI1c/VXlZQF4HMuobJjEWTze8Efjes3ftS+r2tA2xF4gUYlbDDcMAO",
+      "bytes": 288,
+      "sha256": "f6a55a03dcf8a6dcf427ed8e18f39074e5fa6fc7817dd6a6c499446b6f3288fd"
+    },
+    "unsupported-v2-certificate": {
+      "base64": "MIIBGDCBrKADAgEBAgcBAAAAAAAAMAoGCCsGAQUFBwZDMBQxEjAQBggrBgEFBQcZAw0Egf1ZATAeFw0yNjAxMDEwMDAwMDBaFw0yNzAxMDEwMDAwMDBaMBoxGDAWBgNVBAMMD0RvY3VtZW50IFNpZ25lcjAqMAUGAytlcAMhAPdU31kSZ37l9AE7A6UCoJARvZUXji0KhOpfOILQIaqJoxIwEDAOBgNVHQ8BAf8EBAMCB4AwCgYIKwYBBQUHBkMDWwAAAAAAAAAAAAAAAAAAAQAAAABHBIH9WQEAQAvjjZkTiSkcvoKexyE7HtCOKxxocEJhlYjVz9VeVlAXgcy6hsmMRZPN7wR+N6zd+1L6va0DbEXiBRiVsMNwwA4=",
+      "bytes": 284,
+      "sha256": "c6a76300f1b2bdf0688faffe30f1b40b846a57e75a5dc500a0b91816ef2de1a5"
+    },
+    "long-id-legal-boundary": {
+      "base64": "MIIBNzCBsaADAgECAgcBAAAAAAAAMAoGCCsGAQUFBwZDMC4xLDAqBggrBgEFBQcZAw0eAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBMB4XDTI2MDEwMTAwMDAwMFoXDTI3MDEwMTAwMDAwMFowGTEXMBUGA1UEAwwOTG9uZyBJRCBTaWduZXIwKjAFBgMrZXADIQD8eTVyd4d6LBLkleGDNj+wZ768T7bcVHT418brGBV9VjAKBggrBgEFBQcGQwN1AAAAAAAAAAAAAAAAAAABAAAAAGEeAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAECIWR0Qlzcodo29UKBsLWh0rO4DLy7gzz9Rrsr6PI84ouFnP46TLL2YmkboiMzOSnkv/OU71nBgNViLBGdZT7cK",
+      "bytes": 315,
+      "sha256": "bfddd6a9331e7139a285537ff56965bdb53691c07270b85f399195743b36de60"
+    },
+    "long-id-over-boundary": {
+      "base64": "MIIBOTCBsqADAgECAgcBAAAAAAAAMAoGCCsGAQUFBwZDMC8xLTArBggrBgEFBQcZAw0fAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBATAeFw0yNjAxMDEwMDAwMDBaFw0yNzAxMDEwMDAwMDBaMBkxFzAVBgNVBAMMDkxvbmcgSUQgU2lnbmVyMCowBQYDK2VwAyEA/Hk1cneHeiwS5JXhgzY/sGe+vE+23FR0+NfG6xgVfVYwCgYIKwYBBQUHBkMDdgAAAAAAAAAAAAAAAAAAAQAAAABiHwEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEAQOsXUHZWgrVyTs1LomQIdim3gmOdCC96PWyY0R9f5vHuRl20yJgjUKS6S8rcCw2IniNzQPshpCVYLzLSLYEGKAM=",
+      "bytes": 317,
+      "sha256": "bc5723f288e686923d00a083304868d069a20e63b6281b635312d25f89ff5901"
     }
   },
   "policies": {
@@ -112,6 +147,8 @@
       "mtcRevision": "07",
       "logHash": "sha256",
       "representation": "standalone",
+      "minSerial": "281474976710656",
+      "maxSerial": "281474976710658",
       "caIdHex": "81fd5901",
       "cosigners": [
         {
@@ -134,6 +171,8 @@
       "mtcRevision": "07",
       "logHash": "sha256",
       "representation": "standalone",
+      "minSerial": "281474976710656",
+      "maxSerial": "281474976710658",
       "caIdHex": "81fd5901",
       "cosigners": [
         {
@@ -157,6 +196,8 @@
       "mtcRevision": "07",
       "logHash": "sha256",
       "representation": "standalone",
+      "minSerial": "281474976710656",
+      "maxSerial": "281474976710658",
       "caIdHex": "81fd5901",
       "cosigners": [
         {
@@ -179,6 +220,121 @@
           "end": "281474976710657"
         }
       ]
+    },
+    "minExcludesZero": {
+      "mtcRevision": "07",
+      "logHash": "sha256",
+      "representation": "standalone",
+      "minSerial": "281474976710657",
+      "maxSerial": "281474976710658",
+      "caIdHex": "81fd5901",
+      "cosigners": [
+        {
+          "idHex": "81fd5901",
+          "role": "ca",
+          "publicKeySpkiBase64": "MCowBQYDK2VwAyEA0hiB0iaq+Crr0pB3aSgt5hIxME71T0+JqDSuUbSfYZY="
+        },
+        {
+          "idHex": "81fd590a",
+          "role": "mirror",
+          "publicKeySpkiBase64": "MCowBQYDK2VwAyEAnnd+8FYoM1dX/Kc6SG0c4ldpshAA1jlUVVVYgv0sRxA="
+        }
+      ],
+      "requiredRoles": [
+        "ca"
+      ],
+      "revokedRanges": []
+    },
+    "maxExcludesTwo": {
+      "mtcRevision": "07",
+      "logHash": "sha256",
+      "representation": "standalone",
+      "minSerial": "281474976710656",
+      "maxSerial": "281474976710657",
+      "caIdHex": "81fd5901",
+      "cosigners": [
+        {
+          "idHex": "81fd5901",
+          "role": "ca",
+          "publicKeySpkiBase64": "MCowBQYDK2VwAyEA0hiB0iaq+Crr0pB3aSgt5hIxME71T0+JqDSuUbSfYZY="
+        },
+        {
+          "idHex": "81fd590a",
+          "role": "mirror",
+          "publicKeySpkiBase64": "MCowBQYDK2VwAyEAnnd+8FYoM1dX/Kc6SG0c4ldpshAA1jlUVVVYgv0sRxA="
+        }
+      ],
+      "requiredRoles": [
+        "ca"
+      ],
+      "revokedRanges": []
+    },
+    "uint64ExclusiveEnd": {
+      "mtcRevision": "07",
+      "logHash": "sha256",
+      "representation": "standalone",
+      "minSerial": "281474976710656",
+      "maxSerial": "281474976710658",
+      "caIdHex": "81fd5901",
+      "cosigners": [
+        {
+          "idHex": "81fd5901",
+          "role": "ca",
+          "publicKeySpkiBase64": "MCowBQYDK2VwAyEA0hiB0iaq+Crr0pB3aSgt5hIxME71T0+JqDSuUbSfYZY="
+        },
+        {
+          "idHex": "81fd590a",
+          "role": "mirror",
+          "publicKeySpkiBase64": "MCowBQYDK2VwAyEAnnd+8FYoM1dX/Kc6SG0c4ldpshAA1jlUVVVYgv0sRxA="
+        }
+      ],
+      "requiredRoles": [
+        "ca"
+      ],
+      "revokedRanges": [
+        {
+          "start": "18446744073709551615",
+          "end": "18446744073709551616"
+        }
+      ]
+    },
+    "long-id-legal-boundary": {
+      "mtcRevision": "07",
+      "logHash": "sha256",
+      "representation": "standalone",
+      "minSerial": "281474976710656",
+      "maxSerial": "281474976710656",
+      "caIdHex": "010101010101010101010101010101010101010101010101010101010101",
+      "cosigners": [
+        {
+          "idHex": "010101010101010101010101010101010101010101010101010101010101",
+          "role": "ca",
+          "publicKeySpkiBase64": "MCowBQYDK2VwAyEAiQCQ5Qp2CxLJl9u+xiYlKn3kPGqiKdHezyKEcrQCwtc="
+        }
+      ],
+      "requiredRoles": [
+        "ca"
+      ],
+      "revokedRanges": []
+    },
+    "long-id-over-boundary": {
+      "mtcRevision": "07",
+      "logHash": "sha256",
+      "representation": "standalone",
+      "minSerial": "281474976710656",
+      "maxSerial": "281474976710656",
+      "caIdHex": "01010101010101010101010101010101010101010101010101010101010101",
+      "cosigners": [
+        {
+          "idHex": "01010101010101010101010101010101010101010101010101010101010101",
+          "role": "ca",
+          "publicKeySpkiBase64": "MCowBQYDK2VwAyEAiQCQ5Qp2CxLJl9u+xiYlKn3kPGqiKdHezyKEcrQCwtc="
+        }
+      ],
+      "requiredRoles": [
+        "ca"
+      ],
+      "revokedRanges": []
     }
   }
 }

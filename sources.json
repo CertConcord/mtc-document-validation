@@ -16,6 +16,12 @@
       "retrievedAt": "2026-11-26T21:10:12.941810Z"
     },
     {
+      "id": "trustAnchorIdsForMtc07",
+      "url": "https://www.ietf.org/archive/id/draft-ietf-tls-trust-anchor-ids-06.txt",
+      "sha256": "3de3b75e7154fdde7000c367ab65f072cc3077cbcc0987527d168c02cbe0e502",
+      "bytes": 93580
+    },
+    {
       "id": "mtcEditor",
       "url": "https://raw.githubusercontent.com/ietf-plants-wg/merkle-tree-certs/44b1c0b8c54669a35e8d9e96f0e55bb3cab67757/draft-ietf-plants-merkle-tree-certs.md",
       "sha256": "b778cb1f9c325b64bba9f177c78f5edc6b790b1695dd5cce27941fe26a5569cb",

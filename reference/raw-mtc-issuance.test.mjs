@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 import {createHash} from 'node:crypto';
 import {readFileSync} from 'node:fs';
 import {assessRawMtcIssuance,
-  evaluateMtcSubtreeProof} from './raw-mtc-issuance.mjs';
+  deriveMtcLogId, evaluateMtcSubtreeProof} from './raw-mtc-issuance.mjs';
 
 const corpus = JSON.parse(readFileSync(new URL('../vectors/raw-mtc-der.json', import.meta.url)));
 const vectors = JSON.parse(readFileSync(new URL('../vectors/raw-mtc-cases.json', import.meta.url)));
@@ -56,6 +56,39 @@ test('an archive cannot appoint an MTC CA or cosigner policy', () => {
     policy: {...original, mtcRevision: '08'}}), {code: 'MTC_UNSUPPORTED'});
   assert.throws(() => assessRawMtcIssuance({...input,
     policy: {...original, logHash: 'sha512'}}), {code: 'MTC_UNSUPPORTED'});
+  assert.throws(() => assessRawMtcIssuance({...input,
+    policy: {...original, minSerial: undefined}}), {code: 'MTC_POLICY'});
+  assert.throws(() => assessRawMtcIssuance({...input,
+    policy: {...original, minSerial: '0'}}), {code: 'MTC_POLICY'});
+  assert.throws(() => assessRawMtcIssuance({...input,
+    policy: {...original, maxSerial: '18446744073709551616'}}),
+    {code: 'MTC_POLICY'});
+  assert.throws(() => assessRawMtcIssuance({...input,
+    policy: {...original, minSerial: '281474976710659'}}),
+    {code: 'MTC_POLICY'});
+  assert.throws(() => assessRawMtcIssuance({...input,
+    policy: {...original, revokedRanges: [{start: 9007199254740993,
+      end: '18446744073709551616'}]}}), {code: 'MTC_POLICY'});
+  assert.throws(() => assessRawMtcIssuance({...input,
+    policy: {...original, revokedRanges: [{start: '18446744073709551615',
+      end: 18446744073709551616}]}}), {code: 'MTC_POLICY'});
+});
+
+test('derived binary log IDs obey the 32-byte trust anchor ID bound', async t => {
+  for (const vector of vectors.logIdCases) {
+    await t.test(vector.id, () => {
+      const input = Buffer.from(vector.caIdHex, 'hex');
+      if (vector.expected === 'MTC_POLICY') {
+        assert.throws(() => deriveMtcLogId(input, vector.logNumber),
+          {code: vector.expected});
+      } else {
+        const result = deriveMtcLogId(input, vector.logNumber);
+        assert.equal(result.binary.toString('hex'), vector.expectedBinaryHex);
+        assert.equal(result.origin, vector.expectedOrigin);
+        assert.equal(result.binary.length, 32);
+      }
+    });
+  }
 });
 
 test('selected draft-07 accumulated subtree and inclusion vectors through 130 leaves', () => {
