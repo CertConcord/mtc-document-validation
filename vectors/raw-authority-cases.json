@@ -14,6 +14,40 @@
       "expected": "BOUND_CLAIMS"
     },
     {
+      "id": "authority-policy-profile-captured-once",
+      "stateAt": 120,
+      "knownAt": 205,
+      "records": ["issuer-1", "issuer-2", "action-1", "action-2"],
+      "policyControl": "moving-profile",
+      "expected": "BOUND_CLAIMS",
+      "expectedClaimProfileId": "documents:v1"
+    },
+    {
+      "id": "authority-policy-source-captured-once",
+      "stateAt": 120,
+      "knownAt": 205,
+      "records": ["issuer-1", "issuer-2", "action-1", "action-2"],
+      "policyControl": "moving-issuer-source",
+      "expected": "BOUND_CLAIMS",
+      "expectedIssuerSourceId": "issuer-registry"
+    },
+    {
+      "id": "authority-required-streams-captured-once",
+      "stateAt": 120,
+      "knownAt": 205,
+      "records": ["issuer-1", "issuer-2", "action-1", "action-2"],
+      "policyControl": "moving-requirements",
+      "error": "AUTHORITY_INPUT"
+    },
+    {
+      "id": "authority-document-original-captured-before-policy-callback",
+      "stateAt": 120,
+      "knownAt": 205,
+      "records": ["issuer-1", "issuer-2", "action-1", "action-2"],
+      "policyControl": "mutating-document",
+      "expected": "BOUND_CLAIMS"
+    },
+    {
       "id": "authority-same-second-seal-then-allow",
       "stateAt": 120,
       "knownAt": 205,
