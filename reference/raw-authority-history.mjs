@@ -1,5 +1,5 @@
 import {createHash, createPublicKey, verify} from 'node:crypto';
-import {TextDecoder} from 'node:util';
+import {TextDecoder, types} from 'node:util';
 
 const DOMAIN = Buffer.from('MTC-DV-AUTHORITY-HISTORY-v1\0', 'ascii');
 const LINK = Buffer.from('MTC-DV-AUTHORITY-LINK-v1\0', 'ascii');
@@ -13,6 +13,25 @@ const hex = value => typeof value === 'string' && /^[a-f0-9]{64}$/.test(value);
 const error = code => {const e = new Error(code); e.code = code; throw e;};
 const sha = bytes => createHash('sha256').update(bytes).digest('hex');
 const same = (a,b) => JSON.stringify(a) === JSON.stringify(b);
+const nativeArray = Object.getPrototypeOf(Uint8Array.prototype);
+const getBuffer = Object.getOwnPropertyDescriptor(nativeArray, 'buffer').get;
+const getByteOffset = Object.getOwnPropertyDescriptor(nativeArray, 'byteOffset').get;
+const getByteLength = Object.getOwnPropertyDescriptor(nativeArray, 'byteLength').get;
+
+function originalDocument(value) {
+  if (!Buffer.isBuffer(value) || !types.isUint8Array(value))
+    error('AUTHORITY_INPUT');
+  try {
+    const backing = getBuffer.call(value);
+    if (types.isSharedArrayBuffer(backing)) error('AUTHORITY_INPUT');
+    const offset = getByteOffset.call(value);
+    const length = getByteLength.call(value);
+    const owned = Buffer.alloc(length);
+    Uint8Array.prototype.set.call(owned,
+      new Uint8Array(backing, offset, length));
+    return owned;
+  } catch { error('AUTHORITY_INPUT'); }
+}
 
 function strictBase64(value) {
   if (typeof value !== 'string' || !/^(?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==|[A-Za-z0-9+/]{3}=)?$/.test(value))
@@ -59,25 +78,41 @@ function link(raw, signature) {
 
 // Authenticity and internal continuity of source claims only. External source
 // admission, clock evidence, actual completeness and document coverage remain separate.
-export function assessRawAuthorityHistory({stateAt, knownAt, policy, records, document}) {
+export function assessRawAuthorityHistory(input) {
+  if (!input || typeof input !== 'object') error('AUTHORITY_INPUT');
+  const documentBytes = originalDocument(input.document);
+  const {stateAt, knownAt, policy, records} = input;
   if (!instant(stateAt) || !instant(knownAt) || knownAt < stateAt ||
-      !policy || !printable(policy.profileId) || !Array.isArray(policy.requirements) ||
-      policy.requirements.length === 0 || !Array.isArray(records) || !Buffer.isBuffer(document))
+      !policy || !Array.isArray(records))
+    error('AUTHORITY_INPUT');
+  const documentScope = `sha256:${sha(documentBytes)}`;
+  const profileId = policy.profileId;
+  const sourceRequirements = policy.requirements;
+  if (!printable(profileId) || !Array.isArray(sourceRequirements))
     error('AUTHORITY_INPUT');
   const requirements = new Map();
-  for (const requirement of policy.requirements) {
-    if (!requirement ||
-        ![requirement.role,requirement.subjectId,requirement.scope,requirement.sourceId].every(printable) ||
+  const roles = new Set();
+  const requirementCount = sourceRequirements.length;
+  if (!Number.isSafeInteger(requirementCount) || requirementCount === 0)
+    error('AUTHORITY_INPUT');
+  for (let index = 0; index < requirementCount; index++) {
+    const source = sourceRequirements[index];
+    if (!source) error('AUTHORITY_INPUT');
+    const requirement = {role: source.role, subjectId: source.subjectId,
+      scope: source.scope, sourceId: source.sourceId,
+      publicKeySpkiBase64: source.publicKeySpkiBase64};
+    if (![requirement.role,requirement.subjectId,requirement.scope,requirement.sourceId].every(printable) ||
         !['issuer-authorization','document-action'].includes(requirement.role)) error('AUTHORITY_INPUT');
     if (requirement.role === 'document-action' &&
-        requirement.scope !== `sha256:${sha(document)}`) error('AUTHORITY_DOCUMENT');
-    const id = JSON.stringify([policy.profileId,requirement.role,requirement.subjectId,
+        requirement.scope !== documentScope) error('AUTHORITY_DOCUMENT');
+    const id = JSON.stringify([profileId,requirement.role,requirement.subjectId,
       requirement.scope,requirement.sourceId]);
     if (requirements.has(id)) error('AUTHORITY_INPUT');
     requirements.set(id, {...requirement, key:admittedKey(requirement.publicKeySpkiBase64), chain:[]});
+    roles.add(requirement.role);
   }
   if (!['issuer-authorization','document-action'].every(role =>
-    policy.requirements.some(x => x.role === role))) error('AUTHORITY_INPUT');
+    roles.has(role))) error('AUTHORITY_INPUT');
   for (const envelope of records) {
     if (!envelope || typeof envelope !== 'object') error('AUTHORITY_INPUT');
     const raw = strictBase64(envelope.rawBase64);
@@ -94,7 +129,7 @@ export function assessRawAuthorityHistory({stateAt, knownAt, policy, records, do
   }
   const claims = [], reasons = [];
   for (const stream of requirements.values()) {
-    const context = {profileId:policy.profileId,role:stream.role,
+    const context = {profileId,role:stream.role,
       subjectId:stream.subjectId,scope:stream.scope,sourceId:stream.sourceId};
     const missing = code => reasons.push({...context,code});
     const chain = stream.chain;
