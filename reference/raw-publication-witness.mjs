@@ -12,10 +12,21 @@ const hex=value=>typeof value==='string'&&/^[a-f0-9]{64}$/.test(value);
 const label=value=>typeof value==='string'&&/^[\x21-\x7e]+$/.test(value);
 const instant=value=>Number.isSafeInteger(value)&&value>=0;
 const treeSize=value=>Number.isSafeInteger(value)&&value>0&&value<2**48;
+const nativeArray=Object.getPrototypeOf(Uint8Array.prototype);
+const getBuffer=Object.getOwnPropertyDescriptor(nativeArray,'buffer').get;
+const getByteOffset=Object.getOwnPropertyDescriptor(nativeArray,'byteOffset').get;
+const getByteLength=Object.getOwnPropertyDescriptor(nativeArray,'byteLength').get;
 
 function nativeBytes(value,code){
   if(!types.isUint8Array(value))fail(code);
-  return Buffer.from(Uint8Array.prototype.slice.call(value));
+  try{
+    const backing=getBuffer.call(value);
+    const offset=getByteOffset.call(value);
+    const length=getByteLength.call(value);
+    const owned=Buffer.alloc(length);
+    Uint8Array.prototype.set.call(owned,new Uint8Array(backing,offset,length));
+    return owned;
+  }catch{fail(code);}
 }
 function strictBase64(value,code){
   if(typeof value!=='string'||
@@ -61,34 +72,45 @@ function root(nodes){
 // The result covers logged bytes at this head only; submission and clock truth
 // remain independent obligations.
 export function assessRawPublicationWitness({policy,entries,head,monitor,anchor,proof,knownAt}){
-  if(!policy||!label(policy.logId)||!label(policy.monitorId)||
-     !instant(knownAt)||!Array.isArray(entries)||!treeSize(entries.length)||
-     !anchor||!Number.isSafeInteger(anchor.treeSize)||anchor.treeSize<0||
-     anchor.treeSize>=entries.length||!hex(anchor.rootSha256))fail('PUBLICATION_INPUT');
-  const logKey=key(policy.logPublicKeySpkiBase64);
-  const monitorKey=key(policy.monitorPublicKeySpkiBase64);
-  const original=entries.map(entry=>nativeBytes(entry,'PUBLICATION_ENTRY'));
+  if(!policy||!anchor||!Array.isArray(entries))fail('PUBLICATION_INPUT');
+  const logId=policy.logId;
+  const monitorId=policy.monitorId;
+  const logKeySpki=policy.logPublicKeySpkiBase64;
+  const monitorKeySpki=policy.monitorPublicKeySpkiBase64;
+  const anchorSize=anchor.treeSize;
+  const anchorRoot=anchor.rootSha256;
+  const entryCount=entries.length;
+  if(!label(logId)||!label(monitorId)||!instant(knownAt)||
+     !treeSize(entryCount)||!Number.isSafeInteger(anchorSize)||anchorSize<0||
+     anchorSize>=entryCount||!hex(anchorRoot))fail('PUBLICATION_INPUT');
+  const logKey=key(logKeySpki);
+  const monitorKey=key(monitorKeySpki);
+  if(logKey.export({format:'der',type:'spki'}).equals(
+       monitorKey.export({format:'der',type:'spki'})))fail('PUBLICATION_KEY');
+  const original=[];
+  for(let index=0;index<entryCount;index++)
+    original.push(nativeBytes(entries[index],'PUBLICATION_ENTRY'));
   const leaves=original.map(entry=>sha(Buffer.concat([Buffer.from([0]),entry])));
   const computed=root(leaves).toString('hex');
   const signedHead=envelope(head,headKeys,HEAD_DOMAIN,logKey,'PUBLICATION_HEAD');
   const h=signedHead.parsed;
-  if(h.version!==1||h.logId!==policy.logId||h.treeSize!==original.length||
+  if(h.version!==1||h.logId!==logId||h.treeSize!==entryCount||
      !hex(h.rootSha256)||h.rootSha256!==computed||!instant(h.issuedAt))
     fail('PUBLICATION_HEAD');
-  const priorRoot=anchor.treeSize===0?sha(Buffer.alloc(0)).toString('hex'):
-    root(leaves.slice(0,anchor.treeSize)).toString('hex');
-  if(anchor.rootSha256!==priorRoot)fail('PUBLICATION_ANCHOR');
+  const priorRoot=anchorSize===0?sha(Buffer.alloc(0)).toString('hex'):
+    root(leaves.slice(0,anchorSize)).toString('hex');
+  if(anchorRoot!==priorRoot)fail('PUBLICATION_ANCHOR');
   const path=nativeBytes(proof,'PUBLICATION_CONSISTENCY');
-  if(anchor.treeSize===0){if(path.length)fail('PUBLICATION_CONSISTENCY');}
+  if(anchorSize===0){if(path.length)fail('PUBLICATION_CONSISTENCY');}
   else{
-    try{verifyMtcLogConsistencyProof({firstSize:anchor.treeSize,
-      secondSize:h.treeSize,firstRoot:Buffer.from(anchor.rootSha256,'hex'),
+    try{verifyMtcLogConsistencyProof({firstSize:anchorSize,
+      secondSize:h.treeSize,firstRoot:Buffer.from(anchorRoot,'hex'),
       secondRoot:Buffer.from(computed,'hex'),proof:path});}
     catch{fail('PUBLICATION_CONSISTENCY');}
   }
   const witnessed=envelope(monitor,monitorKeys,MONITOR_DOMAIN,monitorKey,'PUBLICATION_MONITOR');
   const m=witnessed.parsed;
-  if(m.version!==1||m.monitorId!==policy.monitorId||m.logId!==policy.logId||
+  if(m.version!==1||m.monitorId!==monitorId||m.logId!==logId||
      m.headSha256!==sha(signedHead.raw).toString('hex')||
      !instant(m.observedAt)||m.observedAt<h.issuedAt||m.observedAt>knownAt)
     fail('PUBLICATION_MONITOR');
