@@ -201,6 +201,19 @@ assert.equal(coherentRenewal.source.initialEvidenceSha256,
   coherent.ers.objects.document.evidence.sha256);
 assert.equal(coherentRenewal.source.initialTokenSha256,
   coherent.ers.objects.document.token.sha256);
+const tsaRetirement=json('vectors/raw-tsa-retirement.json');
+assert.equal(tsaRetirement.format,'original-rfc3161-tsa-retirement-crl-v1');
+assert.equal(tsaRetirement.sourceCorpus,'vectors/coherent-document-evidence.json');
+assert.equal(tsaRetirement.renewalCorpus,'vectors/coherent-ers-renewal.json');
+assert.deepEqual(json('cases.json').cases.filter(x=>x.component==='raw-tsa-retirement')
+  .map(x=>[x.id,x.expected]),tsaRetirement.cases.map(x=>[x.id,x.expected]));
+for(const [id,item] of Object.entries(tsaRetirement.crls)){
+  const bytes=Buffer.from(item.derBase64,'base64');
+  assert.equal(bytes.length,item.bytes,id);
+  assert.equal(createHash('sha256').update(bytes).digest('hex'),item.sha256,id);
+}
+for(const vector of tsaRetirement.cases)
+  assert(Object.hasOwn(tsaRetirement.crls,vector.crl),vector.id);
 const coherentCore=coherent.original_core;
 const coherentRetirement=coherent.retirement;
 assert.equal(coherentCore.objects.document.sha256,

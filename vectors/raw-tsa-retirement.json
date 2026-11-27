@@ -1,0 +1,264 @@
+{
+  "format": "original-rfc3161-tsa-retirement-crl-v1",
+  "sourceCorpus": "vectors/coherent-document-evidence.json",
+  "renewalCorpus": "vectors/coherent-ers-renewal.json",
+  "scope": "Same original TSA certificate and signed timestamp responses; direct complete issuer-wide CRLs without target certificate CDP. Source receipt and knowledge cutoff are caller-admitted synthetic inputs, not verified history completeness or trusted time. The signed CRLs are independently constructed alternatives for the same certificate, not one chronological CRL stream; they reuse a CRL number and omit Authority Key Identifier.",
+  "sourceId": "synthetic-tsa-ca-crl",
+  "knownAt": 1795824000,
+  "observedAt": 1795820400,
+  "crls": {
+    "cessation": {
+      "derBase64": "MIIBsDCBmQIBATANBgkqhkiG9w0BAQsFADAfMR0wGwYDVQQDDBRGaXh0dXJlLVRpbWVzdGFtcC1DQRcNMjYxMTI3MjEyMzAwWhcNMjYxMTI5MjEyMzAwWjA1MDMCFGA1fi1uAmqHJy95eWStSExHNOYcFw0yNjExMjcyMTIzMDBaMAwwCgYDVR0VBAMKAQWgDzANMAsGA1UdFAQEAgIQADANBgkqhkiG9w0BAQsFAAOCAQEAhtn6Wii9ScgKaRrrHCTMdnGkFBajJZqyLZtBhEb8gXz7ZwM4AvZBIXUhdJCOTgxs557qsK0HoEMb8IHorl155kduvhfhtQGxQTANREWANVO03hgG9A3DeZGPsAJ0Bc5m8S89HDtHjaBO2ZAeU6KKHYTRulO2LW6lH56ufaeW9Q+AfHgAJidPof/g8xRkJarm94c44tgLJaq/hPR5YXxbcj+lhCp7WwNT52g6Al5CAVPJFZBkW2zQwjKC4P0cg0/VBCPkfsTX6oo/RrZVMLmaPkCYIZOl6wsMsQHshMhMCmwV6nt4V3y46k7zVy41oiBKgjWmsA85k7Pbi0Aeu4S0HA==",
+      "bytes": 436,
+      "sha256": "c4c959107478b25c8777a8b7a28da467aebe1b8c20b8a4517e2d34231e339ee2"
+    },
+    "compromise": {
+      "derBase64": "MIIBsDCBmQIBATANBgkqhkiG9w0BAQsFADAfMR0wGwYDVQQDDBRGaXh0dXJlLVRpbWVzdGFtcC1DQRcNMjYxMTI3MjEyMzAwWhcNMjYxMTI5MjEyMzAwWjA1MDMCFGA1fi1uAmqHJy95eWStSExHNOYcFw0yNjExMjcyMTIzMDBaMAwwCgYDVR0VBAMKAQGgDzANMAsGA1UdFAQEAgIQADANBgkqhkiG9w0BAQsFAAOCAQEAdjZO44jnNLNeH7fcnJsQPhKT4ryFBXW1jWWEBUewmXVEMKDGlwqhPNVOpw1nBsRmrkkuwwwhBsJpQiLrwriAgztYHO1gBVmJ3Dsp+Lu5o889Xyd6UqZUfMXiJ2rHGOpEJJYkRtjA9kN687WAgc7QtQZoYZvJ9yJ4dmvW5AMPAznfq6ai0DB6dFe22xIFHxd2E4wzWT3Hxv4VQwX9IGNx2W7UM9LcxSGv3rUqelJcfZ0dWmGWMj73t7YOBQ3ZcTqSENr5kVemjVj0OkxSqZJ5w8CUpsGKO6prdkjW9NgNPYketZugVCBm4H9vMN155soUFfJx3pZvKbNknmSnT/cFEQ==",
+      "bytes": 436,
+      "sha256": "367301a6aec788e1c7b9e5350dc3d307883dcb78b77f5f821e4062c481e17601"
+    },
+    "no-reason": {
+      "derBase64": "MIIBojCBiwIBATANBgkqhkiG9w0BAQsFADAfMR0wGwYDVQQDDBRGaXh0dXJlLVRpbWVzdGFtcC1DQRcNMjYxMTI3MjEyMzAwWhcNMjYxMTI5MjEyMzAwWjAnMCUCFGA1fi1uAmqHJy95eWStSExHNOYcFw0yNjExMjcyMTIzMDBaoA8wDTALBgNVHRQEBAICEAAwDQYJKoZIhvcNAQELBQADggEBAG8xPRgYW6qhxoOHGrlFMvCJAD3ljkHl+sUaKl8Gp/GZlwD6BkhRzVeFbIR+v0rmQIKhcoW6Yd4tz+RMRSEOGoWt1dWolJGlm2EEtDTxTFKbzoJLjOoJaAf7ZwnsjvA1QRCfpZ6dsIcxEXtZ2FIQ5w+AFocelnEC38WI7fCjCm04HvAg5SLILPaR9wboYmv4C/xWPDIaoCC6XdfaTMzODLds0JkCfNDIfH4FW4aRP0NM3xhPzzrGhnUr3epgQ4470gWpN4HGMXbHzTpPhQpQ8B6oFKJ2/AmyWBDA2AOA5nHa3DvNL8Q7bM7ifsK00gG/YtiBDGaHXr4rD8zUGB9+UnI=",
+      "bytes": 422,
+      "sha256": "78f0fb8afbee57aac4a9c94fb7628598b5015f5510ae3f4d2846194ceea75689"
+    },
+    "unspecified": {
+      "derBase64": "MIIBsDCBmQIBATANBgkqhkiG9w0BAQsFADAfMR0wGwYDVQQDDBRGaXh0dXJlLVRpbWVzdGFtcC1DQRcNMjYxMTI3MjEzNTEwWhcNMjYxMTI5MjEzNTEwWjA1MDMCFGA1fi1uAmqHJy95eWStSExHNOYcFw0yNjExMjcyMTM1MTBaMAwwCgYDVR0VBAMKAQCgDzANMAsGA1UdFAQEAgIQADANBgkqhkiG9w0BAQsFAAOCAQEAAa9/RojFUOm5KOuvOxUiAqezlf0NWkcqa+2tAcDckVdiSN9vGZwPpgmtBiCE+irAIXlut3001lCUgaMofKBnubd272+tivNtg5YWhwY1AjRWuSWg2MN/zIA7y4jcUxEWx1zYj83foVm57xZagqm8OMau9R4lPeG+nhoCZPgaHtzHh6YRjm5DlnL6sB72Uql2m9wRcus7ZJEtkoHoUsf5yBfXXV6KbIniWuC11/0h0AyvR8mjQm2yRWwawvVbHM4cVcTrdBj3PfjFe9ktySGgWUI/OSxnT/ckaC89FeYEabYBA9TZYqAjavr5brBvEh8zRKdmog/qPitx+OimFKid3Q==",
+      "bytes": 436,
+      "sha256": "445ee90097ca9cddc62d83a31dd1f2dda126877bc93eeaf8052ee6dd147d54ed"
+    },
+    "affiliation": {
+      "derBase64": "MIIBsDCBmQIBATANBgkqhkiG9w0BAQsFADAfMR0wGwYDVQQDDBRGaXh0dXJlLVRpbWVzdGFtcC1DQRcNMjYxMTI3MjEzNTExWhcNMjYxMTI5MjEzNTExWjA1MDMCFGA1fi1uAmqHJy95eWStSExHNOYcFw0yNjExMjcyMTM1MTFaMAwwCgYDVR0VBAMKAQOgDzANMAsGA1UdFAQEAgIQADANBgkqhkiG9w0BAQsFAAOCAQEAPZbEcLKwy1NeUjLgYNXtRvEH/x3aF+LaJ2Zrliip7VLRptSc7ijGIK2LUzfz72pMUvckoknrHxO0pkhYiU2L4NxW5Ic453l5zi1MddMdRV++DE6g2V1reypw1I1znwfKCGg4pIyovsGEj/1uWKvFySCR6GEYnGjgOa655FBL8Ke60XXD4h8rrpNcF7vBg0vpXglJTiol9XiZbVDNnJnJDFudKUrAUyVrVvYGsKz1g3vuxpnxGjGbT1mRc9xLsg+XY14HdGJ8h+jq3hrfHmVlrlwOFwY+UwMItaMtUCFNmSiOpmIFj81NdapsEaLtIoG7FjObSq1Qb+DB9buxZuTg4g==",
+      "bytes": 436,
+      "sha256": "ea53141c08d4eb7b502b694a02dcf9910519a932675388b976dabd135b35f6d3"
+    },
+    "superseded": {
+      "derBase64": "MIIBsDCBmQIBATANBgkqhkiG9w0BAQsFADAfMR0wGwYDVQQDDBRGaXh0dXJlLVRpbWVzdGFtcC1DQRcNMjYxMTI3MjEzNTExWhcNMjYxMTI5MjEzNTExWjA1MDMCFGA1fi1uAmqHJy95eWStSExHNOYcFw0yNjExMjcyMTM1MTFaMAwwCgYDVR0VBAMKAQSgDzANMAsGA1UdFAQEAgIQADANBgkqhkiG9w0BAQsFAAOCAQEAYZMVnIURQoF1SW3ewBTWFFsIQOhNzV8LwlaZlWzzAYkt5mRgGcGqWQU+JyNJ7BosZ3g9Aa1YsAsKLnsmc3VRKlvbLzpUstGXM4Z2GyqInVq6rMCPJVAWfl9Eq5C94xuy1Y1jFnPYppMgVj5uwGV+xhHuYQUyfFvwfOEBNx4gB8sI4rxrNDLTYtuiSUjta703Lrt3x8DMWkVYr670UJfGNZY4/g6iP8fsLCfTsGluAEM3mx7QQn6LcH4bfAVrkaAf29VjXSWu/fv0WNZ/NZh5gyMNf0RAvw9PsKV0Yn4e5ytwtyqNiVqhRiLL+DajxjcMf6IMPPRc9xJxD8zbWIpCNQ==",
+      "bytes": 436,
+      "sha256": "f2e0a53b6128a2610fbdfb4d9e8e1e20192c337a67b836e9ca1c54ed0503f02d"
+    },
+    "equal-renewal-time": {
+      "derBase64": "MIIBsDCBmQIBATANBgkqhkiG9w0BAQsFADAfMR0wGwYDVQQDDBRGaXh0dXJlLVRpbWVzdGFtcC1DQRcNMjYxMTI3MjEzNjI5WhcNMjYxMTI5MjEzNjI5WjA1MDMCFGA1fi1uAmqHJy95eWStSExHNOYcFw0yNjExMjcyMDQxMDBaMAwwCgYDVR0VBAMKAQWgDzANMAsGA1UdFAQEAgIQADANBgkqhkiG9w0BAQsFAAOCAQEAOHAKDFyq1XhNMFLtiju+czueXH9jNPnBPuBhzUG5zNnzwrsFovW1j8qxjid+9/PKZyaMIoq/+J6bAQsmfsPGAHhdS7TSWyY1mIrTRV+K/VN1ZwQB87szIJVLAYSn3mDZpZJh56UntFumIxXdngbtbx2dWd8Cxkz528Zuq/4NABBbdwH+PXj1gt5LrOHl3DBqNEGE0XAPWnfjIOZ1vnJQ6b5RuVfRKSGC3po3dm0dF9krLmGSBnz+vSqyUHxscxscX7ITZIo0xm8f3NIsTlBAqDflTECoyQKuWOYlM4zH+NK4A0P6g8yJRo0Q0L4Oq/qxcQZWBPVLTuctunIo5sd9CA==",
+      "bytes": 436,
+      "sha256": "b265cf86f13ae490aa89d1c50bbbd2d43ca4e8b550d47539e2a1b063572f024c"
+    },
+    "overlap-renewal-interval": {
+      "derBase64": "MIIBsDCBmQIBATANBgkqhkiG9w0BAQsFADAfMR0wGwYDVQQDDBRGaXh0dXJlLVRpbWVzdGFtcC1DQRcNMjYxMTI3MjEzNjI5WhcNMjYxMTI5MjEzNjI5WjA1MDMCFGA1fi1uAmqHJy95eWStSExHNOYcFw0yNjExMjcyMDQxMDFaMAwwCgYDVR0VBAMKAQWgDzANMAsGA1UdFAQEAgIQADANBgkqhkiG9w0BAQsFAAOCAQEALBxw5qhK+8tsuq5Hji6aNtMMU/LigtDbwed+FjgxiovBEQSsIi45UuCZeCHZrwbke7RwxXQ/r7jq9kxXNk7Ie0zmv6x+lFG2vlfx1JdGsmFBOcWWIVlaJd/Mditxe9TwkNnO1Zyo9x8KIloZCwDhLcPAW7CMdDAKWoX5NaVvuvgf2pBPjKLNDDqh3eoA9d/OLUn9n2nBS7ICWe3Un54EadYrT4ochwxnUprvr3RYdnKsv/JSFq5VaM8lyIgpkSzPxBs2xX9/dn8DhZERqed29neUZmRA2JiLKz63E70c8LX7yxyM6C8xkWsuIDTjbGPb94MZTi2HYkvKQFmy3dFjXA==",
+      "bytes": 436,
+      "sha256": "65ad9a10763074644a0096350166e5c48ebc731723501592c8e1dd2572b3dd8e"
+    },
+    "not-listed": {
+      "derBase64": "MIIBeDBiAgEBMA0GCSqGSIb3DQEBCwUAMB8xHTAbBgNVBAMMFEZpeHR1cmUtVGltZXN0YW1wLUNBFw0yNjExMjcyMTM2MzBaFw0yNjExMjkyMTM2MzBaoA8wDTALBgNVHRQEBAICEAAwDQYJKoZIhvcNAQELBQADggEBACeAqjcrKL6fTblykVTV6tJ43qIiGsr59Vt9FC4J/vOGZEkmLNCC3EOgn3Ly5H/acaRrEiwGl29HJITJJJom/Yqjwwpg2zpJLI9BSQA8x5ABaF02FwSgzhkbiZv9YNfNbwCHBpGqEyFmCp+IvCYXZgU2uwoqTDZGv35RHxzxyKuBTBoNo1hANBPpKMOO8Ffz+8uEzNOWPxv5qaK4TGYDQumqXVx7xjCPwe7hKBQdRxwLot8lMeBzCKWHTMeNMVG291s9UmK3dD7dEhsPKM8PP7jWmt5u+vOaGWCoFUU3PqsWp5s4iRvK+P0gxHwIThjy5ZgqhQ9eROFCv8qypz2+sbo=",
+      "bytes": 380,
+      "sha256": "3a6a4257c2f55bbceacba59f598e2421e0a52885abfb3dc22baf9e390461a5b6"
+    },
+    "certificate-hold": {
+      "derBase64": "MIIBsDCBmQIBATANBgkqhkiG9w0BAQsFADAfMR0wGwYDVQQDDBRGaXh0dXJlLVRpbWVzdGFtcC1DQRcNMjYxMTI3MjEzNjMwWhcNMjYxMTI5MjEzNjMwWjA1MDMCFGA1fi1uAmqHJy95eWStSExHNOYcFw0yNjExMjcyMDQyMDBaMAwwCgYDVR0VBAMKAQagDzANMAsGA1UdFAQEAgIQADANBgkqhkiG9w0BAQsFAAOCAQEAVoZmfhzm1wnuK4GpnVEXhv26/pdx4jdKPZi6WPJ1FKB489GBWwE1pbDiUEfVcTMVkcHHNmZiQ7JkBaWw8qBQneCe0CB5DN/+LuT11EWJ8FD7NN1exuJIOwbWHTQDZYqQT1SCzxqTa/Y4CyjzFYEgiKO1o0JC/j9kqym/Hk4ciTYLGCGGQr8cgBX8ZWy78NbTk8yRkBoqpz/oLJuvzyGPD18M896eJxxxxwBMnn8FuEISMxx0HHLSFYeJrKa2XJwFoOj61djR8wxwVypbKFe2EsXPuPprQhNqErEg482+c2vMUGhKMcJckoO+V4lHbQ938jv2kNTNloB4UdeVnR5pQA==",
+      "bytes": 436,
+      "sha256": "7fdcb696ffc5bf437f63cedc1dec67f9e582159207f794cdd6b1f8aaa61f3f8c"
+    },
+    "future-revocation": {
+      "derBase64": "MIIBsDCBmQIBATANBgkqhkiG9w0BAQsFADAfMR0wGwYDVQQDDBRGaXh0dXJlLVRpbWVzdGFtcC1DQRcNMjYxMTI3MjE1MzE1WhcNMjYxMTI5MjE1MzE1WjA1MDMCFGA1fi1uAmqHJy95eWStSExHNOYcFw0yNjExMjgwMDAwMDBaMAwwCgYDVR0VBAMKAQWgDzANMAsGA1UdFAQEAgIQADANBgkqhkiG9w0BAQsFAAOCAQEAfHIXwaAVFdLVulpqIxwQPTu6rjdCrbXHDZdZRXbyF6UnwHTDTrfW03kgiHQXpre01XFX+KRtYo2r7L8LsOD9114tiHF8IVSnVf86f6JFNXmwauDut4GQ5jjrqA9s3T3hXheGmNzdfjkN689cQhCEznAaGdaSiChARA/oiEY0HmFXqeWjrN4IN5T4ok1+NMMsDpWoKZNn1pzUPSF9ZLbIguGS4kxS5POo/9m5a4DiCsmII1lCCwDK0QiIZpOQDuK6WSi5wSWexaPGHXzZWNB4tO8BJYg9oaNJPR/vi2Of6R+/3pkUbA6Z+V+jc1hf8drpMsJoio9a6LK7FITWWMqZ1g==",
+      "bytes": 436,
+      "sha256": "80a05793f4e5e44cb383322e22758758b36cd69ec1dc19e1a4329740c6c12e70"
+    },
+    "invalidity-between-tokens": {
+      "derBase64": "MIIByjCBswIBATANBgkqhkiG9w0BAQsFADAfMR0wGwYDVQQDDBRGaXh0dXJlLVRpbWVzdGFtcC1DQRcNMjYxMTI3MjEyMzAwWhcNMjYxMTI5MjEyMzAwWjBPME0CFGA1fi1uAmqHJy95eWStSExHNOYcFw0yNjExMjcyMTIzMDBaMCYwCgYDVR0VBAMKAQUwGAYDVR0YBBEYDzIwMjYxMTI3MjAwMDAwWqAPMA0wCwYDVR0UBAQCAhAAMA0GCSqGSIb3DQEBCwUAA4IBAQBCkf3gObYzuu+7yYaLJe+L6YlyykJX4cPecmLx0esxwsdA2RmMgvaIxz35+75b3/nQ3qRmLVOm3BOOdTQ7CVeeQhjSe6XQbXioz25bggiTKOp03xHpOTmmPxdfRqbCRZd81CddUlewoFE4QhvNjaQLGHuxgt2zQ27mt1nwTq+Vesp6aMQePYuEkNixF7vg8Ct+I0LrRNVL+mmtVrJXJ89p5DCdVhTs6CJsEGF/OPCVs/9r9PqqHFdj6DNgPaEPikgc41lknS99np2BBI+EJot7Ud0WZ9YjcGMY4rlkYhSAFPTVKSv/VlyZ9DNK1Hj+9ZjDm8UGnxTJT03GsM76cTBV",
+      "bytes": 462,
+      "sha256": "a4c2626cc578c7f7720e104e502acdce698451efcfa0a0055d8e962355bdff2d"
+    },
+    "v1-entry-extension": {
+      "derBase64": "MIIBnDCBhTANBgkqhkiG9w0BAQsFADAfMR0wGwYDVQQDDBRGaXh0dXJlLVRpbWVzdGFtcC1DQRcNMjYxMTI3MjEyMzAwWhcNMjYxMTI5MjEyMzAwWjA1MDMCFGA1fi1uAmqHJy95eWStSExHNOYcFw0yNjExMjcyMTIzMDBaMAwwCgYDVR0VBAMKAQUwDQYJKoZIhvcNAQELBQADggEBADFlCqh+8Ztd94lsILX01bbvRFkCwV73eBLRtvpPHvzCXN2PdGV93mZaKCfP0j5BxS8cqysMSquTQQxK79ZPEyljKjAR5Vf25xKpgI/XAExI7m+rzoLl1i8jYZZsw5N1P5iH4o3WHJNQ+itPUoUl8ZfA63epYQSbfHjT0lERP0qhgI8Nlg9qoq81XOUU+avRH9FccqW0NAA6cVmlrbCAK5j1rdty/F6XD+3uyqqyF5VOQGb7rLiQzOyBCraLsdNIv8qKeLm//IKGw1b9pzMBfMwrV2e3alLbTnNKhdzP5ryLxhsh12vByn8TL8H08Adgo7sk+Ug7aTtUpon8sCiCclE=",
+      "bytes": 416,
+      "sha256": "a5254d5175dd76b7cf4da2ab5c44d6a2825315833ccaddb77b2164febd34b8b8"
+    },
+    "v1-crl-extension": {
+      "derBase64": "MIIBdTBfMA0GCSqGSIb3DQEBCwUAMB8xHTAbBgNVBAMMFEZpeHR1cmUtVGltZXN0YW1wLUNBFw0yNjExMjcyMTIzMDBaFw0yNjExMjkyMTIzMDBaoA8wDTALBgNVHRQEBAICEAAwDQYJKoZIhvcNAQELBQADggEBABs6krBHRyJK9ftdt4fbNuRhb/dD6U/ybZ1BkBpK7s+8zeC4VXQuTpLAkbFkIWT/ve8lPup6TUK9X6RC54C6Aw9VS7ndRzjgMU+nDlWbJmwWK5ci/s11Q8k78wMrpF8VvxnEunDoH+rNfX7AQEOJ0uuh6XfoW2jlouO5xKBQomYCOZgfXVc+3QqDmDegt1sn7BPcmql0DEJRe6wTMgl10y8H94h0amSKMhJbGV65pe/ubmXIZe+tvVhL4rSK9BTd0IY/JoKS/8clANn20SvyxTd74HOPPNux3p3JyNee/DNgUAvhwPNSOTZD177ZBGD1ze908Wk5Bs0U+ISQkswHCHE=",
+      "bytes": 377,
+      "sha256": "abab3e9a65fca0db5f8b078b1956d1c70ddc9aab0e63dc9bfa822bface752f34"
+    },
+    "v1-no-extensions": {
+      "derBase64": "MIIBjTB3MA0GCSqGSIb3DQEBCwUAMB8xHTAbBgNVBAMMFEZpeHR1cmUtVGltZXN0YW1wLUNBFw0yNjExMjcyMTIzMDBaFw0yNjExMjkyMTIzMDBaMCcwJQIUYDV+LW4CaocnL3l5ZK1ITEc05hwXDTI2MTEyNzIxMjMwMFowDQYJKoZIhvcNAQELBQADggEBAADQ9xdhzJKZATFMBDglXd7L6SmLERKawt+UviF+90oTwX/ndEHyhJ0fWs3Syexm0I3FhSZBGF6iMCGd5L1tdFHAip6VWHTEeoycuAS2BY94q33kFwKlpBR2qKlCOgF6XHe6lTJUaGYLP6BwMXM3S+R1Lra12bglHxFGH797DV9R71KefwuuT3q+pa2N5C2lw2IQlb+z4gH26RhpcBFTun51SBa54zhMaww+nX6Rmh1roSJPF3qFlVtpliHBrARRh+UYGT04CSDmq7Q5OIhZSvKwAiZJy7FvD8UcGXjpIPfIrBi6LqdxRciI3DQVdYRiJNJ5Nq5o7YEPN8LUfRdYuTc=",
+      "bytes": 401,
+      "sha256": "bfbf4f18111224699a672b32a633da661dbded4657003093c6b9bc862d014318"
+    }
+  },
+  "cases": [
+    {
+      "id": "cessation-before-initial",
+      "crl": "cessation",
+      "timestamp": "initial",
+      "expected": "BOUNDED_PRE_REVOCATION_CLAIM"
+    },
+    {
+      "id": "cessation-before-renewal",
+      "crl": "cessation",
+      "timestamp": "renewal",
+      "expected": "BOUNDED_PRE_REVOCATION_CLAIM"
+    },
+    {
+      "id": "unspecified-before-initial",
+      "crl": "unspecified",
+      "timestamp": "initial",
+      "expected": "BOUNDED_PRE_REVOCATION_CLAIM"
+    },
+    {
+      "id": "affiliation-before-initial",
+      "crl": "affiliation",
+      "timestamp": "initial",
+      "expected": "BOUNDED_PRE_REVOCATION_CLAIM"
+    },
+    {
+      "id": "superseded-before-initial",
+      "crl": "superseded",
+      "timestamp": "initial",
+      "expected": "BOUNDED_PRE_REVOCATION_CLAIM"
+    },
+    {
+      "id": "key-compromise-invalidates-earlier",
+      "crl": "compromise",
+      "timestamp": "initial",
+      "expected": "REJECTED",
+      "reason": "TSA_KEY_COMPROMISE"
+    },
+    {
+      "id": "missing-reason-invalidates-earlier",
+      "crl": "no-reason",
+      "timestamp": "initial",
+      "expected": "REJECTED",
+      "reason": "TSA_CRL_REASON_MISSING"
+    },
+    {
+      "id": "equal-revocation-not-before",
+      "crl": "equal-renewal-time",
+      "timestamp": "renewal",
+      "expected": "REJECTED",
+      "reason": "TSA_TOKEN_NOT_BEFORE_REVOCATION"
+    },
+    {
+      "id": "accuracy-overlaps-revocation",
+      "crl": "overlap-renewal-interval",
+      "timestamp": "renewal",
+      "expected": "INDETERMINATE",
+      "reason": "TSA_TOKEN_INTERVAL_OVERLAPS_REVOCATION"
+    },
+    {
+      "id": "unlisted-is-not-good",
+      "crl": "not-listed",
+      "timestamp": "initial",
+      "expected": "INDETERMINATE",
+      "reason": "TSA_CRL_NO_TARGET_REVOCATION"
+    },
+    {
+      "id": "certificate-hold-unsupported",
+      "crl": "certificate-hold",
+      "timestamp": "initial",
+      "expected": "UNSUPPORTED",
+      "reason": "TSA_CRL_REASON_UNSUPPORTED"
+    },
+    {
+      "id": "receipt-missing",
+      "crl": "cessation",
+      "timestamp": "initial",
+      "expected": "INDETERMINATE",
+      "reason": "TSA_CRL_RECEIPT_MISSING"
+    },
+    {
+      "id": "receipt-wrong-source",
+      "crl": "cessation",
+      "timestamp": "initial",
+      "expected": "INDETERMINATE",
+      "reason": "TSA_CRL_SOURCE_NOT_ADMITTED"
+    },
+    {
+      "id": "receipt-wrong-record",
+      "crl": "cessation",
+      "timestamp": "initial",
+      "expected": "REJECTED",
+      "reason": "TSA_CRL_RECEIPT_RECORD_MISMATCH"
+    },
+    {
+      "id": "receipt-before-crl",
+      "crl": "cessation",
+      "timestamp": "initial",
+      "expected": "REJECTED",
+      "reason": "TSA_CRL_RECEIPT_BEFORE_RECORD"
+    },
+    {
+      "id": "crl-not-yet-known",
+      "crl": "cessation",
+      "timestamp": "initial",
+      "expected": "INDETERMINATE",
+      "reason": "TSA_CRL_NOT_YET_KNOWN"
+    },
+    {
+      "id": "crl-signature-tampered",
+      "crl": "cessation",
+      "timestamp": "initial",
+      "expected": "REJECTED",
+      "reason": "CRL_SIGNATURE_INVALID"
+    },
+    {
+      "id": "timestamp-covered-bytes-wrong",
+      "crl": "cessation",
+      "timestamp": "initial",
+      "expected": "REJECTED",
+      "reason": "TIMESTAMP_IMPRINT_MISMATCH"
+    },
+    {
+      "id": "source-issuer-unadmitted",
+      "crl": "cessation",
+      "timestamp": "initial",
+      "expected": "INDETERMINATE",
+      "reason": "TSA_CRL_ISSUER_NOT_ADMITTED"
+    },
+    {
+      "id": "revocation-date-after-crl-issue",
+      "crl": "future-revocation",
+      "timestamp": "initial",
+      "expected": "REJECTED",
+      "reason": "TSA_CRL_REVOCATION_AFTER_ISSUE"
+    },
+    {
+      "id": "signed-invalidity-before-initial",
+      "crl": "invalidity-between-tokens",
+      "timestamp": "initial",
+      "expected": "BOUNDED_PRE_REVOCATION_CLAIM"
+    },
+    {
+      "id": "signed-invalidity-overlaps-renewal",
+      "crl": "invalidity-between-tokens",
+      "timestamp": "renewal",
+      "expected": "INDETERMINATE",
+      "reason": "TSA_TOKEN_AFTER_SIGNED_INVALIDITY"
+    },
+    {
+      "id": "v1-entry-extension-forbidden",
+      "crl": "v1-entry-extension",
+      "timestamp": "initial",
+      "expected": "REJECTED",
+      "reason": "CRL_VERSION_REQUIRED"
+    },
+    {
+      "id": "v1-crl-extension-forbidden",
+      "crl": "v1-crl-extension",
+      "timestamp": "initial",
+      "expected": "REJECTED",
+      "reason": "CRL_VERSION_REQUIRED"
+    },
+    {
+      "id": "v1-without-extensions-no-reason",
+      "crl": "v1-no-extensions",
+      "timestamp": "initial",
+      "expected": "REJECTED",
+      "reason": "TSA_CRL_REASON_MISSING"
+    },
+    {
+      "id": "request-omitted",
+      "crl": "cessation",
+      "timestamp": "initial",
+      "expected": "INDETERMINATE",
+      "reason": "TIMESTAMP_REQUEST_MISSING"
+    }
+  ]
+}

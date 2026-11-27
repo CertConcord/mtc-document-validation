@@ -59,10 +59,12 @@ function revokedEntry(value) {
       invalidityDate = encodedTime(one(ext.get(OID.invalidityDate).value, 0x18));
   }
   if (reason === 8) bad('CRL_REMOVE_FROM_COMPLETE_UNSUPPORTED');
-  return {serial, revocationTime, reason, invalidityDate};
+  return {serial, revocationTime, reason, invalidityDate,
+    hasExtensions: fields.length === 3};
 }
 
-export function parseCrl({recordDer, target, issuer, directMtcCa = false}) {
+export function parseCrl({recordDer, target, issuer, directMtcCa = false,
+  allowNoDistributionPoint = false}) {
   const record = Buffer.from(recordDer);
   const outer = children(one(record, 0x30));
   if (outer.length !== 3) bad('DER_MALFORMED');
@@ -74,8 +76,8 @@ export function parseCrl({recordDer, target, issuer, directMtcCa = false}) {
   if (signature.unused !== 0) bad('DER_MALFORMED');
   const fields = children(expect(outer[0], 0x30));
   let at = 0;
-  if (fields[at]?.tag === 0x02 && smallInteger(fields[at++]) !== 1)
-    bad('CRL_VERSION_UNSUPPORTED');
+  const hasVersion = fields[at]?.tag === 0x02;
+  if (hasVersion && smallInteger(fields[at++]) !== 1) bad('CRL_VERSION_UNSUPPORTED');
   const inner = fields[at++];
   if (algorithm(inner) !== signedAlgorithm ||
       (directMtcCa && children(inner).length !== 1))
@@ -105,7 +107,10 @@ export function parseCrl({recordDer, target, issuer, directMtcCa = false}) {
   if (nextUpdate === null || nextUpdate <= thisUpdate) bad('CRL_TIME_UNSUPPORTED');
   let entries = [];
   if (fields[at]?.tag === 0x30) entries = children(fields[at++]).map(revokedEntry);
+  if (!hasVersion && entries.some(entry => entry.hasExtensions))
+    bad('CRL_VERSION_REQUIRED');
   if (fields[at]?.tag === 0xa0) {
+    if (!hasVersion) bad('CRL_VERSION_REQUIRED');
     const wrapper = children(fields[at++]);
     if (wrapper.length !== 1) bad('DER_MALFORMED');
     const ext = extensions(wrapper[0]);
@@ -115,7 +120,12 @@ export function parseCrl({recordDer, target, issuer, directMtcCa = false}) {
       bad('CRL_CRITICAL_EXTENSION_UNSUPPORTED');
   }
   if (at !== fields.length) bad('DER_MALFORMED');
-  const distributionPoint = distributionUri(target);
+  // The issuer-wide, no-CDP path is used only by a caller that explicitly
+  // admits this direct complete CRL source. IDP and delta CRLs were rejected
+  // above, and the caller must bind the target to this issuer independently.
+  const distributionPoint = allowNoDistributionPoint &&
+    !target.extensions.has(certificateOid.crlDistributionPoints)
+    ? null : distributionUri(target);
   const matches = entries.filter(entry => entry.serial === target.serial);
   if (matches.length > 1) bad('CRL_DUPLICATE_TARGET');
   return {recordSha256: digest(record), signerSha256: issuer.sha256,
