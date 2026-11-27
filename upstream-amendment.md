@@ -1,6 +1,6 @@
 # Retention horizon clarification for MTC signed artifacts
 
-Target: [draft-ietf-plants-mtc-deploy-use-cases-01, section 3.5.5](https://www.ietf.org/archive/id/draft-ietf-plants-mtc-deploy-use-cases-01.txt). Status: proposed informative clarification, not submitted.
+Target: [draft-ietf-plants-mtc-deploy-use-cases-01, section 3.5.5](https://www.ietf.org/archive/id/draft-ietf-plants-mtc-deploy-use-cases-01.txt). Status as of 26 November 2026: related, narrower archival-plan wording was submitted for discussion in [upstream Draft PR #20](https://github.com/ietf-plants-wg/deploy-use-cases/pull/20), which remains open and unmerged. The example and proposed addition below are this component's own wording, not the text submitted in that PR. Neither the upstream PR nor this application profile is claimed to have been adopted by the WG.
 
 Revision 00 proposed a specific minimum for every published batch tree head and access after CA retirement. Revision 01 instead asks for an archival plan covering log data and published heads for an appropriate period after decommissioning; it no longer states that numeric minimum or a separate-infrastructure rule. This proposed addition addresses how a deployment assigns responsibility when an application needs longer document validation. A deployment may select the older minimum as its own policy, but revision 01 does not impose it.
 
