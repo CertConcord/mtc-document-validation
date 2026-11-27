@@ -198,6 +198,18 @@
       "certificate": "long-id-over-boundary",
       "policy": "long-id-over-boundary",
       "expected": "MTC_POLICY"
+    },
+    {
+      "id": "mtc-extension-field-omitted",
+      "certificate": "extension-field-omitted",
+      "policy": "extensionCardinality",
+      "expected": "ISSUANCE_PROVEN"
+    },
+    {
+      "id": "mtc-extension-field-empty",
+      "certificate": "extension-field-empty",
+      "policy": "extensionCardinality",
+      "expected": "DER_MALFORMED"
     }
   ],
   "logIdCases": [

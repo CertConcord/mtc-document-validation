@@ -140,6 +140,16 @@
       "base64": "MIIBOTCBsqADAgECAgcBAAAAAAAAMAoGCCsGAQUFBwZDMC8xLTArBggrBgEFBQcZAw0fAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBATAeFw0yNjAxMDEwMDAwMDBaFw0yNzAxMDEwMDAwMDBaMBkxFzAVBgNVBAMMDkxvbmcgSUQgU2lnbmVyMCowBQYDK2VwAyEA/Hk1cneHeiwS5JXhgzY/sGe+vE+23FR0+NfG6xgVfVYwCgYIKwYBBQUHBkMDdgAAAAAAAAAAAAAAAAAAAQAAAABiHwEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEAQOsXUHZWgrVyTs1LomQIdim3gmOdCC96PWyY0R9f5vHuRl20yJgjUKS6S8rcCw2IniNzQPshpCVYLzLSLYEGKAM=",
       "bytes": 317,
       "sha256": "bc5723f288e686923d00a083304868d069a20e63b6281b635312d25f89ff5901"
+    },
+    "extension-field-omitted": {
+      "base64": "MIIBBjCBnKADAgECAgcBAAAAAAAAMAoGCCsGAQUFBwZDMBIxEDAOBggrBgEFBQcZAw0CAQIwHhcNMjYwMTAxMDAwMDAwWhcNMjcwMTAxMDAwMDAwWjAgMR4wHAYDVQQDDBVFeHRlbnNpb24gQ2FyZGluYWxpdHkwKjAFBgMrZXADIQDI70wGMfFpEZvP3h/EMtAt6+NXiucb2Xjpg+p8POBskjAKBggrBgEFBQcGQwNZAAAAAAAAAAAAAAAAAAABAAAAAEUCAQIAQHfdEh4LChfzZbbYKDkEQugJGzx/Ngrs6mMk0DvIi0FQ7VGH41x5pW0SFmkkzbdF8uEbQ53ZraAUXDmfSY54VgM=",
+      "bytes": 266,
+      "sha256": "aa71bb2c42228f061021074a604c5c5c5f3f131ebed029a3f0a95653de2496a5"
+    },
+    "extension-field-empty": {
+      "base64": "MIIBCjCBoKADAgECAgcBAAAAAAAAMAoGCCsGAQUFBwZDMBIxEDAOBggrBgEFBQcZAw0CAQIwHhcNMjYwMTAxMDAwMDAwWhcNMjcwMTAxMDAwMDAwWjAgMR4wHAYDVQQDDBVFeHRlbnNpb24gQ2FyZGluYWxpdHkwKjAFBgMrZXADIQDI70wGMfFpEZvP3h/EMtAt6+NXiucb2Xjpg+p8POBskqMCMAAwCgYIKwYBBQUHBkMDWQAAAAAAAAAAAAAAAAAAAQAAAABFAgECAEDeGl90GzF9wYSF9SlUlePKYfkNL2gjYu0Y5XmhOk7548aHhzDkrS4jvdNgXkD1Tmj42hbHUPGfU9wsNhZbMzMM",
+      "bytes": 270,
+      "sha256": "436554d53f2bec5f4b520bf8ac5a09e076b4e5503c908ca8ca810022966851d1"
     }
   },
   "policies": {
@@ -329,6 +339,25 @@
           "idHex": "01010101010101010101010101010101010101010101010101010101010101",
           "role": "ca",
           "publicKeySpkiBase64": "MCowBQYDK2VwAyEAiQCQ5Qp2CxLJl9u+xiYlKn3kPGqiKdHezyKEcrQCwtc="
+        }
+      ],
+      "requiredRoles": [
+        "ca"
+      ],
+      "revokedRanges": []
+    },
+    "extensionCardinality": {
+      "mtcRevision": "07",
+      "logHash": "sha256",
+      "representation": "standalone",
+      "minSerial": "281474976710656",
+      "maxSerial": "281474976710656",
+      "caIdHex": "0102",
+      "cosigners": [
+        {
+          "idHex": "0102",
+          "role": "ca",
+          "publicKeySpkiBase64": "MCowBQYDK2VwAyEA1ENGbtm16F+OXt3ZsnVTdxE7/jfbRxQcgTSpiBDd7Ks="
         }
       ],
       "requiredRoles": [

@@ -33,6 +33,8 @@
     {"id":"mtc-extension-type-order","component":"raw-mtc-issuance","expected":"MTC_PROOF_ENCODING"},
     {"id":"mtc-long-id-legal-boundary","component":"raw-mtc-issuance","expected":"ISSUANCE_PROVEN"},
     {"id":"mtc-long-id-over-boundary","component":"raw-mtc-issuance","expected":"MTC_POLICY"},
+    {"id":"mtc-extension-field-omitted","component":"raw-mtc-issuance","expected":"ISSUANCE_PROVEN"},
+    {"id":"mtc-extension-field-empty","component":"raw-mtc-issuance","expected":"DER_MALFORMED"},
     {"id":"log-id-one-octet-legal-maximum","component":"raw-mtc-log-id","expected":"ADMITTED"},
     {"id":"log-id-one-octet-over-maximum","component":"raw-mtc-log-id","expected":"MTC_POLICY"},
     {"id":"log-id-two-octet-legal-maximum","component":"raw-mtc-log-id","expected":"ADMITTED"},
