@@ -1,6 +1,6 @@
 {
   "format": "original-mtc07-status-der-v1",
-  "description": "Test-only original standalone MTC certificate, independently superior-signed CA representation, direct Ed25519 OCSP/CRL and adversarial originals; no private keys retained.",
+  "description": "Test-only original standalone MTC certificate, independently superior-signed CA representation, direct Ed25519 OCSP/CRL and adversarial originals; no private keys retained. The retained original crl-revoked has a target revocationDate after thisUpdate and is now a negative control. Four additional independently signed originals provide a valid same-second MTC CRL revocation control with its own superior, CA representation, target proof and policy.",
   "source": "draft-ietf-plants-merkle-tree-certs-07, RFC 5280, RFC 6960, RFC 8410",
   "objects": {
     "superior": {
@@ -122,6 +122,26 @@
       "derBase64": "MIGOMEICAQEwBQYDK2VwMBQxEjAQBggrBgEFBQcZAw0Egf1ZARgPMjAyNjA2MDEwMDAwMDBaGA8yMDI2MDYwODAwMDAwMFowBQYDK2VwA0EAVltHss2YeFdV7eGJVGAx2KwigsAOi9W5kdojLgyOEEoeiQGGi9dTdyQeIdTyjflC3KyOY2TLeDmt8/o5cf7NAw==",
       "bytes": 145,
       "sha256": "5e0c28f0f7bf418094ea14fb3fd32d8b21669b506e6c72e93a76cb408895ee10"
+    },
+    "chronological-superior": {
+      "derBase64": "MIIBCzCBvqADAgECAgEBMAUGAytlcDAdMRswGQYDVQQDDBJTeW50aGV0aWMgc3VwZXJpb3IwHhcNMjYwMTAxMDAwMDAwWhcNMjcwMTAxMDAwMDAwWjAdMRswGQYDVQQDDBJTeW50aGV0aWMgc3VwZXJpb3IwKjAFBgMrZXADIQBjNYslWRzpSb1a6ou6RDH4E+Ykqju8ZxU718VRGAphyqMjMCEwDwYDVR0TAQH/BAUwAwEB/zAOBgNVHQ8BAf8EBAMCAQYwBQYDK2VwA0EA7mdsyZ+QDZn0MRoMPrjwHMlqqYNLdK6MJ1jWVKnhMt9fhgo3iqqNXvdvmro8Bvc+G2HSBwXzwCle3YmBlxMZDA==",
+      "bytes": 271,
+      "sha256": "56debe7a1d43217f1d7f11438740febcd1115ff26a7b154c7d08347f9527b765"
+    },
+    "chronological-ca": {
+      "derBase64": "MIIBLjCB4aADAgECAgECMAUGAytlcDAdMRswGQYDVQQDDBJTeW50aGV0aWMgc3VwZXJpb3IwHhcNMjYwMTAxMDAwMDAwWhcNMjcwMTAxMDAwMDAwWjAUMRIwEAYIKwYBBQUHGQMNBIH9WQEwKjAFBgMrZXADIQDjL8dGlVYFYg7e04Y4g6DJNiDmlpaHnZBctpO/zduUlKNPME0wDwYDVR0TAQH/BAUwAwEB/zAOBgNVHQ8BAf8EBAMCAYYwKgYIKwYBBQUHASYBAf8EGzAZMAUGAytlcAIHAQAAAAAAAAIHAQAAAAAAADAFBgMrZXADQQDqYoICOKB1N5rT17yjTl+hxVVjc/rIPS2yuQsx3ToN0VH9DjDKLC2BdDkRkqZfsh3bPu/d0FrhxbbYzGCEYRII",
+      "bytes": 306,
+      "sha256": "4b16ba376434d46aadc5d1be556aad2f5f2da1135675811c267af1a2d8d73b29"
+    },
+    "chronological-target": {
+      "derBase64": "MIIBWTCB7aADAgECAgcBAAAAAAAAMAoGCCsGAQUFBwZDMBQxEjAQBggrBgEFBQcZAw0Egf1ZATAeFw0yNjAxMDEwMDAwMDBaFw0yNzAxMDEwMDAwMDBaMCUxIzAhBgNVBAMMGk1UQyBzdGF0dXMgZG9jdW1lbnQgc2lnbmVyMCowBQYDK2VwAyEAbmCp6iTw/H1+VfhwLKPsS8Vw7nb4phQeCj+saUSFLdGjSDBGMA4GA1UdDwEB/wQEAwIHgDA0BgNVHR8ELTArMCmgJ6AlhiNodHRwczovL3N0YXR1cy5leGFtcGxlLnRlc3QvbXRjLmNybDAKBggrBgEFBQcGQwNbAAAAAAAAAAAAAAAAAAABAAAAAEcEgf1ZAQBAyIcHWfShMv17rQ5HKJSsbH5rUXCVzV931gXZT6iLHp0d/07eKdrwQhDbreBViqQSth4/Bv18iItrgwOxbDvdBg==",
+      "bytes": 349,
+      "sha256": "a0b66f9a42625c6088c6e9ab50dbf225d9897ced84613df44ec4d7964fab6871"
+    },
+    "chronological-crl": {
+      "derBase64": "MIGsMGACAQEwBQYDK2VwMBQxEjAQBggrBgEFBQcZAw0Egf1ZARgPMjAyNjA2MDEwMDAwMDBaGA8yMDI2MDYwODAwMDAwMFowHDAaAgcBAAAAAAAAGA8yMDI2MDYwMTAwMDAwMFowBQYDK2VwA0EAvEpqVIZrawmG57ZP1l43R44QYQMFlIZ0cIBjQ19IEzJZwPTdochZwvYF3KiYze2h5Cwpnyy6eyrWU0zWagAaCQ==",
+      "bytes": 175,
+      "sha256": "17503d5fcddfd7acfdc80e8b715f6c2e14afc67de607975ca0a9f41a83b68367"
     }
   },
   "mtcPolicy": {
@@ -136,6 +156,25 @@
         "idHex": "81fd5901",
         "role": "ca",
         "publicKeySpkiBase64": "MCowBQYDK2VwAyEAnWGobZuqkocsQCZuxz82EIgxrwX9oxE9BpWEsA5pw7Y="
+      }
+    ],
+    "requiredRoles": [
+      "ca"
+    ],
+    "revokedRanges": []
+  },
+  "supplementalMtcPolicy": {
+    "mtcRevision": "07",
+    "logHash": "sha256",
+    "representation": "standalone",
+    "minSerial": "281474976710656",
+    "maxSerial": "281474976710656",
+    "caIdHex": "81fd5901",
+    "cosigners": [
+      {
+        "idHex": "81fd5901",
+        "role": "ca",
+        "publicKeySpkiBase64": "MCowBQYDK2VwAyEA4y/HRpVWBWIO3tOGOIOgyTYg5paWh52QXLaTv83blJQ="
       }
     ],
     "requiredRoles": [

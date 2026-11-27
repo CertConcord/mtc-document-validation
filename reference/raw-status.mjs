@@ -48,6 +48,11 @@ function assessStatus({kind, recordDer, targetDer, issuerDer, responderDer,
       ...decision(unresolved ? 'INDETERMINATE' : unsupported ? 'UNSUPPORTED' : 'REJECTED', error.code)};
   }
   const observed = {kind, stateAt, knownAt, ...observation};
+  // A target cannot already be revoked in a CRL issued before the date on
+  // which that same CRL claims its revocation was processed.
+  if (kind === 'CRL' && observation.status === 'REVOKED' &&
+      observation.revocationTime > observation.thisUpdate)
+    return decision('REJECTED', 'CRL_REVOCATION_AFTER_ISSUE', observed);
   if (admittedReceipt === undefined || admittedReceipt === null)
     return decision('INDETERMINATE', 'RECEIPT_MISSING', observed);
   if (!hash(admittedReceipt.recordSha256) || !time(admittedReceipt.observedAt) ||

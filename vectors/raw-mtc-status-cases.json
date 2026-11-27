@@ -33,6 +33,16 @@
       "id": "mtc-direct-crl-revoked",
       "kind": "CRL",
       "record": "crl-revoked",
+      "expected": "REJECTED",
+      "reason": "CRL_REVOCATION_AFTER_ISSUE"
+    },
+    {
+      "id": "mtc-direct-crl-revoked-valid-date",
+      "kind": "CRL",
+      "record": "chronological-crl",
+      "target": "chronological-target",
+      "issuer": "chronological-ca",
+      "fixture": "chronological",
       "expected": "REVOKED"
     },
     {
