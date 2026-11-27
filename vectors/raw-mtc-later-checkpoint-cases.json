@@ -18,6 +18,13 @@
     {"id":"later-publication-one-byte-diff","mutatePublication":true,"signatures":[{"key":"caReference5"},{"key":"mirrorLater7","proof":"fiveToSevenHex"}],"expected":"MTC_LANDMARK_SOURCE"},
     {"id":"later-duplicate-required-cosigner","signatures":[{"key":"caReference5"},{"key":"mirrorLater7","proof":"fiveToSevenHex"},{"key":"mirrorReference5"}],"expected":"MTC_CHECKPOINT_FORMAT"},
     {"id":"later-equal-size-proof-supplied","signatures":[{"key":"caReference5"},{"key":"mirrorReference5","proof":"fiveToSevenHex"}],"expected":"MTC_CHECKPOINT_FORMAT"},
-    {"id":"later-equal-size-empty-proof-supplied","signatures":[{"key":"caReference5"},{"key":"mirrorReference5","emptyProof":true}],"expected":"MTC_CHECKPOINT_FORMAT"}
+    {"id":"later-equal-size-empty-proof-supplied","signatures":[{"key":"caReference5"},{"key":"mirrorReference5","emptyProof":true}],"expected":"MTC_CHECKPOINT_FORMAT"},
+    {"id":"later-reference-good-then-bad-getter","referenceRootSequence":"good-then-bad","signatures":[{"key":"caReference5"},{"key":"mirrorLater7","proof":"fiveToSevenHex"}],"expected":"RELATIVE_ISSUANCE_BOUND"},
+    {"id":"later-reference-bad-then-good-getter","referenceRootSequence":"bad-then-good","signatures":[{"key":"caReference5"},{"key":"mirrorLater7","proof":"fiveToSevenHex"}],"expected":"MTC_CHECKPOINT_MISMATCH"},
+    {"id":"later-reference-buffer-mutated-by-signature-getter","mutateReferenceAtSignature":"mirrorLater7","signatures":[{"key":"caReference5"},{"key":"mirrorLater7","proof":"fiveToSevenHex"}],"expected":"RELATIVE_ISSUANCE_BOUND"},
+    {"id":"later-message-good-then-bad-getter","messageSequenceKey":"mirrorLater7","messageSequence":"good-then-bad","signatures":[{"key":"caReference5"},{"key":"mirrorLater7","proof":"fiveToSevenHex"}],"expected":"RELATIVE_ISSUANCE_BOUND"},
+    {"id":"later-message-bad-then-good-getter","messageSequenceKey":"mirrorLater7","messageSequence":"bad-then-good","signatures":[{"key":"caReference5"},{"key":"mirrorLater7","proof":"fiveToSevenHex"}],"expected":"MTC_CHECKPOINT_SIGNATURE"},
+    {"id":"later-inferred-reference-message-once","omitReference":true,"messageSequenceKey":"caReference5","messageSequence":"good-then-bad","signatures":[{"key":"caReference5"},{"key":"mirrorLater7","proof":"fiveToSevenHex"}],"expected":"RELATIVE_ISSUANCE_BOUND"},
+    {"id":"later-message-buffer-mutated-by-signature-getter","mutateMessageAtSignature":"mirrorLater7","signatures":[{"key":"caReference5"},{"key":"mirrorLater7","proof":"fiveToSevenHex"}],"expected":"RELATIVE_ISSUANCE_BOUND"}
   ]
 }

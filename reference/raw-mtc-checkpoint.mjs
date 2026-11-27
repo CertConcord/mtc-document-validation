@@ -41,39 +41,55 @@ function parsedCheckpoint(message, cosignerName, logOrigin) {
 export function verifyMtcReferenceCheckpoint({reference, signatures, admitted,
   logOrigin, minimumTreeSize}) {
   if (!Array.isArray(signatures) || !admitted ||
-      !(admitted.cosigners instanceof Map) ||
-      !Array.isArray(admitted.requiredRoles) ||
       !Number.isSafeInteger(minimumTreeSize) || minimumTreeSize < 1 ||
-      minimumTreeSize >= 2 ** 48 || typeof logOrigin !== 'string' ||
-      (reference !== undefined && (!reference ||
-        !Number.isSafeInteger(reference.treeSize) ||
-        reference.treeSize < 1 || reference.treeSize >= 2 ** 48 ||
-        !Buffer.isBuffer(reference.rootHash) ||
-        reference.rootHash.length !== 32)))
+      minimumTreeSize >= 2 ** 48 || typeof logOrigin !== 'string')
     fail('MTC_CHECKPOINT_POLICY');
-  const seen = new Set(), roles = new Set(), parsedSignatures = [];
-  let selected = reference ?? null;
-  for (const item of signatures) {
-    if (!item || typeof item.idHex !== 'string')
-      fail('MTC_CHECKPOINT_FORMAT');
-    const cosigner = admitted.cosigners.get(item.idHex);
-    if (!cosigner) continue;
-    if (seen.has(item.idHex) || !Buffer.isBuffer(item.message) ||
-        !Buffer.isBuffer(item.signature) || item.signature.length !== 64 ||
-        (item.consistencyProof !== undefined &&
-          !Buffer.isBuffer(item.consistencyProof)))
-      fail('MTC_CHECKPOINT_FORMAT');
-    seen.add(item.idHex);
-    const parsed = parsedCheckpoint(item.message, cosigner.name, logOrigin);
-    if (!verify(null, item.message, cosigner.key, item.signature))
-      fail('MTC_CHECKPOINT_SIGNATURE');
-    if (!selected && item.consistencyProof === undefined)
-      selected = {treeSize: parsed.treeSize, rootHash: parsed.root};
-    roles.add(cosigner.role);
-    parsedSignatures.push({idHex: item.idHex, ...parsed,
-      consistencyProof: item.consistencyProof});
+  const cosigners = admitted.cosigners;
+  const requiredRoles = admitted.requiredRoles;
+  if (!(cosigners instanceof Map) || !Array.isArray(requiredRoles))
+    fail('MTC_CHECKPOINT_POLICY');
+  const required = requiredRoles.slice();
+  let selected = null;
+  if (reference !== undefined) {
+    if (!reference) fail('MTC_CHECKPOINT_POLICY');
+    const treeSize = reference.treeSize;
+    const rootHash = reference.rootHash;
+    if (!Number.isSafeInteger(treeSize) || treeSize < 1 ||
+        treeSize >= 2 ** 48 || !Buffer.isBuffer(rootHash) ||
+        rootHash.length !== 32) fail('MTC_CHECKPOINT_POLICY');
+    selected = {treeSize, rootHash: Buffer.from(rootHash)};
   }
-  if (!selected || !admitted.requiredRoles.every(role => roles.has(role)))
+  const seen = new Set(), roles = new Set(), parsedSignatures = [];
+  for (const item of signatures) {
+    if (!item) fail('MTC_CHECKPOINT_FORMAT');
+    const idHex = item.idHex;
+    if (typeof idHex !== 'string')
+      fail('MTC_CHECKPOINT_FORMAT');
+    const cosigner = cosigners.get(idHex);
+    if (!cosigner) continue;
+    if (seen.has(idHex)) fail('MTC_CHECKPOINT_FORMAT');
+    const rawMessage = item.message;
+    if (!Buffer.isBuffer(rawMessage)) fail('MTC_CHECKPOINT_FORMAT');
+    const message = Buffer.from(rawMessage);
+    const rawSignature = item.signature;
+    if (!Buffer.isBuffer(rawSignature) || rawSignature.length !== 64)
+      fail('MTC_CHECKPOINT_FORMAT');
+    const signature = Buffer.from(rawSignature);
+    const rawProof = item.consistencyProof;
+    if (rawProof !== undefined && !Buffer.isBuffer(rawProof))
+      fail('MTC_CHECKPOINT_FORMAT');
+    const consistencyProof = rawProof === undefined ? undefined :
+      Buffer.from(rawProof);
+    seen.add(idHex);
+    const parsed = parsedCheckpoint(message, cosigner.name, logOrigin);
+    if (!verify(null, message, cosigner.key, signature))
+      fail('MTC_CHECKPOINT_SIGNATURE');
+    if (!selected && consistencyProof === undefined)
+      selected = {treeSize: parsed.treeSize, rootHash: Buffer.from(parsed.root)};
+    roles.add(cosigner.role);
+    parsedSignatures.push({idHex, ...parsed, consistencyProof});
+  }
+  if (!selected || !required.every(role => roles.has(role)))
     fail('MTC_CHECKPOINT_QUORUM');
   if (selected.treeSize < minimumTreeSize) fail('MTC_CHECKPOINT_SIZE');
   for (const parsed of parsedSignatures) {
@@ -89,7 +105,7 @@ export function verifyMtcReferenceCheckpoint({reference, signatures, admitted,
         secondRoot: parsed.root, proof: parsed.consistencyProof});
     } else fail('MTC_CHECKPOINT_SIZE');
   }
-  return {treeSize: selected.treeSize, rootHash: selected.rootHash,
+  return {treeSize: selected.treeSize, rootHash: Buffer.from(selected.rootHash),
     admittedRoles: [...roles].sort(),
     claimedTimestamps: parsedSignatures.map(item => ({idHex: item.idHex,
       timestamp: item.timestamp.toString()}))};

@@ -64,13 +64,54 @@ for(const vector of vectors.cases)test(vector.id,()=>{
   }
   const root=Buffer.from(corpus.reference.rootSha256,'hex');
   if(vector.mutateReferenceRoot)root[0]^=1;
-  const referenceCheckpoint=vector.omitReference?undefined:
+  let referenceCheckpoint=vector.omitReference?undefined:
     {treeSize:corpus.reference.treeSize,rootHash:root};
+  let referenceRootReads=0,referenceSizeReads=0;
+  if(vector.referenceRootSequence){
+    const badRoot=Buffer.from(root);badRoot[0]^=1;
+    referenceCheckpoint={
+      get treeSize(){referenceSizeReads++;
+        return referenceSizeReads===1?corpus.reference.treeSize:7;},
+      get rootHash(){referenceRootReads++;
+        const first=vector.referenceRootSequence==='good-then-bad'?root:badRoot;
+        const later=vector.referenceRootSequence==='good-then-bad'?badRoot:root;
+        return referenceRootReads===1?first:later;}
+    };
+  }
+  const mutationWitnesses=[],messageReads=[];
   const checkpointSignatures=vector.signatures.map(spec=>{
     const frozen=corpus.checkpoints[spec.key];
     const signature=decode(frozen.signature);
     if(vector.mutateSignature===spec.key)signature[0]^=1;
-    const item={idHex:frozen.idHex,message:decode(frozen.message),signature};
+    const message=decode(frozen.message);
+    const item={idHex:frozen.idHex,message,signature};
+    if(vector.messageSequenceKey===spec.key){
+      const badMessage=Buffer.from(message);
+      badMessage[badMessage.length-1]^=1;
+      let reads=0;
+      Object.defineProperty(item,'message',{get(){reads++;
+        if(vector.messageSequence==='good-then-bad')
+          return reads===1?message:badMessage;
+        return reads===1?badMessage:message;
+      }});
+      messageReads.push(()=>reads);
+    }
+    if(vector.mutateMessageAtSignature===spec.key ||
+        vector.mutateReferenceAtSignature===spec.key){
+      Object.defineProperty(item,'signature',{get(){
+        if(vector.mutateMessageAtSignature===spec.key){
+          message[message.length-1]=decode(frozen.message).at(-1)^1;
+          mutationWitnesses.push(()=>assert.notDeepEqual(message,
+            decode(frozen.message)));
+        }
+        if(vector.mutateReferenceAtSignature===spec.key){
+          root[0]=Buffer.from(corpus.reference.rootSha256,'hex')[0]^1;
+          mutationWitnesses.push(()=>assert.notEqual(root.toString('hex'),
+            corpus.reference.rootSha256));
+        }
+        return signature;
+      }});
+    }
     if(spec.proof){
       item.consistencyProof=Buffer.from(corpus.logConsistency[spec.proof],'hex');
       if(vector.mutateProof===spec.key)item.consistencyProof[0]^=1;
@@ -84,6 +125,12 @@ for(const vector of vectors.cases)test(vector.id,()=>{
     policy,landmarkPublication,referenceCheckpoint,checkpointSignatures,
     subtreeConsistencyProof});
   assert.equal(result.reason??result.decision,vector.expected);
+  if(vector.referenceRootSequence){
+    assert.equal(referenceRootReads,1);
+    assert.equal(referenceSizeReads,1);
+  }
+  for(const count of messageReads)assert.equal(count(),1);
+  for(const witness of mutationWitnesses)witness();
   if(vector.expected==='RELATIVE_ISSUANCE_BOUND'){
     const candidate=parseRawMtcCertificateCandidate({certificateDer:decode(corpus.certificate),
       policy});
