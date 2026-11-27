@@ -213,6 +213,28 @@ assert.equal(createHash('sha256').update(coherentAuthorityBytes).digest('hex'),
 assert.equal(coherentRetirement.result.itemCount,23);
 assert.equal(coherentRetirement.publication.entryIds.length,4);
 assert(!coherentRetirement.publication.entryIds.includes('action-deny'));
+const transfer=json('vectors/raw-transfer-claims.json');
+assert.equal(transfer.format,'original-signed-transfer-claims-v1');
+assert.equal(transfer.sourceCorpus,'vectors/coherent-document-evidence.json');
+const transferExpected=vector=>{
+  if(vector.expectedError)return vector.expectedError;
+  const axes=[vector.expectedResponsibility,vector.expectedBytes];
+  return axes.includes('REJECTED')?'REJECTED':
+    axes.includes('INDETERMINATE')?'INDETERMINATE':'BOUND_CLAIMS';
+};
+assert.deepEqual(json('cases.json').cases.filter(x=>x.component==='raw-transfer-claims')
+  .map(x=>[x.id,x.expected]),transfer.cases.map(x=>[x.id,transferExpected(x)]));
+const selectedSet=Buffer.from(transfer.requiredSetRawBase64,'base64');
+assert.equal(selectedSet.length,transfer.requiredSetRawBytes);
+assert.equal(createHash('sha256').update(selectedSet).digest('hex'),
+  transfer.requiredSetSha256);
+assert.deepEqual(JSON.parse(selectedSet.toString('utf8')),transfer.requiredSet);
+assert.equal(transfer.requiredSet.items.length,23);
+assert.deepEqual(transfer.requiredSet.items,JSON.parse(Buffer.from(
+  coherentRetirement.manifest.rawBase64,'base64').toString('utf8')).items);
+assert(transfer.requiredSet.selectedAt<coherentRetirement.policy.retiredAt);
+assert(coherentRetirement.policy.retiredAt<JSON.parse(Buffer.from(
+  coherentRetirement.manifest.rawBase64,'base64').toString('utf8')).declaredAt);
 const mtcVectors=json('vectors/raw-mtc-cases.json');
 const mtcDer=json('vectors/raw-mtc-der.json');
 assert.equal(mtcVectors.format,'original-mtc07-issuance-cases-v1');
