@@ -1,0 +1,23 @@
+{
+  "format": "original-retirement-closure-cases-v1",
+  "cases": [
+    {"id":"retirement-five-entry-declared-set-retrieved","bundle":"five","expected":"BOUND_RETIREMENT_RETRIEVAL_CLAIMS"},
+    {"id":"retirement-four-entry-declared-set-cannot-reveal-deny","bundle":"four","expected":"BOUND_RETIREMENT_RETRIEVAL_CLAIMS"},
+    {"id":"retirement-native-good-species-ignored","bundle":"five","speciesMutation":"native-good","expected":"BOUND_RETIREMENT_RETRIEVAL_CLAIMS"},
+    {"id":"retirement-native-bad-species-repair-ignored","bundle":"five","speciesMutation":"native-bad","expected":"REJECTED","reason":"RETIREMENT_BYTES_MISMATCH"},
+    {"id":"retirement-status-bytes-missing","bundle":"five","omit":"historical-status","expected":"INDETERMINATE","reason":"RETIREMENT_BYTES_MISSING"},
+    {"id":"retirement-logged-entry-missing-from-archive","bundle":"five","omit":"log-entry:4","expected":"INDETERMINATE","reason":"RETIREMENT_BYTES_MISSING"},
+    {"id":"retirement-status-bytes-substituted","bundle":"five","mutate":"historical-status","expected":"REJECTED","reason":"RETIREMENT_BYTES_MISMATCH"},
+    {"id":"retirement-monitor-receipt-missing","bundle":"five","omitReceipt":"monitor-observation","expected":"INDETERMINATE","reason":"RETIREMENT_RECEIPT_MISSING"},
+    {"id":"retirement-status-receipt-stale","bundle":"five","receiptControl":"staleStatusReceipt","expected":"INDETERMINATE","reason":"RETIREMENT_RECEIPT_SCOPE"},
+    {"id":"retirement-archive-source-unadmitted","bundle":"five","receiptControl":"wrongArchiveReceipt","expected":"INDETERMINATE","reason":"RETIREMENT_RECEIPT_SCOPE"},
+    {"id":"retirement-archive-receipt-signature-invalid","bundle":"five","mutateReceiptSignature":"historical-status","expected":"RETIREMENT_RECEIPT"},
+    {"id":"retirement-signed-manifest-omits-required-status","bundle":"five","manifestControl":"missingRequired","expected":"RETIREMENT_MANIFEST_SCOPE"},
+    {"id":"retirement-signed-manifest-wrong-head","bundle":"five","manifestControl":"wrongHead","expected":"RETIREMENT_MANIFEST"},
+    {"id":"retirement-signed-manifest-before-monitor","bundle":"five","manifestControl":"earlyDeclaration","expected":"RETIREMENT_MANIFEST"},
+    {"id":"retirement-manifest-signature-invalid","bundle":"five","mutateManifestSignature":true,"expected":"RETIREMENT_MANIFEST"},
+    {"id":"retirement-log-and-inventory-same-key","bundle":"five","sameInventoryLogKey":true,"expected":"RETIREMENT_KEY"},
+    {"id":"retirement-publication-proof-altered","bundle":"five","mutateProof":true,"expected":"PUBLICATION_CONSISTENCY"},
+    {"id":"retirement-after-document-horizon","bundle":"five","checkAt":401,"expected":"OUT_OF_SCOPE"}
+  ]
+}

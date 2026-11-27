@@ -445,6 +445,24 @@
     {"id":"witness-monitor-for-other-head","expected":"PUBLICATION_MONITOR","component":"raw-publication-witness"},
     {"id":"witness-monitor-after-knowledge-cutoff","expected":"PUBLICATION_MONITOR","component":"raw-publication-witness"},
     {"id":"witness-untrusted-earlier-root","expected":"PUBLICATION_ANCHOR","component":"raw-publication-witness"},
-    {"id":"witness-invalid-consistency-path","expected":"PUBLICATION_CONSISTENCY","component":"raw-publication-witness"}
+    {"id":"witness-invalid-consistency-path","expected":"PUBLICATION_CONSISTENCY","component":"raw-publication-witness"},
+    {"id":"retirement-five-entry-declared-set-retrieved","expected":"BOUND_RETIREMENT_RETRIEVAL_CLAIMS","component":"raw-retirement-closure"},
+    {"id":"retirement-four-entry-declared-set-cannot-reveal-deny","expected":"BOUND_RETIREMENT_RETRIEVAL_CLAIMS","component":"raw-retirement-closure"},
+    {"id":"retirement-native-good-species-ignored","expected":"BOUND_RETIREMENT_RETRIEVAL_CLAIMS","component":"raw-retirement-closure"},
+    {"id":"retirement-native-bad-species-repair-ignored","expected":"REJECTED","component":"raw-retirement-closure"},
+    {"id":"retirement-status-bytes-missing","expected":"INDETERMINATE","component":"raw-retirement-closure"},
+    {"id":"retirement-logged-entry-missing-from-archive","expected":"INDETERMINATE","component":"raw-retirement-closure"},
+    {"id":"retirement-status-bytes-substituted","expected":"REJECTED","component":"raw-retirement-closure"},
+    {"id":"retirement-monitor-receipt-missing","expected":"INDETERMINATE","component":"raw-retirement-closure"},
+    {"id":"retirement-status-receipt-stale","expected":"INDETERMINATE","component":"raw-retirement-closure"},
+    {"id":"retirement-archive-source-unadmitted","expected":"INDETERMINATE","component":"raw-retirement-closure"},
+    {"id":"retirement-archive-receipt-signature-invalid","expected":"RETIREMENT_RECEIPT","component":"raw-retirement-closure"},
+    {"id":"retirement-signed-manifest-omits-required-status","expected":"RETIREMENT_MANIFEST_SCOPE","component":"raw-retirement-closure"},
+    {"id":"retirement-signed-manifest-wrong-head","expected":"RETIREMENT_MANIFEST","component":"raw-retirement-closure"},
+    {"id":"retirement-signed-manifest-before-monitor","expected":"RETIREMENT_MANIFEST","component":"raw-retirement-closure"},
+    {"id":"retirement-manifest-signature-invalid","expected":"RETIREMENT_MANIFEST","component":"raw-retirement-closure"},
+    {"id":"retirement-log-and-inventory-same-key","expected":"RETIREMENT_KEY","component":"raw-retirement-closure"},
+    {"id":"retirement-publication-proof-altered","expected":"PUBLICATION_CONSISTENCY","component":"raw-retirement-closure"},
+    {"id":"retirement-after-document-horizon","expected":"OUT_OF_SCOPE","component":"raw-retirement-closure"}
   ]
 }
