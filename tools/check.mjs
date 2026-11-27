@@ -130,6 +130,46 @@ for(const [kind,records] of [['heads',witness.heads],
     assert.equal(createHash('sha256').update(signature).digest('hex'),
       item.signatureSha256,`${kind}: ${name}`);
   }
+const retirement=json('vectors/raw-retirement-closure.json');
+const retirementCases=json('vectors/raw-retirement-closure-cases.json');
+assert.equal(retirement.format,'frozen-original-retirement-closure-v1');
+assert.equal(retirementCases.format,'original-retirement-closure-cases-v1');
+assert.deepEqual(retirement.policy.publicationAnchor,witness.anchor);
+assert.deepEqual(json('cases.json').cases.filter(x=>x.component==='raw-retirement-closure')
+  .map(x=>[x.id,x.expected]),retirementCases.cases.map(x=>[x.id,x.expected]));
+const retirementObjectSources={
+  document:ersDer.objects.document.sha256,
+  'mtc-certificate':json('vectors/raw-mtc-der.json').objects['standalone-one'].sha256,
+  'historical-status':rawDer.objects['good-ca'].sha256,
+  'preservation-evidence':ersDer.objects['ers-initial'].sha256
+};
+for(const [id,item] of Object.entries(retirement.objects)){
+  const raw=Buffer.from(item.base64,'base64');
+  assert.equal(raw.toString('base64'),item.base64,id);
+  assert.equal(raw.length,item.bytes,id);
+  assert.equal(createHash('sha256').update(raw).digest('hex'),item.sha256,id);
+  if(retirementObjectSources[id])assert.equal(item.sha256,retirementObjectSources[id],id);
+}
+const authorityPair=Buffer.concat(['samecut-1','samecut-2'].flatMap(id=>[
+  Buffer.from(authorityBytes.objects[id].rawBase64,'base64'),
+  Buffer.from(authorityBytes.objects[id].signatureBase64,'base64')]));
+assert.equal(createHash('sha256').update(authorityPair).digest('hex'),
+  retirement.objects['authority-history'].sha256);
+const checkSigned=(item,id)=>{
+  const raw=Buffer.from(item.rawBase64,'base64');
+  const signature=Buffer.from(item.signatureBase64,'base64');
+  assert.equal(raw.length,item.rawBytes,id);
+  assert.equal(createHash('sha256').update(raw).digest('hex'),item.rawSha256,id);
+  assert.equal(createHash('sha256').update(signature).digest('hex'),
+    item.signatureSha256,id);
+};
+for(const [name,bundle] of Object.entries(retirement.bundles)){
+  checkSigned(bundle.manifest,`${name}: manifest`);
+  for(const [id,item] of Object.entries(bundle.receipts))
+    checkSigned(item,`${name}: ${id}`);
+}
+for(const [id,item] of Object.entries(retirement.controls))
+  checkSigned(item,`control: ${id}`);
 const mtcVectors=json('vectors/raw-mtc-cases.json');
 const mtcDer=json('vectors/raw-mtc-der.json');
 assert.equal(mtcVectors.format,'original-mtc07-issuance-cases-v1');
