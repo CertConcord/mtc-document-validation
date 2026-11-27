@@ -175,9 +175,10 @@ export function assessRawRetirementClosure({policy,publication,manifest,retrieve
   const retrievedCount=retrieved.length;
   for(let i=0;i<retrievedCount;i++){
     const item=retrieved[i];
-    if(!item||!label(item.id)||!byId.has(item.id)||provided.has(item.id))
+    const id=item?.id;
+    if(!label(id)||!byId.has(id)||provided.has(id))
       fail('RETIREMENT_RETRIEVAL');
-    provided.set(item.id,{bytes:bytes(item.bytes,'RETIREMENT_RETRIEVAL'),
+    provided.set(id,{bytes:bytes(item.bytes,'RETIREMENT_RETRIEVAL'),
       receipt:item.receipt});
   }
   const reasons=[];

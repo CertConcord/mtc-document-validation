@@ -79,6 +79,24 @@ test('original inventory and archive signatures verify independently',()=>{
   }
 });
 
+test('retrieval ID is captured once from original signed bundle',()=>{
+  const publication=published('five');
+  const original=originals('five',publication);
+  const bundle=corpus.bundles.five;
+  const retrieved=Object.entries(bundle.receipts).map(([id,item])=>({id,
+    bytes:Buffer.from(original[id]),receipt:envelope(item)}));
+  const status=retrieved.find(x=>x.id==='historical-status');
+  let reads=0;
+  Object.defineProperty(status,'id',{get(){
+    reads++;
+    return reads===1?'historical-status':'unselected';
+  }});
+  const result=assessRawRetirementClosure({policy:structuredClone(corpus.policy),
+    publication,manifest:envelope(bundle.manifest),retrieved,checkAt:corpus.checkAt});
+  assert.equal(result.decision,'BOUND_RETIREMENT_RETRIEVAL_CLAIMS');
+  assert.equal(reads,1);
+});
+
 for(const vector of vectors.cases)test(vector.id,()=>{
   const policy=structuredClone(corpus.policy);
   const publication=published(vector.bundle);
