@@ -83,6 +83,13 @@
       "retrievedAt": "2026-11-26T21:59:40Z"
     },
     {
+      "id": "rfc8410",
+      "url": "https://www.rfc-editor.org/rfc/rfc8410.txt",
+      "sha256": "90a0ff0b3dd661d3e26e1873f40f2ca8b41709a7bbd755a1ed3599c4746313d2",
+      "bytes": 34896,
+      "retrievedAt": "2026-11-27T17:37:40Z"
+    },
+    {
       "id": "rfc4998",
       "url": "https://www.rfc-editor.org/rfc/rfc4998.txt",
       "sha256": "c194b696364f6b5ed1e2fac6da676fc8d29219b84e48a2e2d30d20fde5b14b43",

@@ -47,7 +47,7 @@ export function deriveMtcLogId(caId, logNumber) {
   return {binary, origin: `${arcs}.0.${logNumber}`};
 }
 
-function caName(caId) {
+export function mtcCaName(caId) {
   const value = Buffer.concat([Buffer.from([0x0d, caId.length]), caId]);
   const attribute = Buffer.concat([CA_NAME_OID, value]);
   const sequence = Buffer.concat([Buffer.from([0x30, attribute.length]), attribute]);
@@ -126,7 +126,7 @@ function certificateParts(der, caId) {
   if (!raw(expect(fields[at++], 0x30)).equals(MTC_ALGORITHM))
     fail('MTC_CERTIFICATE');
   const issuer = raw(expect(fields[at++], 0x30));
-  if (!issuer.equals(caName(caId))) fail('MTC_ISSUER');
+  if (!issuer.equals(mtcCaName(caId))) fail('MTC_ISSUER');
   const validity = raw(expect(fields[at++], 0x30));
   const subject = raw(expect(fields[at++], 0x30));
   const spki = fields[at++];

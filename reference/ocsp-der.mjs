@@ -9,6 +9,7 @@ const OID = {
   sha1: '1.3.14.3.2.26',
   sha256: '2.16.840.1.101.3.4.2.1',
   rsaSha256: '1.2.840.113549.1.1.11',
+  ed25519: '1.3.101.112',
   nonce: '1.3.6.1.5.5.7.48.1.2',
   reason: '2.5.29.21',
   invalidityDate: '2.5.29.24'
@@ -119,7 +120,9 @@ function responderMatches(value, signer) {
   bad('OCSP_RESPONDER_ID_UNSUPPORTED');
 }
 
-export function parseOcsp({recordDer, target, issuer, responderDer, requestDer}) {
+export function parseOcsp({recordDer, target, issuer, responderDer, requestDer,
+  directMtcCa = false}) {
+  if (directMtcCa && responderDer) bad('OCSP_DELEGATED_UNSUPPORTED');
   const record = Buffer.from(recordDer);
   const outer = children(one(record, 0x30));
   if (outer.length < 1 || outer.length > 2) bad('DER_MALFORMED');
@@ -135,7 +138,11 @@ export function parseOcsp({recordDer, target, issuer, responderDer, requestDer})
     bad('OCSP_RESPONSE_TYPE_UNSUPPORTED');
   const basic = children(one(content(expect(responseBytes[1], 0x04)), 0x30));
   if (basic.length < 3 || basic.length > 4) bad('DER_MALFORMED');
-  if (algorithm(basic[1]) !== OID.rsaSha256) bad('OCSP_SIGNATURE_ALGORITHM_UNSUPPORTED');
+  const signedAlgorithm = algorithm(basic[1]);
+  const expectedAlgorithm = directMtcCa ? OID.ed25519 : OID.rsaSha256;
+  if (signedAlgorithm !== expectedAlgorithm ||
+      (directMtcCa && children(basic[1]).length !== 1))
+    bad('OCSP_SIGNATURE_ALGORITHM_UNSUPPORTED');
   const signed = raw(basic[0]);
   const signature = bitString(basic[2]);
   if (signature.unused !== 0) bad('DER_MALFORMED');
@@ -159,10 +166,13 @@ export function parseOcsp({recordDer, target, issuer, responderDer, requestDer})
   if (producedAt < signer.validFrom || producedAt > signer.validUntil)
     bad('OCSP_SIGNER_CERT_TIME');
   if (responderDer) admittedResponder(signer, issuer, producedAt);
-  if (signer.x509.publicKey.asymmetricKeyType !== 'rsa')
+  if (signer.x509.publicKey.asymmetricKeyType !== (directMtcCa ? 'ed25519' : 'rsa'))
     bad('OCSP_SIGNATURE_ALGORITHM_UNSUPPORTED');
   try {
-    if (!verify('RSA-SHA256', signed, signer.x509.publicKey, signature.bytes))
+    if (directMtcCa && signature.bytes.length !== 64)
+      bad('OCSP_SIGNATURE_INVALID');
+    if (!verify(directMtcCa ? null : 'RSA-SHA256', signed,
+      signer.x509.publicKey, signature.bytes))
       bad('OCSP_SIGNATURE_INVALID');
   } catch (error) {
     if (error instanceof DerError) throw error;

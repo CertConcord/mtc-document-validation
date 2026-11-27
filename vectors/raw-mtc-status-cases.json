@@ -1,0 +1,217 @@
+{
+  "format": "original-mtc07-status-cases-v1",
+  "defaults": {
+    "target": "mtc-target",
+    "issuer": "mtc-ca",
+    "stateAt": 1780360200,
+    "knownAt": 1780444800,
+    "receiptAt": 1780362000,
+    "sourceId": "independent-status-archive",
+    "crlDistributionPoint": "https://status.example.test/mtc.crl",
+    "compromiseMode": "use-invalidity-date"
+  },
+  "cases": [
+    {
+      "id": "mtc-direct-ocsp-good",
+      "kind": "OCSP",
+      "record": "ocsp-good",
+      "expected": "GOOD"
+    },
+    {
+      "id": "mtc-direct-ocsp-revoked",
+      "kind": "OCSP",
+      "record": "ocsp-revoked",
+      "expected": "REVOKED"
+    },
+    {
+      "id": "mtc-direct-crl-good",
+      "kind": "CRL",
+      "record": "crl-good",
+      "expected": "GOOD"
+    },
+    {
+      "id": "mtc-direct-crl-revoked",
+      "kind": "CRL",
+      "record": "crl-revoked",
+      "expected": "REVOKED"
+    },
+    {
+      "id": "mtc-proof-invalid",
+      "kind": "OCSP",
+      "record": "ocsp-good",
+      "expected": "REJECTED",
+      "reason": "MTC_COSIGNER_QUORUM",
+      "target": "mtc-target-invalid-proof"
+    },
+    {
+      "id": "mtc-direct-tbs-forbidden",
+      "kind": "OCSP",
+      "record": "ocsp-good",
+      "expected": "REJECTED",
+      "reason": "MTC_CERTIFICATE",
+      "target": "direct-target-forbidden"
+    },
+    {
+      "id": "mtc-ca-key-not-cosigner",
+      "kind": "OCSP",
+      "record": "ocsp-good",
+      "expected": "REJECTED",
+      "reason": "MTC_CA_KEY",
+      "issuer": "mtc-ca-other-key"
+    },
+    {
+      "id": "mtc-ca-extension-missing",
+      "kind": "OCSP",
+      "record": "ocsp-good",
+      "expected": "REJECTED",
+      "reason": "MTC_CA_EXTENSION",
+      "issuer": "mtc-ca-missing-extension"
+    },
+    {
+      "id": "mtc-ca-extension-noncritical",
+      "kind": "OCSP",
+      "record": "ocsp-good",
+      "expected": "REJECTED",
+      "reason": "MTC_CA_EXTENSION",
+      "issuer": "mtc-ca-noncritical-extension"
+    },
+    {
+      "id": "mtc-ca-name-mismatch",
+      "kind": "OCSP",
+      "record": "ocsp-good",
+      "expected": "REJECTED",
+      "reason": "MTC_CA_NAME",
+      "issuer": "mtc-ca-wrong-subject"
+    },
+    {
+      "id": "mtc-ca-keycertsign-missing",
+      "kind": "OCSP",
+      "record": "ocsp-good",
+      "expected": "REJECTED",
+      "reason": "ISSUER_USAGE_UNPROVEN",
+      "issuer": "mtc-ca-no-keycertsign"
+    },
+    {
+      "id": "mtc-ca-extension-wrong-range",
+      "kind": "OCSP",
+      "record": "ocsp-good",
+      "expected": "REJECTED",
+      "reason": "MTC_CA_RANGE",
+      "issuer": "mtc-ca-wrong-range"
+    },
+    {
+      "id": "mtc-ocsp-signing-use-missing",
+      "kind": "OCSP",
+      "record": "ocsp-good",
+      "expected": "REJECTED",
+      "reason": "OCSP_SIGNING_KEY_USAGE",
+      "issuer": "mtc-ca-no-ocsp-usage"
+    },
+    {
+      "id": "mtc-crl-signing-use-missing",
+      "kind": "CRL",
+      "record": "crl-good",
+      "expected": "REJECTED",
+      "reason": "CRL_SIGNING_KEY_USAGE",
+      "issuer": "mtc-ca-no-crl-usage"
+    },
+    {
+      "id": "mtc-ocsp-wrong-certid",
+      "kind": "OCSP",
+      "record": "ocsp-other-serial",
+      "expected": "INDETERMINATE",
+      "reason": "OCSP_TARGET_NOT_FOUND"
+    },
+    {
+      "id": "mtc-ocsp-wrong-signer",
+      "kind": "OCSP",
+      "record": "ocsp-wrong-key",
+      "expected": "REJECTED",
+      "reason": "OCSP_SIGNATURE_INVALID"
+    },
+    {
+      "id": "mtc-crl-wrong-signer",
+      "kind": "CRL",
+      "record": "crl-wrong-key",
+      "expected": "REJECTED",
+      "reason": "CRL_SIGNATURE_INVALID"
+    },
+    {
+      "id": "mtc-ocsp-ed-null",
+      "kind": "OCSP",
+      "record": "ocsp-null-parameters",
+      "expected": "UNSUPPORTED",
+      "reason": "OCSP_SIGNATURE_ALGORITHM_UNSUPPORTED"
+    },
+    {
+      "id": "mtc-crl-ed-null",
+      "kind": "CRL",
+      "record": "crl-null-parameters",
+      "expected": "UNSUPPORTED",
+      "reason": "CRL_SIGNATURE_ALGORITHM_UNSUPPORTED"
+    },
+    {
+      "id": "mtc-ocsp-bit-corrupted",
+      "kind": "OCSP",
+      "record": "ocsp-invalid-signature",
+      "expected": "REJECTED",
+      "reason": "OCSP_SIGNATURE_INVALID"
+    },
+    {
+      "id": "mtc-crl-bit-corrupted",
+      "kind": "CRL",
+      "record": "crl-invalid-signature",
+      "expected": "REJECTED",
+      "reason": "CRL_SIGNATURE_INVALID"
+    },
+    {
+      "id": "mtc-delegated-ocsp-unsupported",
+      "kind": "OCSP",
+      "record": "ocsp-good",
+      "expected": "UNSUPPORTED",
+      "reason": "OCSP_DELEGATED_UNSUPPORTED",
+      "responder": "mtc-ca"
+    },
+    {
+      "id": "mtc-ocsp-stale-state",
+      "kind": "OCSP",
+      "record": "ocsp-good",
+      "expected": "INDETERMINATE",
+      "reason": "STATUS_INTERVAL_NOT_COVERED",
+      "stateAt": 1780963200,
+      "knownAt": 1780963200
+    },
+    {
+      "id": "mtc-ocsp-no-receipt",
+      "kind": "OCSP",
+      "record": "ocsp-good",
+      "expected": "INDETERMINATE",
+      "reason": "RECEIPT_MISSING",
+      "receipt": false
+    },
+    {
+      "id": "mtc-ocsp-receipt-after-cutoff",
+      "kind": "OCSP",
+      "record": "ocsp-good",
+      "expected": "INDETERMINATE",
+      "reason": "RECORD_NOT_YET_KNOWN",
+      "receiptAt": 1780531200
+    },
+    {
+      "id": "mtc-crl-unadmitted-distribution",
+      "kind": "CRL",
+      "record": "crl-good",
+      "expected": "INDETERMINATE",
+      "reason": "CRL_DISTRIBUTION_NOT_ADMITTED",
+      "crlDistributionPoint": "https://other.example.test/mtc.crl"
+    },
+    {
+      "id": "mtc-ocsp-record-mismatch",
+      "kind": "OCSP",
+      "record": "ocsp-good",
+      "expected": "REJECTED",
+      "reason": "RECEIPT_RECORD_MISMATCH",
+      "receiptRecord": "ocsp-revoked"
+    }
+  ]
+}
