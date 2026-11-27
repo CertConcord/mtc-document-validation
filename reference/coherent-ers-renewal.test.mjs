@@ -37,6 +37,11 @@ const firstAts = evidenceDer => {
   const chains = children(children(one(evidenceDer, 0x30)).at(-1));
   return raw(children(chains[0])[0]);
 };
+const embeddedToken = (evidenceDer, index) => {
+  const chains = children(children(one(evidenceDer, 0x30)).at(-1));
+  const stamps = children(chains[0]);
+  return raw(children(stamps[index]).at(-1));
+};
 
 test('same-document renewal originals preserve the prior ATS and response tokens', () => {
   assert.equal(vectors.format, 'original-coherent-document-ers-renewal-v1');
@@ -51,8 +56,11 @@ test('same-document renewal originals preserve the prior ATS and response tokens
   for (const id of ['renewal', 'wrongWholeAts']) {
     const row = vectors[id];
     const response = frozen(row.response);
+    const evidence = frozen(row.evidence);
     assert.deepEqual(tokenFromResponse(response), frozen(row.token));
-    assert.deepEqual(firstAts(frozen(row.evidence)), oldAts);
+    assert.deepEqual(firstAts(evidence), oldAts);
+    assert.deepEqual(embeddedToken(evidence, 0), oldToken);
+    assert.deepEqual(embeddedToken(evidence, 1), tokenFromResponse(response));
     frozen(row.request);
   }
 });
