@@ -55,7 +55,7 @@ function caName(caId) {
   return Buffer.concat([Buffer.from([0x30, set.length]), set]);
 }
 
-function admittedPolicy(policy, representation = 'standalone') {
+export function admittedPolicy(policy, representation = 'standalone') {
   if (!policy || typeof policy.mtcRevision !== 'string' ||
       typeof policy.logHash !== 'string' ||
       policy.representation !== representation ||
