@@ -247,7 +247,7 @@ for(const [id,item] of Object.entries(activeSet.publications)){
 }
 for(const vector of activeCases.cases){
   assert(Object.hasOwn(activeSet.publications,vector.publication),vector.id);
-  for(const field of ['evidenceSet','previousPublication'])
+  for(const field of ['evidenceSet','previousPublication','previousEvidenceSet'])
     if(vector[field])assert(Object.hasOwn(activeSet.publications,vector[field]),vector.id);
 }
 for(const s of json('sources.json').sources){assert(s.url.startsWith('https://'));assert(/^[a-f0-9]{64}$/.test(s.sha256));}

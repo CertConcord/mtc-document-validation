@@ -22,7 +22,8 @@ function sourceFacts(source, caId) {
     minimumTrustedTreeSize: source.minimumTrustedTreeSize,
     maxActiveLandmarksForLog: source.maxActiveLandmarksForLog,
     previousLatest: source.previousLatest,
-    previousPublicationSha256: source.previousPublicationSha256};
+    previousPublicationSha256: source.previousPublicationSha256,
+    previousEvaluatedAt: source.previousEvaluatedAt};
   if (typeof facts.sourceId !== 'string' ||
       !/^[A-Za-z0-9._:/-]{1,128}$/.test(facts.sourceId) ||
       facts.caIdHex !== caId.toString('hex') ||
@@ -49,13 +50,19 @@ function sourceFacts(source, caId) {
       minimumTrustedTreeSize >= (1n << 48n)) fail('MTC_ACTIVE_POLICY');
   const previousLatest = facts.previousLatest;
   const previousPublicationSha256 = facts.previousPublicationSha256;
+  const previousEvaluatedAt = facts.previousEvaluatedAt;
   if (previousLatest === null) {
-    if (previousPublicationSha256 !== null) fail('MTC_ACTIVE_POLICY');
+    if (previousPublicationSha256 !== null ||
+        previousEvaluatedAt !== undefined && previousEvaluatedAt !== null)
+      fail('MTC_ACTIVE_POLICY');
   } else if (!Number.isSafeInteger(previousLatest) || previousLatest < 0 ||
       previousLatest >= 2 ** 48 ||
       typeof previousPublicationSha256 !== 'string' ||
       !/^[a-f0-9]{64}$/.test(previousPublicationSha256))
     fail('MTC_ACTIVE_POLICY');
+  if (previousEvaluatedAt !== undefined && previousEvaluatedAt !== null &&
+      (!decimal(previousEvaluatedAt) || BigInt(previousEvaluatedAt) === 0n ||
+       BigInt(previousEvaluatedAt) > admittedAt)) fail('MTC_ACTIVE_POLICY');
   return {sourceId: facts.sourceId, caIdHex: facts.caIdHex,
     logNumber: facts.logNumber, logOrigin: logId.origin,
     publicationSha256: facts.publicationSha256,
@@ -63,14 +70,16 @@ function sourceFacts(source, caId) {
     freshThrough: facts.freshThrough,
     minimumTrustedTreeSize: Number(minimumTrustedTreeSize),
     maxActiveLandmarksForLog: facts.maxActiveLandmarksForLog,
-    previousLatest, previousPublicationSha256};
+    previousLatest, previousPublicationSha256,
+    previousEvaluatedAt: previousEvaluatedAt ?? null};
 }
 
 // Read-only §7.4 admission relative to one independently admitted publication.
 // The caller chooses an explicit older suffix; this function never upgrades a
 // failed subtree into a trusted one or advances persistent source/watermark state.
 export function assessRawMtcActiveSubtreeSet({policy, sourceAdmission,
-  landmarkPublication, acceptedHeadNumber, referenceCheckpoint,
+  landmarkPublication, previousLandmarkPublication, acceptedHeadNumber,
+  referenceCheckpoint,
   checkpointSignatures, subtreeProofs}) {
   try {
     const admitted = admittedPolicy(policy, 'relative');
@@ -82,11 +91,34 @@ export function assessRawMtcActiveSubtreeSet({policy, sourceAdmission,
       source.evaluatedAt);
     if (publication.publicationSha256 !== source.publicationSha256)
       fail('MTC_ACTIVE_SOURCE');
-    if (source.previousLatest !== null &&
-        (publication.latest < source.previousLatest ||
-         (publication.latest === source.previousLatest &&
-          publication.publicationSha256 !==
-            source.previousPublicationSha256))) fail('MTC_ACTIVE_REPLAY');
+    if (source.previousLatest !== null) {
+      if (publication.latest < source.previousLatest)
+        fail('MTC_ACTIVE_REPLAY');
+      if (publication.latest === source.previousLatest &&
+          publication.publicationSha256 !== source.previousPublicationSha256) {
+        if (previousLandmarkPublication == null ||
+            source.previousEvaluatedAt === null)
+          fail('MTC_ACTIVE_PRIOR_MISSING');
+        const previousBytes = snapshotMtcBuffer(previousLandmarkPublication,
+          'MTC_ACTIVE_PRIOR_SOURCE');
+        const previous = parseMtcLandmarkPublication(previousBytes,
+          source.previousEvaluatedAt);
+        if (previous.publicationSha256 !== source.previousPublicationSha256 ||
+            previous.latest !== source.previousLatest)
+          fail('MTC_ACTIVE_PRIOR_SOURCE');
+        // The latest number identifies a landmark, not a publication
+        // version. A later view may omit expired older rows. Retained
+        // numbered landmark tuples remain immutable.
+        if (publication.rows.length > previous.rows.length ||
+            publication.rows.some((row, i) =>
+              row.number !== previous.rows[i].number ||
+              row.treeSize !== previous.rows[i].treeSize ||
+              row.expiration !== previous.rows[i].expiration) ||
+            previous.rows.slice(publication.rows.length).some(row =>
+              row.expiration >= BigInt(source.evaluatedAt)))
+          fail('MTC_ACTIVE_REPLAY');
+      }
+    }
     const active = publication.rows.slice(0, -1);
     if (!Array.isArray(subtreeProofs)) fail('MTC_ACTIVE_SUBTREES');
     if (acceptedHeadNumber === null) {
@@ -152,7 +184,8 @@ export function assessRawMtcActiveSubtreeSet({policy, sourceAdmission,
       subtrees};
   } catch (error) {
     if (!(error instanceof DerError)) throw error;
-    return {decision: error.code.endsWith('_UNSUPPORTED') ? 'UNSUPPORTED' :
-      'REJECTED', reason: error.code};
+    return {decision: error.code === 'MTC_ACTIVE_PRIOR_MISSING' ?
+      'INDETERMINATE' : error.code.endsWith('_UNSUPPORTED') ?
+        'UNSUPPORTED' : 'REJECTED', reason: error.code};
   }
 }

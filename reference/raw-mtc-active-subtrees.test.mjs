@@ -62,6 +62,10 @@ test('original entries, signed roots, two-sided proofs and empty hash',()=>{
       [b[5],[b[4],root4]],[hash(Buffer.alloc(0)),[]],
       [root23,[root01,root45]],[b[4],[b[5],root4]],
       [b[0],[b[1],root23,root45]],[b[1],[b[0],root23,root45]]],
+    sixThreeActiveFutureThree:[
+      [b[5],[b[4],root4]],[hash(Buffer.alloc(0)),[]],
+      [root23,[root01,root45]],[b[4],[b[5],root4]],
+      [b[0],[b[1],root23,root45]],[b[1],[b[0],root23,root45]]],
     sixNewestWithExpiredFive:[
       [b[5],[b[4],root4]],[hash(Buffer.alloc(0)),[]]]
   };
@@ -102,12 +106,14 @@ for(const vector of vectors.cases)test(vector.id,()=>{
   const policy=structuredClone(sourceCorpus.policy);
   const sourceAdmission={sourceId:'original-mtc07-publication',
     caIdHex:policy.caIdHex,logNumber:1,logOrigin:'1.2.0.1',
-    publicationSha256:publication.sha256,admittedAt:'1780000000',
+    publicationSha256:publication.sha256,
+    admittedAt:vector.admittedAt??'1780000000',
     evaluatedAt:vector.evaluatedAt??'1780000000',
     freshThrough:vector.freshThrough??'1780000100',
     previousLatest:vector.previousLatest??null,
     previousPublicationSha256:vector.previousPublication?
       frozen.publications[vector.previousPublication].sha256:null,
+    previousEvaluatedAt:vector.previousEvaluatedAt,
     minimumTrustedTreeSize:vector.minimumTrustedTreeSize??'5',
     maxActiveLandmarksForLog:vector.maxActiveLandmarksForLog??3};
   if(vector.mutateRequiredRolesAtSourceRead)
@@ -127,6 +133,8 @@ for(const vector of vectors.cases)test(vector.id,()=>{
       vector.nativeInput.mode,'publication');
   if(vector.fakeBuffer==='publication')
     landmarkPublication=fakeBufferPrototype();
+  const previousLandmarkPublication=vector.previousEvidenceSet?
+    decode(frozen.publications[vector.previousEvidenceSet]):undefined;
   const referenceCheckpoint={treeSize:evidence.referenceTreeSize,
     rootHash:Buffer.from(evidence.referenceRootHex,'hex')};
   if(vector.mutateReferenceRoot)referenceCheckpoint.rootHash[0]^=1;
@@ -160,7 +168,8 @@ for(const vector of vectors.cases)test(vector.id,()=>{
   if(vector.fakeBuffer&&vector.fakeBuffer!=='publication')
     subtreeProofs[vector.fakeIndex][vector.fakeBuffer]=fakeBufferPrototype();
   const result=assessRawMtcActiveSubtreeSet({policy,sourceAdmission,
-    landmarkPublication,acceptedHeadNumber:vector.acceptedHeadNumber,
+    landmarkPublication,previousLandmarkPublication,
+    acceptedHeadNumber:vector.acceptedHeadNumber,
     referenceCheckpoint,checkpointSignatures,subtreeProofs});
   assert.equal(result.reason??result.decision,vector.expected);
   if(vector.expected==='ACTIVE_SUBTREE_SET_BOUND'||
