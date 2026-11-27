@@ -1,0 +1,118 @@
+{
+  "format": "frozen-original-mtc07-relative-proof-corpus-v1",
+  "objects": {
+    "relative-one": {
+      "base64": "MIG7MIGWoAMCAQICBwEAAAAAAAAwCgYIKwYBBQUHBkMwEjEQMA4GCCsGAQUFBxkDDQIBAjAeFw0yNjAxMDEwMDAwMDBaFw0yNzAxMDEwMDAwMDBaMBoxGDAWBgNVBAMMD1JlbGF0aXZlIFNpZ25lcjAqMAUGAytlcAMhAL1RDBP9VkTQeExZPdOzRLqkjjdElMuCY7CV9smBH2+7MAoGCCsGAQUFBwZDAxQAAAAAAAAAAAAAAAAAAAEAAAAAAA==",
+      "bytes": 190,
+      "sha256": "a6c139e3266a0e5ff4cea2a99f57151c81638529c1b2547782bdbd80503d5428"
+    },
+    "relative-subject-mutant": {
+      "base64": "MIG7MIGWoAMCAQICBwEAAAAAAAAwCgYIKwYBBQUHBkMwEjEQMA4GCCsGAQUFBxkDDQIBAjAeFw0yNjAxMDEwMDAwMDBaFw0yNzAxMDEwMDAwMDBaMBoxGDAWBgNVBAMMD1NlbGF0aXZlIFNpZ25lcjAqMAUGAytlcAMhAL1RDBP9VkTQeExZPdOzRLqkjjdElMuCY7CV9smBH2+7MAoGCCsGAQUFBwZDAxQAAAAAAAAAAAAAAAAAAAEAAAAAAA==",
+      "bytes": 190,
+      "sha256": "f4251ea9b88ec5ded0e6df2b9f1ccd7fcdf430a71c5976307cd2b6ea3a384c04"
+    }
+  },
+  "publication": {
+    "base64": "MQoxIDE4MzAyOTc2MDAKMCAwCg==",
+    "bytes": 19,
+    "sha256": "3b4511fbbea217d4939c82e364228182f4809c60c9ed1a2b3d644cba29653242"
+  },
+  "policy": {
+    "mtcRevision": "07",
+    "logHash": "sha256",
+    "representation": "relative",
+    "minSerial": "281474976710656",
+    "maxSerial": "281474976710656",
+    "caIdHex": "0102",
+    "cosigners": [
+      {
+        "idHex": "0102",
+        "role": "ca",
+        "publicKeySpkiBase64": "MCowBQYDK2VwAyEA/NXGQfiSYI3NzN2OcVvTkuUzzAIj0mFTWS2CN27qJqY="
+      },
+      {
+        "idHex": "0103",
+        "role": "mirror",
+        "publicKeySpkiBase64": "MCowBQYDK2VwAyEA0L25LjS4QM/o7kYpYXRoIFM2X1xkpaSpa+jS88/rwjE="
+      }
+    ],
+    "requiredRoles": [
+      "ca",
+      "mirror"
+    ],
+    "revokedRanges": [],
+    "landmarkPublicationSha256": "3b4511fbbea217d4939c82e364228182f4809c60c9ed1a2b3d644cba29653242",
+    "landmarkAdmittedAt": "1780000000",
+    "landmarkLogOrigin": "1.2.0.1",
+    "minimumTrustedTreeSize": "1"
+  },
+  "checkpoints": {
+    "ca": {
+      "idHex": "0102",
+      "message": {
+        "base64": "c3VidHJlZS92MQoAE29pZC8xLjMuNi4xLjQuMS4xLjIAAAAAahilChdvaWQvMS4zLjYuMS40LjEuMS4yLjAuMQAAAAAAAAAAAAAAAAAAAAEut1twxiovRaCXc6i3TXsWSVm8jeII2OgSDxuL5Wptbw==",
+        "bytes": 112,
+        "sha256": "6177130ff4ba3b664f40d185ca1de8a0d74d2d1e7ff7beaa6e2a63fc9cc90e55"
+      },
+      "signature": {
+        "base64": "DVJDVEG9oTn+2NJ9D4JJVIQUlWOyxPiBSBU2/8O3sni47pnK/yg9UjVvAkfix/60qvuWSLD619mF1dlaVp8gDw==",
+        "bytes": 64,
+        "sha256": "93ebbc83339a49fdac5b47e365da4039165e5af276a017ad93f1bbdf718a4663"
+      }
+    },
+    "mirror": {
+      "idHex": "0103",
+      "message": {
+        "base64": "c3VidHJlZS92MQoAE29pZC8xLjMuNi4xLjQuMS4xLjMAAAAAahilChdvaWQvMS4zLjYuMS40LjEuMS4yLjAuMQAAAAAAAAAAAAAAAAAAAAEut1twxiovRaCXc6i3TXsWSVm8jeII2OgSDxuL5Wptbw==",
+        "bytes": 112,
+        "sha256": "8c6b5779e1cf7aceab737d762fcd2500c086167bc17569951b9fea2b2813d678"
+      },
+      "signature": {
+        "base64": "XXXT+4yqankbLLnKte09THW1olpFV+lNu1phsm6K2MzgJ8bxO2dox0L3UkyLVf7joXOzoVJhfzfZb/pY2v4kAg==",
+        "bytes": 64,
+        "sha256": "2ffec1741fa715fd12ac998fb7db0df98409c586d3ba6c0bae2c76bdc058959d"
+      }
+    },
+    "caWrongOrigin": {
+      "idHex": "0102",
+      "message": {
+        "base64": "c3VidHJlZS92MQoAE29pZC8xLjMuNi4xLjQuMS4xLjIAAAAAahilChdvaWQvMS4zLjYuMS40LjEuMS4yLjAuMgAAAAAAAAAAAAAAAAAAAAEut1twxiovRaCXc6i3TXsWSVm8jeII2OgSDxuL5Wptbw==",
+        "bytes": 112,
+        "sha256": "b1fa1050136c99c868a656cadba7fdc7e6f2279b487963b453755c12348d868a"
+      },
+      "signature": {
+        "base64": "Hr5jPyGZE8Ljfvv18DoNmldqWDYDr4xthpS14MeLfXzm6eNMtuZ2llTMG7VzQT/DuybBHKZzNO9XnxwTNJ+KBw==",
+        "bytes": 64,
+        "sha256": "7cef9ef43254655fc6dd1b7dce6ad0b47bb3e465cfd8becbd39341f429e4ef09"
+      }
+    },
+    "caZeroTimestamp": {
+      "idHex": "0102",
+      "message": {
+        "base64": "c3VidHJlZS92MQoAE29pZC8xLjMuNi4xLjQuMS4xLjIAAAAAAAAAABdvaWQvMS4zLjYuMS40LjEuMS4yLjAuMQAAAAAAAAAAAAAAAAAAAAEut1twxiovRaCXc6i3TXsWSVm8jeII2OgSDxuL5Wptbw==",
+        "bytes": 112,
+        "sha256": "cdf44626935ede9565eed0c0cacb77aae72b8baf662812298308c81647610f75"
+      },
+      "signature": {
+        "base64": "X84sxnXIHmlN3iLRXM8rbFVgi5ags57ztE4oFrPCyme5py+Mb9I1pZRJS1UeeOPccnFWrrm7TCIabMY2JtiBCA==",
+        "bytes": 64,
+        "sha256": "fe5111f2bc9dd24fbd30637e7a4c25e03b6a582257913752c3d8818eb227894a"
+      }
+    },
+    "mirrorWrongRoot": {
+      "idHex": "0103",
+      "message": {
+        "base64": "c3VidHJlZS92MQoAE29pZC8xLjMuNi4xLjQuMS4xLjMAAAAAahilChdvaWQvMS4zLjYuMS40LjEuMS4yLjAuMQAAAAAAAAAAAAAAAAAAAAEvt1twxiovRaCXc6i3TXsWSVm8jeII2OgSDxuL5Wptbw==",
+        "bytes": 112,
+        "sha256": "bb27911e913f5823f15bd6104be4907d5c05af46fdb77a6cca2059549b3e0e4d"
+      },
+      "signature": {
+        "base64": "MLGe4Xgj7o+TmbaCq352ya84FnjPks3SLNJOqlBVNegiuLEYAVO3Jh1XlZW1v5+iTkkmRfi8VR5Z0WhYPEcSAA==",
+        "bytes": 64,
+        "sha256": "43f1070271262edc49471a1f3f3da9dc8fb02f8b5508479a72ab192f86f3f747"
+      }
+    }
+  },
+  "subtreeProofHex": "",
+  "expectedLeafSha256": "2eb75b70c62a2f45a09773a8b74d7b164959bc8de208d8e8120f1b8be56a6d6f"
+}

@@ -107,6 +107,60 @@ for(const v of mtcVectors.cases){
   assert(Object.hasOwn(mtcDer.objects,v.certificate),`${v.id}: certificate`);
   assert(Object.hasOwn(mtcDer.policies,v.policy),`${v.id}: policy`);
 }
+const mtcConsistency=json('vectors/raw-mtc-consistency.json');
+assert.equal(mtcConsistency.format,'original-mtc07-subtree-consistency-cases-v1');
+assert.deepEqual(json('cases.json').cases.filter(x=>x.component==='raw-mtc-consistency')
+  .map(x=>[x.id,x.expected]),mtcConsistency.cases.map(x=>[x.id,x.expected]));
+assert.deepEqual(json('cases.json').cases.filter(x=>x.component==='raw-mtc-covering')
+  .map(x=>[x.id,x.expected]),mtcConsistency.coveringCases.map(x=>[x.id,x.expected]));
+for(const leaf of mtcConsistency.leafInputs){
+  const original=Buffer.from(leaf.base64,'base64');
+  assert.equal(createHash('sha256').update(Buffer.concat([Buffer.from([0]),original]))
+    .digest('hex'),leaf.sha256,leaf.id);
+}
+for(const v of mtcConsistency.cases){
+  for(const field of ['subtreeHashHex','rootHashHex'])
+    assert(/^[a-f0-9]{64}$/.test(v[field]),v.id);
+  assert(/^(?:[a-f0-9]{2})*$/.test(v.proofHex),v.id);
+  if(v.expected==='VERIFIED')
+    assert.equal(Buffer.from(v.proofHex,'hex').length%32,0,v.id);
+}
+const mtcLandmark=json('vectors/raw-mtc-landmark-publication.json');
+assert.equal(mtcLandmark.format,'original-mtc07-landmark-publication-cases-v1');
+assert.deepEqual(json('cases.json').cases.filter(x=>x.component==='raw-mtc-landmark-publication')
+  .map(x=>[x.id,x.expected]),mtcLandmark.cases.map(x=>[x.id,x.expected]));
+assert.deepEqual(json('cases.json').cases.filter(x=>x.component==='raw-mtc-landmark-selection')
+  .map(x=>[x.id,x.expected]),mtcLandmark.selectionCases.map(x=>[x.id,x.expected]));
+for(const v of mtcLandmark.cases){
+  const raw=Buffer.from(v.rawBase64,'base64');
+  assert.equal(createHash('sha256').update(raw).digest('hex'),v.sha256,v.id);
+}
+const mtcRelative=json('vectors/raw-mtc-relative.json');
+const mtcRelativeCases=json('vectors/raw-mtc-relative-cases.json');
+assert.equal(mtcRelative.format,'frozen-original-mtc07-relative-proof-corpus-v1');
+assert.equal(mtcRelativeCases.format,'original-mtc07-relative-issuance-cases-v1');
+assert.deepEqual(json('cases.json').cases.filter(x=>x.component==='raw-mtc-relative-issuance')
+  .map(x=>[x.id,x.expected]),mtcRelativeCases.cases.map(x=>[x.id,x.expected]));
+const checkRelativeBytes=(item,id)=>{
+  const raw=Buffer.from(item.base64,'base64');
+  assert.equal(raw.toString('base64'),item.base64,id);
+  assert.equal(raw.length,item.bytes,id);
+  assert.equal(createHash('sha256').update(raw).digest('hex'),item.sha256,id);
+};
+for(const [id,item] of Object.entries(mtcRelative.objects))
+  checkRelativeBytes(item,id);
+checkRelativeBytes(mtcRelative.publication,'publication');
+for(const [id,item] of Object.entries(mtcRelative.checkpoints)){
+  checkRelativeBytes(item.message,`${id}: message`);
+  checkRelativeBytes(item.signature,`${id}: signature`);
+}
+assert.equal(mtcRelative.policy.landmarkPublicationSha256,
+  mtcRelative.publication.sha256);
+for(const v of mtcRelativeCases.cases){
+  if(v.certificate)assert(Object.hasOwn(mtcRelative.objects,v.certificate),v.id);
+  for(const key of v.checkpointKeys??['ca','mirror'])
+    assert(Object.hasOwn(mtcRelative.checkpoints,key),v.id);
+}
 for(const s of json('sources.json').sources){assert(s.url.startsWith('https://'));assert(/^[a-f0-9]{64}$/.test(s.sha256));}
 function walk(dir=''){for(const e of readdirSync(join(root,dir),{withFileTypes:true})){if(['.git','.runtime','node_modules'].includes(e.name))continue;const p=join(dir,e.name);if(e.isDirectory())walk(p);else{const t=readFileSync(join(root,p),'utf8');assert(!/\p{Script=Han}/u.test(t),p);assert(!/-----BEGIN (?:RSA |EC )?PRIVATE KEY-----/.test(t),p);assert(!/github_pat_[A-Za-z0-9_]{40,}|gh[pousr]_[A-Za-z0-9]{30,}/.test(t),p);}}}
 walk();console.log('Draft sources, cases and publication content verified');
