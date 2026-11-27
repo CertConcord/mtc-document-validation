@@ -30,6 +30,22 @@ for(const v of rawStatus.cases){
   for(const id of [v.record,v.target,v.issuer,v.responder,v.request,v.policyIssuer,v.receiptRecord])
     if(id!==undefined)assert(Object.hasOwn(rawDer.objects,id),`${v.id}: ${id}`);
 }
+const mtcStatus=json('vectors/raw-mtc-status-cases.json');
+const mtcStatusDer=json('vectors/raw-mtc-status-der.json');
+assert.equal(mtcStatus.format,'original-mtc07-status-cases-v1');
+assert.equal(mtcStatusDer.format,'original-mtc07-status-der-v1');
+assert.deepEqual(json('cases.json').cases.filter(x=>x.component==='raw-mtc-status')
+  .map(x=>[x.id,x.expected]),mtcStatus.cases.map(x=>[x.id,x.expected]));
+for(const [id,item] of Object.entries(mtcStatusDer.objects)){
+  const bytes=Buffer.from(item.derBase64,'base64');
+  assert.equal(bytes.length,item.bytes,id);
+  assert.equal(createHash('sha256').update(bytes).digest('hex'),item.sha256,id);
+}
+for(const v of mtcStatus.cases){
+  for(const id of [v.record,v.target??mtcStatus.defaults.target,
+      v.issuer??mtcStatus.defaults.issuer,v.responder,v.receiptRecord])
+    if(id!==undefined)assert(Object.hasOwn(mtcStatusDer.objects,id),`${v.id}: ${id}`);
+}
 const timestampVectors=json('vectors/raw-timestamp-cases.json');
 const timestampCases=json('cases.json').cases.filter(x=>x.component==='raw-timestamp');
 assert.equal(timestampVectors.format,'original-der-timestamp-observation-cases-v1');

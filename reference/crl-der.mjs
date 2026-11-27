@@ -6,6 +6,7 @@ import {DerError, bitString, children, content, encodedTime, expect, extensions,
 const bad = code => { throw new DerError(code); };
 const OID = {
   rsaSha256: '1.2.840.113549.1.1.11',
+  ed25519: '1.3.101.112',
   authorityKeyIdentifier: '2.5.29.35',
   crlNumber: '2.5.29.20',
   issuingDistributionPoint: '2.5.29.28',
@@ -61,27 +62,36 @@ function revokedEntry(value) {
   return {serial, revocationTime, reason, invalidityDate};
 }
 
-export function parseCrl({recordDer, target, issuer}) {
+export function parseCrl({recordDer, target, issuer, directMtcCa = false}) {
   const record = Buffer.from(recordDer);
   const outer = children(one(record, 0x30));
   if (outer.length !== 3) bad('DER_MALFORMED');
-  if (algorithm(outer[1]) !== OID.rsaSha256) bad('CRL_SIGNATURE_ALGORITHM_UNSUPPORTED');
+  const signedAlgorithm = algorithm(outer[1]);
+  if (signedAlgorithm !== (directMtcCa ? OID.ed25519 : OID.rsaSha256) ||
+      (directMtcCa && children(outer[1]).length !== 1))
+    bad('CRL_SIGNATURE_ALGORITHM_UNSUPPORTED');
   const signature = bitString(outer[2]);
   if (signature.unused !== 0) bad('DER_MALFORMED');
   const fields = children(expect(outer[0], 0x30));
   let at = 0;
   if (fields[at]?.tag === 0x02 && smallInteger(fields[at++]) !== 1)
     bad('CRL_VERSION_UNSUPPORTED');
-  if (algorithm(fields[at++]) !== OID.rsaSha256) bad('CRL_SIGNATURE_ALGORITHM_UNSUPPORTED');
+  const inner = fields[at++];
+  if (algorithm(inner) !== signedAlgorithm ||
+      (directMtcCa && children(inner).length !== 1))
+    bad('CRL_SIGNATURE_ALGORITHM_UNSUPPORTED');
   if (!raw(expect(fields[at++], 0x30)).equals(issuer.subject))
     bad('CRL_ISSUER_MISMATCH');
   const usage = issuer.extensions.get(certificateOid.keyUsage);
   if (!usage || !(bitString(one(usage.value, 0x03)).bytes[0] & 0x02))
     bad('CRL_SIGNING_KEY_USAGE');
-  if (issuer.x509.publicKey.asymmetricKeyType !== 'rsa')
+  if (issuer.x509.publicKey.asymmetricKeyType !== (directMtcCa ? 'ed25519' : 'rsa'))
     bad('CRL_SIGNATURE_ALGORITHM_UNSUPPORTED');
   try {
-    if (!verify('RSA-SHA256', raw(outer[0]), issuer.x509.publicKey, signature.bytes))
+    if (directMtcCa && signature.bytes.length !== 64)
+      bad('CRL_SIGNATURE_INVALID');
+    if (!verify(directMtcCa ? null : 'RSA-SHA256', raw(outer[0]),
+      issuer.x509.publicKey, signature.bytes))
       bad('CRL_SIGNATURE_INVALID');
   } catch (error) {
     if (error instanceof DerError) throw error;

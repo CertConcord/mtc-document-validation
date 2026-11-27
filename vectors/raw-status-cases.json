@@ -40,6 +40,8 @@
     {"id":"ocsp-receipt-after-knowledge-cutoff","kind":"OCSP","record":"good-ca","request":"request-nonce","stateAt":1795729177,"knownAt":1795729177,"expected":"INDETERMINATE","reason":"RECORD_NOT_YET_KNOWN"},
     {"id":"ocsp-unadmitted-archive-source","kind":"OCSP","record":"good-ca","request":"request-nonce","receiptSource":"other-source","expected":"INDETERMINATE","reason":"SOURCE_NOT_ADMITTED"},
     {"id":"crl-complete-good-observation","kind":"CRL","record":"crl-good","expected":"GOOD"},
+    {"id":"crl-rsa-outer-parameters-omitted","kind":"CRL","record":"crl-rsa-outer-parameters-omitted","expected":"GOOD"},
+    {"id":"crl-rsa-inner-parameters-omitted","kind":"CRL","record":"crl-rsa-inner-parameters-omitted","expected":"GOOD"},
     {"id":"crl-retrospective-compromise","kind":"CRL","record":"crl-revoked","stateAt":1795729177,"expected":"REVOKED","effectiveRevocationAt":1790812800},
     {"id":"crl-revocation-time-only-before-posting","kind":"CRL","record":"crl-revoked","stateAt":1795729177,"compromiseMode":"revocation-time-only","expected":"INDETERMINATE","reason":"REVOCATION_AFTER_STATE_TIME"},
     {"id":"crl-wrong-direct-issuer","kind":"CRL","record":"crl-good","issuer":"unrelated-ca","policyIssuer":"unrelated-ca","expected":"REJECTED","reason":"TARGET_ISSUER_MISMATCH"},

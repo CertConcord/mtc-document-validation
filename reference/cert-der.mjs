@@ -9,7 +9,8 @@ const OID = {
   extendedKeyUsage: '2.5.29.37',
   ocspSigning: '1.3.6.1.5.5.7.3.9',
   ocspNoCheck: '1.3.6.1.5.5.7.48.1.5',
-  crlDistributionPoints: '2.5.29.31'
+  crlDistributionPoints: '2.5.29.31',
+  mtcCaSha256: '1.3.6.1.5.5.7.1.38'
 };
 
 export const digest = bytes => createHash('sha256').update(bytes).digest('hex');
@@ -36,7 +37,8 @@ export function certificate(bytes) {
   const validUntil = encodedTime(validity[1]);
   if (validUntil <= validFrom) bad('DER_MALFORMED');
   const subject = raw(expect(tbs[at++], 0x30));
-  const spki = children(expect(tbs[at++], 0x30));
+  const spkiValue = expect(tbs[at++], 0x30);
+  const spki = children(spkiValue);
   if (spki.length !== 2) bad('DER_MALFORMED');
   const publicKeyBits = bitString(spki[1]);
   if (publicKeyBits.unused !== 0) bad('DER_UNSUPPORTED');
@@ -53,18 +55,12 @@ export function certificate(bytes) {
   try { x509 = new X509Certificate(encoded); }
   catch { bad('CERT_MALFORMED'); }
   return {encoded, sha256: digest(encoded), serial, issuer, subject,
-    publicKeyBits: publicKeyBits.bytes, validFrom, validUntil,
+    publicKeyBits: publicKeyBits.bytes, spkiDer: raw(spkiValue),
+    validFrom, validUntil,
     extensions: ext, x509};
 }
 
-export function admittedIssuer(target, issuer, expectedSha256, stateAt) {
-  if (issuer.sha256 !== expectedSha256) bad('ISSUER_NOT_ADMITTED');
-  if (!target.issuer.equals(issuer.subject)) bad('TARGET_ISSUER_MISMATCH');
-  try { if (!target.x509.verify(issuer.x509.publicKey)) bad('TARGET_ISSUER_MISMATCH'); }
-  catch (error) {
-    if (error instanceof DerError) throw error;
-    bad('TARGET_SIGNATURE_UNSUPPORTED');
-  }
+function issuerConstraints(target, issuer, stateAt) {
   if (stateAt < issuer.validFrom || stateAt > issuer.validUntil)
     bad('ISSUER_CERT_TIME');
   if (stateAt < target.validFrom || stateAt > target.validUntil)
@@ -79,6 +75,43 @@ export function admittedIssuer(target, issuer, expectedSha256, stateAt) {
   const bits = bitString(one(usage.value, 0x03)).bytes;
   if (!bits.length || !(bits[0] & 0x04))
     bad('ISSUER_USAGE_UNPROVEN');
+  return bits[0];
+}
+
+export function admittedIssuer(target, issuer, expectedSha256, stateAt) {
+  if (issuer.sha256 !== expectedSha256) bad('ISSUER_NOT_ADMITTED');
+  if (!target.issuer.equals(issuer.subject)) bad('TARGET_ISSUER_MISMATCH');
+  try { if (!target.x509.verify(issuer.x509.publicKey)) bad('TARGET_ISSUER_MISMATCH'); }
+  catch (error) {
+    if (error instanceof DerError) throw error;
+    bad('TARGET_SIGNATURE_UNSUPPORTED');
+  }
+  issuerConstraints(target, issuer, stateAt);
+}
+
+// The caller has already verified the exact target's MTCProof. This checks the
+// separately admitted CA representation; its superior certificate path remains
+// an external trust input.
+export function admittedMtcIssuer(target, issuer, expectedSha256, stateAt,
+  {caName, caSpki, minSerial, maxSerial}) {
+  if (issuer.sha256 !== expectedSha256) bad('ISSUER_NOT_ADMITTED');
+  if (!target.issuer.equals(issuer.subject) || !issuer.subject.equals(caName))
+    bad('MTC_CA_NAME');
+  const usage = issuerConstraints(target, issuer, stateAt);
+  if (!issuer.spkiDer.equals(caSpki))
+    bad('MTC_CA_KEY');
+  const extension = issuer.extensions.get(OID.mtcCaSha256);
+  if (!extension || !extension.critical) bad('MTC_CA_EXTENSION');
+  const fields = children(one(extension.value, 0x30));
+  const ed25519 = Buffer.from('300506032b6570', 'hex');
+  if (fields.length !== 3 || !raw(fields[0]).equals(ed25519))
+    bad('MTC_CA_EXTENSION');
+  const lower = BigInt(`0x${positiveInteger(fields[1])}`);
+  const upper = BigInt(`0x${positiveInteger(fields[2])}`);
+  if (lower < (1n << 48n) || upper > (1n << 64n) - 1n || lower > upper ||
+      lower !== minSerial || upper !== maxSerial)
+    bad('MTC_CA_RANGE');
+  return usage;
 }
 
 export function admittedResponder(responder, issuer, producedAt) {

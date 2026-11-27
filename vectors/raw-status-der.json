@@ -1,6 +1,6 @@
 {
   "format": "frozen-der-status-corpus-v1",
-  "generator": "OpenSSL 3.0.16 generated the signed records on 2026-11-26; two negative copies flip one signature bit in frozen DER. The five-byte RFC 6960 tryLater exception response is specified directly by its ASN.1 encoding.",
+  "generator": "OpenSSL 3.0.16 generated the signed records on 2026-11-26; two negative copies flip one signature bit in frozen DER. The five-byte RFC 6960 tryLater exception response is specified directly by its ASN.1 encoding. Two additional valid RSA CRLs preserve the previously admitted independent NULL/absent SHA256-with-RSA parameter forms; the inner-omitted TBSCertList was re-signed by the test-only fixture CA key.",
   "purpose": "Test-only OCSP requests/responses, direct CRLs and certificates. Private fixture keys are not published or production trust anchors.",
   "objects": {
     "response-try-later": {
@@ -162,6 +162,16 @@
       "bytes": 1315,
       "sha256": "5d29cc8c30561f5df4f4f4797fb6aab9fba52c56bd29293ba1eb5f9bedb954b8",
       "derBase64": "MIIFHwoBAKCCBRgwggUUBgkrBgEFBQcwAQEEggUFMIIFATCBtaEeMBwxGjAYBgNVBAMMEUZpeHR1cmUtU3RhdHVzLUNBGA8yMDI2MTEyNjIyMTI1OFowgYEwfzBXMA0GCWCGSAFlAwQCAQUABCB2Z6Vy3IZkPGplpKcfyI2pEKesGtznDLknJ/9OzJkb1QQgFAeby3W53SpTVWiaPX6il+KpFcrlW+PvL7ZT2on4CG0CAhAAggAYDzIwMjYxMTI2MjIxMjU4WqARGA8yMDI2MTEyODIyMTI1OFowDQYJKoZIhvcNAQELBQADggEBAB1OW7A1RwQSQu6kDjKZ636FfCCYKaWL6upZkHs2JJd0DfhFjGipProrYavhOmikvlYt4frgLIrQ7vFeFN/OgnvnsVhXqgfy5qqsFWE0TW+th1s6Y5PNRqfWdMo0pFtLiJSGs1mNb0q3ye6DskhUmdstbC+gBEkUluZVvF0zk8WURruxgq7hizN40T309L6jYU+T69p39utuLiz7KSlZB2xhkdHZuAizSphvcnSWuXDbzr+PEpfMcSJtP9eC0Bktk8qWuJcsijTPqBY0vHgZjZufZN0q8vVf+IoTMqOLK0diJQhju08XunQSTrSk8y1YsBqxNyx8ftExAFiooEjaE3GgggMxMIIDLTCCAykwggIRoAMCAQICFEny+wMYgnLegsaBeGNgUFZ7MnCnMA0GCSqGSIb3DQEBCwUAMBwxGjAYBgNVBAMMEUZpeHR1cmUtU3RhdHVzLUNBMB4XDTI2MTEyNjIxMzkzNloXDTM2MTEyMzIxMzkzNlowHDEaMBgGA1UEAwwRRml4dHVyZS1TdGF0dXMtQ0EwggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQCx0T86e3GLs5VuV1x1c8isR3JRZyFiTcxa3SmuQlxRc1NsxT2dsvJjKtu2DD8mA63lvM9jSS5Dmfrob1n1+Eek18Z87K0QHEk/FZK0HDQoNsd6iNk5DAcXunIkmAvyS4IjAcx5r+++asgSCHnvncGpRy8UMCyvsIYntE6s2+ckwibSh0Pnaz1uRYHSw6VBepfrm6XLz1K53qQ4fa+Y5MoLxxDRzLQl4hf3kLtpBtV9Xju6yJ74rokVu13Zexuqbaopf8+6wKExsQFj3o7izQ7ucDTonLP/Lwe63nXV5+6ioVdEIFwIoARLHUi1h/EMEvlEY+sVFCbKsS55WLFnsRRXAgMBAAGjYzBhMB0GA1UdDgQWBBTPh9ZtjFiE9r+ZFq2S2GuSQgsKsjAfBgNVHSMEGDAWgBTPh9ZtjFiE9r+ZFq2S2GuSQgsKsjAPBgNVHRMBAf8EBTADAQH/MA4GA1UdDwEB/wQEAwIBBjANBgkqhkiG9w0BAQsFAAOCAQEAU9fs8UojwfRhJYpWiNZzfJH6I6+5awHDYWx6mrpdD+nlTXDHSBxlHtEltKq0O6MPuXssft/lazWgW4cadAw9JIfhhFoKc09DHsH9SedYk6Zb8eHc6hxZsz97DKKuLTI7u+Q0CZmIpfgw8IzQpgSqRs7NnwZmU8KT+cWQpqDes3KoLwpUTnIk5DW3VCTBTpmfoOk2mvsBZjqN4fId+OV6oGt8wjeyTUA7FaIPJHZyvyVe8VD6GrIrRf9ZBdJqnB8yjrcExanLC9lo7pg3Dm5YZGyvfUUFGvIz2OK4mAVljJoYQAe8i45O0wiWgxo1qB9Bvq0MFw+8UNL2tN62oGSSmw=="
+    },
+    "crl-rsa-outer-parameters-omitted": {
+      "bytes": 375,
+      "sha256": "f666de13ce9719e56e07c3003e38b08037bedc3d7e3b20b82f79c8123f90e0e9",
+      "derBase64": "MIIBczBfAgEBMA0GCSqGSIb3DQEBCwUAMBwxGjAYBgNVBAMMEUZpeHR1cmUtU3RhdHVzLUNBFw0yNjExMjYyMTM5MzhaFw0yNjExMjgyMTM5MzhaoA8wDTALBgNVHRQEBAICEAAwCwYJKoZIhvcNAQELA4IBAQBIFvS6yf3tioxMv3mSm/+rV3JLre0CUF3R4XqR3rFD8HvvibA34cVF/CJ8t6yD0IlvlIe+J9aY8/0VLIRHGhadyr7yqIyNeU7HxiaEh9kR2OPff+LZ4dK7yoLeRjGPArrxhfcJDBlbpjYnCAJ1UnGVTy6eTrEBZ1vSIfaRA6sE6CVLldg7DwYDrkKQFMiISd6VCAXWkmzqnmA9S0wE61oBcjwNRcai7AbIrN2uGWWofbzPUonUy9xdIzaWbfIVZrLzt+IgBgjMGYqddtqxbI9VwHLu/MgJSNhOcsNuUTqVm2uSA/W19rU45duS/nvlOFfoOWtWJdhSkhC0u4XisAd5"
+    },
+    "crl-rsa-inner-parameters-omitted": {
+      "bytes": 375,
+      "sha256": "476a52d8964830d3b85e7cc6469ee1b05ce0aedfa61e4d6d9f347369473584a2",
+      "derBase64": "MIIBczBdAgEBMAsGCSqGSIb3DQEBCzAcMRowGAYDVQQDDBFGaXh0dXJlLVN0YXR1cy1DQRcNMjYxMTI2MjEzOTM4WhcNMjYxMTI4MjEzOTM4WqAPMA0wCwYDVR0UBAQCAhAAMA0GCSqGSIb3DQEBCwUAA4IBAQA16g5vnG8CQ17NSy0whOF6RBr3r9EpVtkmFriQCyc95JS+YlTmogTywpbEeULZW3Ux3HOO/7oiaDdght3JiTcf/Bu9Au7WY2XmXWxsnvK2FvpStaZVzPnLsl6dcsR41h0qs/Ugpakwy59mGIjZZIaGYU57TKxaLgqA8ypWZPRym9EIqv1Th7IJLdXjTNL+WUA9svmgLLsQz+wABM/JVkNNGGXrKr1MgOK1m7RF3FXDVd1oPCBzDcx2TgA6bBYBU7JQIFHM7TKtce4e9eDm98tmtcYySeaxPHl6GkyAQb9hR97eNqC1SkSvkvvfiSCet/WlKowBSxce+cuv4P7FVhA1"
     }
   },
   "negativeDerivations": {
