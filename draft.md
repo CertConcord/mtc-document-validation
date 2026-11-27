@@ -138,6 +138,8 @@ Within a chain, each later ArchiveTimeStamp MUST bind the complete original DER 
 
 The reference returns `BOUND_CLAIMS` only when the original object, reduced trees, predecessor bytes, signed tokens and claimed time order bind. It marks absent original requests as `NOT_PROVIDED`. These are signed claims, not authenticated preservation continuity or document `VALID`: the selected application MUST separately establish historical TSA path and status, clock reliability, algorithm-protection deadlines, timely renewal, final protection at evaluation, actual document signature coverage, MTC authority/status history and present admissibility before passing authenticated facts to the lifetime rules.
 
+The [same-document renewal originals](vectors/coherent-ers-renewal.json) exercise this rule on the retained coherent document and its unchanged first ArchiveTimeStamp. The new signed timestamp response covers the complete prior CMS `ContentInfo` token. An independently signed response over the entire previous ArchiveTimeStamp is a negative control, as is a different original object. The resulting `BOUND_CLAIMS` is scoped to original bytes and claimed time order; it is not a trusted protection interval and is not evidence that renewal occurred between the separately signed custodian handoffs.
+
 ## 5. Monitoring, retirement and archive transfer
 
 Issuance monitoring checks issued certificates, log consistency, operator policy and equivocation under the selected MTC composition. It cannot observe arbitrary later signatures produced with an existing private key. Document-operation monitoring requires separately justified application evidence.

@@ -566,6 +566,9 @@
     {"id":"independent-successor-anchor-mismatch","expected":"TRANSFER_SET_ANCHOR","component":"raw-transfer-set-evolution"},
     {"id":"new-item-admitted-before-first-handoff","expected":"TRANSFER_SET_TIME","component":"raw-transfer-set-evolution"},
     {"id":"fixed-set-valid-digest-control","expected":"BOUND_CLAIMS","component":"raw-transfer-set-evolution"},
-    {"id":"fixed-set-signed-null-set-digest","expected":"TRANSFER_HANDOFF","component":"raw-transfer-set-evolution"}
+    {"id":"fixed-set-signed-null-set-digest","expected":"TRANSFER_HANDOFF","component":"raw-transfer-set-evolution"},
+    {"id":"coherent-same-document-ers-renewal","expected":"BOUND_CLAIMS","component":"coherent-ers-renewal"},
+    {"id":"coherent-signed-whole-ats-instead-of-token","expected":"REJECTED","component":"coherent-ers-renewal"},
+    {"id":"coherent-renewal-changed-original-document","expected":"REJECTED","component":"coherent-ers-renewal"}
   ]
 }
