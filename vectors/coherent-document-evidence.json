@@ -51,6 +51,18 @@
       "expected": "REJECTED"
     },
     {
+      "id": "coherent-document-timestamp",
+      "expected": "SIGNED_CLAIM"
+    },
+    {
+      "id": "coherent-document-timestamp-signature-request",
+      "expected": "REJECTED"
+    },
+    {
+      "id": "coherent-document-timestamp-signature-response",
+      "expected": "REJECTED"
+    },
+    {
       "id": "coherent-ers-document",
       "expected": "BOUND_CLAIMS"
     },

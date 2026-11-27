@@ -9,6 +9,7 @@ import {assessRawTimestamp} from './raw-timestamp.mjs';
 import {assessRawErs} from './raw-ers.mjs';
 import {assessRawPublicationWitness} from './raw-publication-witness.mjs';
 import {assessRawRetirementClosure} from './raw-retirement-closure.mjs';
+import {children, one, raw} from './der.mjs';
 
 const corpus = JSON.parse(readFileSync(new URL(
   '../vectors/coherent-document-evidence.json', import.meta.url)));
@@ -42,7 +43,7 @@ const signerKey = new X509Certificate(target).publicKey;
 
 test('frozen original identities connect every source without a retained signing key', () => {
   assert.equal(corpus.format, 'original-coherent-document-evidence-v1');
-  assert.equal(corpus.cases.length, 23);
+  assert.equal(corpus.cases.length, 26);
   assert.equal(sha(document), authority.documentSha256);
   assert.equal(sha(document), retirement.originals.document.sha256);
   assert.equal(sha(signature), timestamp.coveredSignatureSha256);
@@ -140,7 +141,7 @@ function timestampResult(coveredDer) {
   } else assert.deepEqual(result.reasons, ['TIMESTAMP_IMPRINT_MISMATCH']);
   return result.decision;
 }
-function ersResult(id, source) {
+function ersAssessment(id, source) {
   const item = ers.objects[id];
   const result = assessRawErs({evidenceDer: frozen(item.evidence),
     objectDer: source,
@@ -153,6 +154,26 @@ function ersResult(id, source) {
     assert(BigInt(result.observations[0].claimedUpperBoundMicros) <
       BigInt(core.status.stateAt) * 1000000n);
   } else assert.deepEqual(result.reasons, ['TIMESTAMP_IMPRINT_MISMATCH']);
+  return result;
+}
+const ersResult = (id, source) => ersAssessment(id, source).decision;
+function documentTimestampResult(request, response, expectedReason = null) {
+  const responseDer = frozen(response);
+  const result = assessRawTimestamp({responseDer,
+    requestDer: frozen(request), coveredDer: document,
+    tsaDer: stampBytes('tsa'), issuerDer: stampBytes('issuer'),
+    policy: ers.policy});
+  if (expectedReason !== null) {
+    assert.deepEqual(result.reasons, [expectedReason]);
+  } else {
+    assert.equal(result.decision, 'SIGNED_CLAIM');
+    assert.equal(result.recordSha256, sha(responseDer));
+    assert.equal(result.coveredSha256, sha(document));
+    const observation = ersAssessment('document', document);
+    assert.equal(observation.decision, 'BOUND_CLAIMS');
+    const token = raw(children(one(responseDer, 0x30))[1]);
+    assert.equal(sha(token), observation.observations[0].tokenSha256);
+  }
   return result.decision;
 }
 const publication = {entries: retirement.publication.entryIds.map(authorityBytes),
@@ -218,6 +239,14 @@ const cases = {
   'coherent-timestamp-signature': () => timestampResult(signature),
   'coherent-timestamp-other-signature': () =>
     timestampResult(coreBytes('wrongKeySignature')),
+  'coherent-document-timestamp': () => documentTimestampResult(
+    ers.objects.document.request, ers.objects.document.response),
+  'coherent-document-timestamp-signature-request': () => documentTimestampResult(
+    ers.objects.signature.request, ers.objects.document.response,
+    'TIMESTAMP_REQUEST_IMPRINT_MISMATCH'),
+  'coherent-document-timestamp-signature-response': () => documentTimestampResult(
+    ers.objects.document.request, ers.objects.signature.response,
+    'TIMESTAMP_IMPRINT_MISMATCH'),
   'coherent-ers-document': () => ersResult('document', document),
   'coherent-ers-signature': () => ersResult('signature', signature),
   'coherent-ers-cross-object': () => ersResult('signature', document),
