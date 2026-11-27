@@ -1,0 +1,83 @@
+{
+  "format": "frozen-original-publication-witness-v1",
+  "description": "Original source-signed authority claim bytes followed by their original 64-byte signatures, witnessed under two separately signed application-log heads. Four-entry head does not reveal a fifth source action.",
+  "policy": {
+    "logId": "application-authority-log-A",
+    "monitorId": "independent-monitor-A",
+    "logPublicKeySpkiBase64": "MCowBQYDK2VwAyEABeiqnuQDbzPmDUtDT0P0crcsVkSyfxMoc48YcLxmsIw=",
+    "monitorPublicKeySpkiBase64": "MCowBQYDK2VwAyEAJnbBFUS2EypnnqssCVy/RDLlsDzgh/qyLsQCqM/x3Hs="
+  },
+  "entries": [
+    {
+      "id": "samecut-1",
+      "base64": "eyJ2ZXJzaW9uIjoxLCJraW5kIjoiZXZlbnQiLCJzb3VyY2VJZCI6Imlzc3Vlci1yZWdpc3RyeSIsInNlcXVlbmNlIjoxLCJwcmV2aW91c1NoYTI1NiI6bnVsbCwicHJvZmlsZUlkIjoiZG9jdW1lbnRzOnYxIiwicm9sZSI6Imlzc3Vlci1hdXRob3JpemF0aW9uIiwic3ViamVjdElkIjoibXRjLWNhOlEiLCJzY29wZSI6ImRvY3VtZW50czp2MSIsImFubm91bmNlZEF0IjoxODAsInN0YXRlRnJvbSI6MTAwLCJzdGF0ZVVudGlsIjoxNTEsImRlY2lzaW9uIjoiQUxMT1cifU43xGbBCslRkP0LuMdaOVbb69+lhckAGuBVhPu6eQ/Xsp/Z8S+DFEzg807pYqA0qDouNhyawshWCwivS/qyIQI=",
+      "bytes": 329,
+      "sha256": "b32364ac967fd5457ef81c6f5b0437dbc600e2aedcf96a7f86933c538cf0bca4"
+    },
+    {
+      "id": "samecut-2",
+      "base64": "eyJ2ZXJzaW9uIjoxLCJraW5kIjoic2VhbCIsInNvdXJjZUlkIjoiaXNzdWVyLXJlZ2lzdHJ5Iiwic2VxdWVuY2UiOjIsInByZXZpb3VzU2hhMjU2IjoiODYxZWZlNmQyZmE3NDBhZjA2MjhmN2UyOTRmODg5MDc2ZDk3MmU4Nzc2ZTViMjJjOGYzMmI3ODhhZjQwOTk3YSIsInByb2ZpbGVJZCI6ImRvY3VtZW50czp2MSIsInJvbGUiOiJpc3N1ZXItYXV0aG9yaXphdGlvbiIsInN1YmplY3RJZCI6Im10Yy1jYTpRIiwic2NvcGUiOiJkb2N1bWVudHM6djEiLCJhbm5vdW5jZWRBdCI6MjA1LCJ0aHJvdWdoIjoyMDV9cXKubQC3zK3VI7SgYDz65rpJIAyDRs3myNh+O8jGjyV/572TV397e1dpiOA/CUTOq7TflLC908L7Zs9IirleAw==",
+      "bytes": 352,
+      "sha256": "493085c6eb640b662eba72ef197b078cc74b736eae0d776b35f4841605d889bb"
+    },
+    {
+      "id": "action-1",
+      "base64": "eyJ2ZXJzaW9uIjoxLCJraW5kIjoiZXZlbnQiLCJzb3VyY2VJZCI6ImFjdGlvbi1yZWdpc3RyeSIsInNlcXVlbmNlIjoxLCJwcmV2aW91c1NoYTI1NiI6bnVsbCwicHJvZmlsZUlkIjoiZG9jdW1lbnRzOnYxIiwicm9sZSI6ImRvY3VtZW50LWFjdGlvbiIsInN1YmplY3RJZCI6InNpZ25lcjpRIiwic2NvcGUiOiJzaGEyNTY6OWIxZGQ5Y2Q5MTc5YTI5NTEwNTVjYmJhYzFjNjM2MmU4MmUyMzk2OTdjZGU3ZTZlNzVmMjQzOGFmZWExNWU5OCIsImFubm91bmNlZEF0IjoxOTAsInN0YXRlRnJvbSI6MTAwLCJzdGF0ZVVudGlsIjoxNTEsImRlY2lzaW9uIjoiQUxMT1cifeULV4YpqOfTvQJfLFo3dgvF9HUx8V9krYlBsPodY32f69KteslX6cOIrNp9J1/LQ8/TlOFEbpOQdzd7xKS2LA0=",
+      "bytes": 383,
+      "sha256": "570affabb326a7da491fedf72d37256e5c92672bd22d519770541276a38a3975"
+    },
+    {
+      "id": "action-2",
+      "base64": "eyJ2ZXJzaW9uIjoxLCJraW5kIjoic2VhbCIsInNvdXJjZUlkIjoiYWN0aW9uLXJlZ2lzdHJ5Iiwic2VxdWVuY2UiOjIsInByZXZpb3VzU2hhMjU2IjoiMWQ0MDFmZDNjMmE0ZDNkNjViMTA0NmUwMzg0NGMzZmY1Zjc0N2VmMjE2OWIzM2E1NTdjNDE0N2M1YTQzNDU0YSIsInByb2ZpbGVJZCI6ImRvY3VtZW50czp2MSIsInJvbGUiOiJkb2N1bWVudC1hY3Rpb24iLCJzdWJqZWN0SWQiOiJzaWduZXI6USIsInNjb3BlIjoic2hhMjU2OjliMWRkOWNkOTE3OWEyOTUxMDU1Y2JiYWMxYzYzNjJlODJlMjM5Njk3Y2RlN2U2ZTc1ZjI0MzhhZmVhMTVlOTgiLCJhbm5vdW5jZWRBdCI6MjA1LCJ0aHJvdWdoIjoyMDV98LqvFxYZlKrU3+4fJPlgNn3tFrPGZoSopLTZNk4pV8/veefaqcF+klI/VNGVeT+maxxkvQs1QsRo7HL0/JtWCQ==",
+      "bytes": 406,
+      "sha256": "48af7cbb40b221418c9a8fef776105f87e86d9a9975cdb6a6a69546ab55a5cc3"
+    },
+    {
+      "id": "samecut-3",
+      "base64": "eyJ2ZXJzaW9uIjoxLCJraW5kIjoiZXZlbnQiLCJzb3VyY2VJZCI6Imlzc3Vlci1yZWdpc3RyeSIsInNlcXVlbmNlIjozLCJwcmV2aW91c1NoYTI1NiI6ImVjOTI4ZDVkMDFmZjFlZDI5YTg2YWQxMzAxM2NlM2Y5YzkxZGMxNzFiNTcyNjY2Y2U1NGMzNTdiNmY1ZWI5ODAiLCJwcm9maWxlSWQiOiJkb2N1bWVudHM6djEiLCJyb2xlIjoiaXNzdWVyLWF1dGhvcml6YXRpb24iLCJzdWJqZWN0SWQiOiJtdGMtY2E6USIsInNjb3BlIjoiZG9jdW1lbnRzOnYxIiwiYW5ub3VuY2VkQXQiOjIwNSwic3RhdGVGcm9tIjoxMDAsInN0YXRlVW50aWwiOjE1MSwiZGVjaXNpb24iOiJERU5ZIn0CnH9wEn2IfmBst6RaSsTBjQ7VY0h2Zpiu4WM7Z7uv5Qw5nYF43Z/ApBbBoJp6FEEYU9h6qA9+ATAl3V4SoaEA",
+      "bytes": 390,
+      "sha256": "7e5cff83ab6287fc9db90c75994ceb9880ca0beeb5d7cfa08ad2690e6a7d4513"
+    }
+  ],
+  "anchor": {
+    "treeSize": 2,
+    "rootSha256": "e975b6bb9c0200376ec83426349f8fefe565d30d878ac3d48992dbe5f8e8bfec"
+  },
+  "heads": {
+    "four": {
+      "rawBase64": "eyJ2ZXJzaW9uIjoxLCJsb2dJZCI6ImFwcGxpY2F0aW9uLWF1dGhvcml0eS1sb2ctQSIsInRyZWVTaXplIjo0LCJyb290U2hhMjU2IjoiMTE5ZWUxODBkYmQzYmUxZDQzMjNjYTVhODMzZWFlYzE4OGRkODQyODk1ZGFjZTg4NjhkYTBkZDYyYzEyMzhkNiIsImlzc3VlZEF0IjoyMDZ9",
+      "rawBytes": 159,
+      "rawSha256": "d0cfef4e9f98eeec6a70a032e05e020bcd1333e9cc173cc9413dcaf3aaa1b2f0",
+      "signatureBase64": "SxlucDYr8v2wEv4IdlHwj2iHbpIBQgJn0UIkMpDyc1sjPej6rgSL1KjMXw3kM5xquv3RZETLPPJYg2Jr4N1pDw==",
+      "signatureSha256": "24465b2cfce35ac1e3edea338cd7d3de6b04372b1c784def9127f2d5dda87757"
+    },
+    "five": {
+      "rawBase64": "eyJ2ZXJzaW9uIjoxLCJsb2dJZCI6ImFwcGxpY2F0aW9uLWF1dGhvcml0eS1sb2ctQSIsInRyZWVTaXplIjo1LCJyb290U2hhMjU2IjoiNGMwZjZkNmYxMGFlMzViYWI4NWE2OGI3OThjMDVhZjM5Y2IzMWUyMjUwNjg5MWY3MTFlM2Y3ZWRmMzViMDViYiIsImlzc3VlZEF0IjoyMTF9",
+      "rawBytes": 159,
+      "rawSha256": "720787f46cf46891aec0da68feed106ddaf08aa11f473ad13d5b62573100b987",
+      "signatureBase64": "CA4dNRihCdq97DFPnRCpfucLYWtUWZ4Vmaaa+UNe9ALMjj67SOxJ2DRrE7b7nEvQ2stCdxcFBFbeU04lpIA+CA==",
+      "signatureSha256": "6bed09e9bf122dd658de461f41f5efb585401b8196ecbf75019668169a13d2b8"
+    }
+  },
+  "observations": {
+    "four": {
+      "rawBase64": "eyJ2ZXJzaW9uIjoxLCJtb25pdG9ySWQiOiJpbmRlcGVuZGVudC1tb25pdG9yLUEiLCJsb2dJZCI6ImFwcGxpY2F0aW9uLWF1dGhvcml0eS1sb2ctQSIsImhlYWRTaGEyNTYiOiJkMGNmZWY0ZTlmOThlZWVjNmE3MGEwMzJlMDVlMDIwYmNkMTMzM2U5Y2MxNzNjYzk0MTNkY2FmM2FhYTFiMmYwIiwib2JzZXJ2ZWRBdCI6MjA4fQ==",
+      "rawBytes": 184,
+      "rawSha256": "0d2f61ea5f183c9d3f0a88e23ed04bb5214a65f4222b7f9a887ff16f03164ba0",
+      "signatureBase64": "OdTfbV7EgNawCAfb7HJeSAd1bjWINaFGuJFt4grGI3YUyroGh0yfGohZTy8zoOlUcrn+gzXc8QZFmRIyFwxWBA==",
+      "signatureSha256": "7b4741c914648654b3917b17225ef4509b58a94177faee5dde63ec341355752b"
+    },
+    "five": {
+      "rawBase64": "eyJ2ZXJzaW9uIjoxLCJtb25pdG9ySWQiOiJpbmRlcGVuZGVudC1tb25pdG9yLUEiLCJsb2dJZCI6ImFwcGxpY2F0aW9uLWF1dGhvcml0eS1sb2ctQSIsImhlYWRTaGEyNTYiOiI3MjA3ODdmNDZjZjQ2ODkxYWVjMGRhNjhmZWVkMTA2ZGRhZjA4YWExMWY0NzNhZDEzZDViNjI1NzMxMDBiOTg3Iiwib2JzZXJ2ZWRBdCI6MjE0fQ==",
+      "rawBytes": 184,
+      "rawSha256": "233c70c3247135e00ced76c09bd8825db49bf6dba4a4daa684b1ef4e18ef3beb",
+      "signatureBase64": "pM+Wmxy8V3dMqANVSttLIhX/eL+0PmzBZpGQnlSAap4gku/im39/3oK5UBO3NDEmqVG5rIOJWoElnd/hJoU8Bg==",
+      "signatureSha256": "cffdc224a9480ce6abb2bc53978b08cf5f5504e927331b31cc39e52d29e83fc8"
+    }
+  },
+  "proofs": {
+    "four": "ba42c65a27de7b866de7bfde03033724cac430056e7718524dccced6a4131071",
+    "five": "ba42c65a27de7b866de7bfde03033724cac430056e7718524dccced6a41310714d9536a8ce3c8656dfc5b8cda20222e9413aabb55a17955198d72a31e60295c3"
+  },
+  "knownAt": 220
+}
