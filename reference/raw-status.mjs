@@ -48,6 +48,10 @@ function assessStatus({kind, recordDer, targetDer, issuerDer, responderDer,
       ...decision(unresolved ? 'INDETERMINATE' : unsupported ? 'UNSUPPORTED' : 'REJECTED', error.code)};
   }
   const observed = {kind, stateAt, knownAt, ...observation};
+  // A signed CRL cannot list any revocation processed after its issue date,
+  // including an entry for a certificate other than the selected target.
+  if (kind === 'CRL' && observation.hasFutureRevocation)
+    return decision('REJECTED', 'CRL_REVOCATION_AFTER_ISSUE', observed);
   if (admittedReceipt === undefined || admittedReceipt === null)
     return decision('INDETERMINATE', 'RECEIPT_MISSING', observed);
   if (!hash(admittedReceipt.recordSha256) || !time(admittedReceipt.observedAt) ||

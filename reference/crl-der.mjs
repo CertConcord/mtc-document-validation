@@ -109,6 +109,7 @@ export function parseCrl({recordDer, target, issuer, directMtcCa = false,
   if (fields[at]?.tag === 0x30) entries = children(fields[at++]).map(revokedEntry);
   if (!hasVersion && entries.some(entry => entry.hasExtensions))
     bad('CRL_VERSION_REQUIRED');
+  const hasFutureRevocation = entries.some(entry => entry.revocationTime > thisUpdate);
   if (fields[at]?.tag === 0xa0) {
     if (!hasVersion) bad('CRL_VERSION_REQUIRED');
     const wrapper = children(fields[at++]);
@@ -130,7 +131,7 @@ export function parseCrl({recordDer, target, issuer, directMtcCa = false,
   if (matches.length > 1) bad('CRL_DUPLICATE_TARGET');
   return {recordSha256: digest(record), signerSha256: issuer.sha256,
     targetSerial: target.serial, distributionPoint, thisUpdate, nextUpdate,
-    status: matches.length ? 'REVOKED' : 'GOOD',
+    status: matches.length ? 'REVOKED' : 'GOOD', hasFutureRevocation,
     revocationTime: matches[0]?.revocationTime ?? null,
     reason: matches[0]?.reason ?? null,
     invalidityDate: matches[0]?.invalidityDate ?? null};

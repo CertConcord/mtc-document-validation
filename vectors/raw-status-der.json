@@ -1,6 +1,6 @@
 {
   "format": "frozen-der-status-corpus-v1",
-  "generator": "OpenSSL 3.0.16 generated the signed records on 2026-11-26; two negative copies flip one signature bit in frozen DER. The five-byte RFC 6960 tryLater exception response is specified directly by its ASN.1 encoding. Two additional valid RSA CRLs preserve the previously admitted independent NULL/absent SHA256-with-RSA parameter forms; the inner-omitted TBSCertList was re-signed by the test-only fixture CA key.",
+  "generator": "OpenSSL 3.0.16 generated the signed records on 2026-11-26; two negative copies flip one signature bit in frozen DER. The five-byte RFC 6960 tryLater exception response is specified directly by its ASN.1 encoding. Two additional valid RSA CRLs preserve the previously admitted independent NULL/absent SHA256-with-RSA parameter forms; the inner-omitted TBSCertList was re-signed by the test-only fixture CA key. A later source-signed RSA CRL control changes only the existing target entry revocationDate to a second after thisUpdate, then re-signs the original TBSCertList with the same test-only issuer key. A second signed control lists only an unrelated serial with a future revocationDate, leaving the target unlisted.",
   "purpose": "Test-only OCSP requests/responses, direct CRLs and certificates. Private fixture keys are not published or production trust anchors.",
   "objects": {
     "response-try-later": {
@@ -172,6 +172,16 @@
       "bytes": 375,
       "sha256": "476a52d8964830d3b85e7cc6469ee1b05ce0aedfa61e4d6d9f347369473584a2",
       "derBase64": "MIIBczBdAgEBMAsGCSqGSIb3DQEBCzAcMRowGAYDVQQDDBFGaXh0dXJlLVN0YXR1cy1DQRcNMjYxMTI2MjEzOTM4WhcNMjYxMTI4MjEzOTM4WqAPMA0wCwYDVR0UBAQCAhAAMA0GCSqGSIb3DQEBCwUAA4IBAQA16g5vnG8CQ17NSy0whOF6RBr3r9EpVtkmFriQCyc95JS+YlTmogTywpbEeULZW3Ux3HOO/7oiaDdght3JiTcf/Bu9Au7WY2XmXWxsnvK2FvpStaZVzPnLsl6dcsR41h0qs/Ugpakwy59mGIjZZIaGYU57TKxaLgqA8ypWZPRym9EIqv1Th7IJLdXjTNL+WUA9svmgLLsQz+wABM/JVkNNGGXrKr1MgOK1m7RF3FXDVd1oPCBzDcx2TgA6bBYBU7JQIFHM7TKtce4e9eDm98tmtcYySeaxPHl6GkyAQb9hR97eNqC1SkSvkvvfiSCet/WlKowBSxce+cuv4P7FVhA1"
+    },
+    "crl-revocation-after-issue": {
+      "bytes": 441,
+      "sha256": "244b8da82e36960c390fd7232b3cef1d8ecbc3c8fcbdc0242bfa9b3020d8cb09",
+      "derBase64": "MIIBtTCBngIBATANBgkqhkiG9w0BAQsFADAcMRowGAYDVQQDDBFGaXh0dXJlLVN0YXR1cy1DQRcNMjYxMTI2MjEzOTM4WhcNMjYxMTI4MjEzOTM4WjA9MDsCAhAAFw0yNjExMjcyMTM5MzhaMCYwCgYDVR0VBAMKAQEwGAYDVR0YBBEYDzIwMjYxMDAxMDAwMDAwWqAPMA0wCwYDVR0UBAQCAhABMA0GCSqGSIb3DQEBCwUAA4IBAQCLWXdUWLjHOiUf1+L95LsOyb5xuN5ryKgnuP70zdLbr3aGAY4Dc0KdZz+sMOgjljmTPCCAyX5Wnvvf6KM32ZORP2C8LTCtlocwvkDUcqCKy78oXjm6R+FWbyqwCuwu4Q0qw4kNcr2ryM+tjQs2Hh4OaAruKoassW4u094jS+NnMBNfA16e8ebQObBjrbf9cUsFkhNp25Sw3xe7RrFxZPPJzrXuF2KXRibp732MNxWcZGWEJ3luQRGNnS+dTUxTUzjHd4LCiapw+lLRSLemEvNTwWpaNkGOL1fJFfw5d8BIr9+8cHo3/eVTdTk2K53fSpOp4MEYwWw6tWxZHyJ/N6F7"
+    },
+    "crl-unrelated-future-revocation": {
+      "bytes": 441,
+      "sha256": "eedc3e77b4f30ed0bb191860c8ce0cfb2ab329c4e500b7290abac9e47ab27815",
+      "derBase64": "MIIBtTCBngIBATANBgkqhkiG9w0BAQsFADAcMRowGAYDVQQDDBFGaXh0dXJlLVN0YXR1cy1DQRcNMjYxMTI2MjEzOTM4WhcNMjYxMTI4MjEzOTM4WjA9MDsCAhABFw0yNjExMjcyMTM5MzhaMCYwCgYDVR0VBAMKAQEwGAYDVR0YBBEYDzIwMjYxMDAxMDAwMDAwWqAPMA0wCwYDVR0UBAQCAhABMA0GCSqGSIb3DQEBCwUAA4IBAQCn9kRoE5sTiAim/dSRXTvogkd8FvVPBay9zRKT44XHcgwMDi7w+Xj7Ts+gN2uMvb4CSFwfdD/0vKd711v/1Iv+8rFRHurNiUloeeoY44981UMcspY0omd8oVDrb3zwD7EL5Q/FBQrA1XQiY71XvMPWzg8/PCpOY4y9THzUtsMj/8SJUyDb0+s5TI1vmTffI6ZpWiMSRva3M4xdL4TYhBbvA0hm/ttYRrBqI9FpkxntZsGlfPM5Gz6igT9OoKWaeRySuYeUguyS8migPMSPcMrZyT/qY3wPZWOSlDINg1pBf46mWfCA8ddwgna6i5ASJeQGn3nptarm8/KHbRWetLIk"
     }
   },
   "negativeDerivations": {

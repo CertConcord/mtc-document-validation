@@ -3,6 +3,8 @@ import assert from 'node:assert/strict';
 import {createHash} from 'node:crypto';
 import {readFileSync} from 'node:fs';
 import {assessRawStatus} from './raw-status.mjs';
+import {certificate} from './cert-der.mjs';
+import {parseCrl} from './crl-der.mjs';
 
 const corpus = JSON.parse(readFileSync(new URL('../vectors/raw-status-der.json', import.meta.url), 'utf8'));
 const vectors = JSON.parse(readFileSync(new URL('../vectors/raw-status-cases.json', import.meta.url), 'utf8'));
@@ -20,6 +22,26 @@ test('frozen original DER has the recorded byte count and SHA-256', () => {
     assert.equal(bytes.length, item.bytes, id);
     assert.equal(sha256(bytes), item.sha256, id);
   }
+});
+
+test('signed CRL equality and future-date controls cover target and unrelated entries', () => {
+  const target = certificate(object('leaf'));
+  const issuer = certificate(object('ca'));
+  const equal = parseCrl({recordDer: object('crl-revoked'), target, issuer});
+  const future = parseCrl({recordDer: object('crl-revocation-after-issue'),
+    target, issuer});
+  const unrelated = parseCrl({recordDer: object('crl-unrelated-future-revocation'),
+    target, issuer});
+  assert.equal(equal.targetSerial, future.targetSerial);
+  assert.equal(equal.thisUpdate, future.thisUpdate);
+  assert.equal(equal.revocationTime, equal.thisUpdate);
+  assert.equal(equal.hasFutureRevocation, false);
+  assert(future.revocationTime > future.thisUpdate);
+  assert(future.revocationTime < future.nextUpdate);
+  assert.equal(future.hasFutureRevocation, true);
+  assert.equal(unrelated.status, 'GOOD');
+  assert.equal(unrelated.revocationTime, null);
+  assert.equal(unrelated.hasFutureRevocation, true);
 });
 
 test('original DER status observations and adversarial pairings', async t => {
