@@ -190,6 +190,17 @@ const coherent=json('vectors/coherent-document-evidence.json');
 assert.equal(coherent.format,'original-coherent-document-evidence-v1');
 assert.deepEqual(json('cases.json').cases.filter(x=>x.component==='coherent-document-evidence')
   .map(x=>[x.id,x.expected]),coherent.cases.map(x=>[x.id,x.expected]));
+const coherentRenewal=json('vectors/coherent-ers-renewal.json');
+assert.equal(coherentRenewal.format,'original-coherent-document-ers-renewal-v1');
+assert.equal(coherentRenewal.sourceCorpus,'vectors/coherent-document-evidence.json');
+assert.deepEqual(json('cases.json').cases.filter(x=>x.component==='coherent-ers-renewal')
+  .map(x=>[x.id,x.expected]),coherentRenewal.cases.map(x=>[x.id,x.expected]));
+assert.equal(coherentRenewal.source.documentSha256,
+  coherent.original_core.objects.document.sha256);
+assert.equal(coherentRenewal.source.initialEvidenceSha256,
+  coherent.ers.objects.document.evidence.sha256);
+assert.equal(coherentRenewal.source.initialTokenSha256,
+  coherent.ers.objects.document.token.sha256);
 const coherentCore=coherent.original_core;
 const coherentRetirement=coherent.retirement;
 assert.equal(coherentCore.objects.document.sha256,
