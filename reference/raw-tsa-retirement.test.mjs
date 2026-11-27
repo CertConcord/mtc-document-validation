@@ -39,8 +39,8 @@ test('frozen CRLs are original signed controls for the same no-CDP TSA', () => {
   assert.equal(vectors.format, 'original-rfc3161-tsa-retirement-crl-v1');
   assert.equal(vectors.sourceCorpus, 'vectors/coherent-document-evidence.json');
   assert.equal(vectors.renewalCorpus, 'vectors/coherent-ers-renewal.json');
-  assert.equal(Object.keys(vectors.crls).length, 15);
-  assert.equal(vectors.cases.length, 26);
+  assert.equal(Object.keys(vectors.crls).length, 16);
+  assert.equal(vectors.cases.length, 27);
   const tsa = certificate(tsaDer);
   const issuer = certificate(issuerDer);
   assert(!tsa.extensions.has(OID.crlDistributionPoints));
@@ -62,6 +62,10 @@ test('frozen CRLs are original signed controls for the same no-CDP TSA', () => {
     assert.equal(parsed.recordSha256, item.sha256, name);
     if (name === 'invalidity-between-tokens')
       assert.equal(parsed.invalidityDate, Date.parse('2026-11-27T20:00:00Z') / 1000);
+    if (name === 'unrelated-future-revocation') {
+      assert.equal(parsed.status, 'GOOD');
+      assert.equal(parsed.hasFutureRevocation, true);
+    }
   }
 });
 

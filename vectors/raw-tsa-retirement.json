@@ -57,6 +57,11 @@
       "bytes": 436,
       "sha256": "7fdcb696ffc5bf437f63cedc1dec67f9e582159207f794cdd6b1f8aaa61f3f8c"
     },
+    "unrelated-future-revocation": {
+      "derBase64": "MIIBsDCBmQIBATANBgkqhkiG9w0BAQsFADAfMR0wGwYDVQQDDBRGaXh0dXJlLVRpbWVzdGFtcC1DQRcNMjYxMTI3MjE1MzE1WhcNMjYxMTI5MjE1MzE1WjA1MDMCFGA1fi1uAmqHJy95eWStSExHNOYdFw0yNjExMjgwMDAwMDBaMAwwCgYDVR0VBAMKAQWgDzANMAsGA1UdFAQEAgIQADANBgkqhkiG9w0BAQsFAAOCAQEAbLRIKisSvdl2nt5B70yGI1cD1omCgJkrtR8dDCRRtoE7p81szbpA8j3DTYLSZRLZH6M+gQx07SiwPjyB1BAglHOYWN+nvjCpy6V7C1xVTl9+JrUH3TynM5b63Ked+9r6/DCyxledJiXgL37dYnoz3mmaY+j++5xxMfALav/RpW8XkEK27q7+0cISmUKB9BwPMlQpSUSDWnY1bF4zn7L6z7bOPtyy8Gj7/umcPMKOTSZeu7IQdMPmebL9UEcwqSWQC8P9gsRrE6fZ02AZ9/U9eKDMGJ0qAbAO+Sn/DN3+O4znkfTabuK9aFssWVpsSpoFNGEFPCzbMFJra6/hNoep1A==",
+      "bytes": 436,
+      "sha256": "391a1be7808c81c1162e629ce19d1487873c19b076739955d8ca611f8a431991"
+    },
     "future-revocation": {
       "derBase64": "MIIBsDCBmQIBATANBgkqhkiG9w0BAQsFADAfMR0wGwYDVQQDDBRGaXh0dXJlLVRpbWVzdGFtcC1DQRcNMjYxMTI3MjE1MzE1WhcNMjYxMTI5MjE1MzE1WjA1MDMCFGA1fi1uAmqHJy95eWStSExHNOYcFw0yNjExMjgwMDAwMDBaMAwwCgYDVR0VBAMKAQWgDzANMAsGA1UdFAQEAgIQADANBgkqhkiG9w0BAQsFAAOCAQEAfHIXwaAVFdLVulpqIxwQPTu6rjdCrbXHDZdZRXbyF6UnwHTDTrfW03kgiHQXpre01XFX+KRtYo2r7L8LsOD9114tiHF8IVSnVf86f6JFNXmwauDut4GQ5jjrqA9s3T3hXheGmNzdfjkN689cQhCEznAaGdaSiChARA/oiEY0HmFXqeWjrN4IN5T4ok1+NMMsDpWoKZNn1pzUPSF9ZLbIguGS4kxS5POo/9m5a4DiCsmII1lCCwDK0QiIZpOQDuK6WSi5wSWexaPGHXzZWNB4tO8BJYg9oaNJPR/vi2Of6R+/3pkUbA6Z+V+jc1hf8drpMsJoio9a6LK7FITWWMqZ1g==",
       "bytes": 436,
@@ -211,6 +216,13 @@
       "timestamp": "initial",
       "expected": "INDETERMINATE",
       "reason": "TSA_CRL_ISSUER_NOT_ADMITTED"
+    },
+    {
+      "id": "unrelated-revocation-date-after-crl-issue",
+      "crl": "unrelated-future-revocation",
+      "timestamp": "initial",
+      "expected": "REJECTED",
+      "reason": "TSA_CRL_REVOCATION_AFTER_ISSUE"
     },
     {
       "id": "revocation-date-after-crl-issue",

@@ -58,7 +58,9 @@ test('original MTC target, CA representation and status DER are pinned', () => {
     target: certificate(bytes('chronological-target')),
     issuer: certificate(bytes('chronological-ca')), directMtcCa: true});
   assert(prior.revocationTime > prior.thisUpdate);
+  assert.equal(prior.hasFutureRevocation, true);
   assert.equal(corrected.revocationTime, corrected.thisUpdate);
+  assert.equal(corrected.hasFutureRevocation, false);
 });
 
 test('MTC proof and direct CA status edges use the same original target', async t => {

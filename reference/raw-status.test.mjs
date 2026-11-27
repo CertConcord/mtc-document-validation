@@ -24,17 +24,24 @@ test('frozen original DER has the recorded byte count and SHA-256', () => {
   }
 });
 
-test('signed CRL equality and future-date controls bind the same target', () => {
+test('signed CRL equality and future-date controls cover target and unrelated entries', () => {
   const target = certificate(object('leaf'));
   const issuer = certificate(object('ca'));
   const equal = parseCrl({recordDer: object('crl-revoked'), target, issuer});
   const future = parseCrl({recordDer: object('crl-revocation-after-issue'),
     target, issuer});
+  const unrelated = parseCrl({recordDer: object('crl-unrelated-future-revocation'),
+    target, issuer});
   assert.equal(equal.targetSerial, future.targetSerial);
   assert.equal(equal.thisUpdate, future.thisUpdate);
   assert.equal(equal.revocationTime, equal.thisUpdate);
+  assert.equal(equal.hasFutureRevocation, false);
   assert(future.revocationTime > future.thisUpdate);
   assert(future.revocationTime < future.nextUpdate);
+  assert.equal(future.hasFutureRevocation, true);
+  assert.equal(unrelated.status, 'GOOD');
+  assert.equal(unrelated.revocationTime, null);
+  assert.equal(unrelated.hasFutureRevocation, true);
 });
 
 test('original DER status observations and adversarial pairings', async t => {

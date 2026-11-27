@@ -80,7 +80,7 @@ export function assessRawTsaRetirement(input) {
     crlThisUpdate: crl.thisUpdate, crlNextUpdate: crl.nextUpdate,
     revocationTime: crl.revocationTime, reasonCode: crl.reason,
     invalidityDate: crl.invalidityDate, targetSerial: crl.targetSerial};
-  if (crl.status === 'REVOKED' && crl.revocationTime > crl.thisUpdate)
+  if (crl.hasFutureRevocation)
     return result('REJECTED', 'TSA_CRL_REVOCATION_AFTER_ISSUE', observed);
   if (!admittedReceipt)
     return result('INDETERMINATE', 'TSA_CRL_RECEIPT_MISSING', observed);
