@@ -1,0 +1,259 @@
+{
+  "format": "original-mtc07-issuance-cases-v1",
+  "cases": [
+    {
+      "id": "mtc-standalone-single-leaf",
+      "certificate": "standalone-one",
+      "policy": "caOnly",
+      "expected": "ISSUANCE_PROVEN"
+    },
+    {
+      "id": "mtc-standalone-two-role-and-grease",
+      "certificate": "standalone-two-role",
+      "policy": "caAndMirror",
+      "expected": "ISSUANCE_PROVEN"
+    },
+    {
+      "id": "mtc-standalone-three-leaf-skipped-level",
+      "certificate": "standalone-three-leaf",
+      "policy": "caOnly",
+      "expected": "ISSUANCE_PROVEN"
+    },
+    {
+      "id": "mtc-three-leaf-missing-sibling",
+      "certificate": "three-leaf-missing-sibling",
+      "policy": "caOnly",
+      "expected": "MTC_PATH"
+    },
+    {
+      "id": "mtc-required-mirror-missing",
+      "certificate": "standalone-one",
+      "policy": "caAndMirror",
+      "expected": "MTC_COSIGNER_QUORUM"
+    },
+    {
+      "id": "mtc-revoked-range",
+      "certificate": "standalone-one",
+      "policy": "revoked",
+      "expected": "MTC_SERIAL"
+    },
+    {
+      "id": "mtc-below-ca-minimum-serial",
+      "certificate": "standalone-one",
+      "policy": "minExcludesZero",
+      "expected": "MTC_SERIAL"
+    },
+    {
+      "id": "mtc-above-ca-maximum-serial",
+      "certificate": "standalone-three-leaf",
+      "policy": "maxExcludesTwo",
+      "expected": "MTC_SERIAL"
+    },
+    {
+      "id": "mtc-uint64-exclusive-revocation-end",
+      "certificate": "standalone-one",
+      "policy": "uint64ExclusiveEnd",
+      "expected": "ISSUANCE_PROVEN"
+    },
+    {
+      "id": "mtc-original-subject-changed",
+      "certificate": "changed-subject",
+      "policy": "caOnly",
+      "expected": "MTC_COSIGNER_QUORUM"
+    },
+    {
+      "id": "mtc-original-spki-changed",
+      "certificate": "changed-spki",
+      "policy": "caOnly",
+      "expected": "MTC_COSIGNER_QUORUM"
+    },
+    {
+      "id": "mtc-original-extension-changed",
+      "certificate": "changed-x509-extension",
+      "policy": "caOnly",
+      "expected": "MTC_COSIGNER_QUORUM"
+    },
+    {
+      "id": "mtc-proof-trailing-byte",
+      "certificate": "trailing-proof",
+      "policy": "caAndMirror",
+      "expected": "MTC_PROOF_ENCODING"
+    },
+    {
+      "id": "mtc-proof-unsorted-cosigners",
+      "certificate": "unsorted-cosigners",
+      "policy": "caAndMirror",
+      "expected": "MTC_PROOF_ENCODING"
+    },
+    {
+      "id": "mtc-proof-duplicate-cosigner",
+      "certificate": "duplicate-cosigner",
+      "policy": "caAndMirror",
+      "expected": "MTC_PROOF_ENCODING"
+    },
+    {
+      "id": "mtc-proof-non-octet-bitstring",
+      "certificate": "non-octet-bitstring",
+      "policy": "caOnly",
+      "expected": "MTC_PROOF_ENCODING"
+    },
+    {
+      "id": "mtc-signature-nonzero-timestamp",
+      "certificate": "wrong-timestamp",
+      "policy": "caOnly",
+      "expected": "MTC_COSIGNER_QUORUM"
+    },
+    {
+      "id": "mtc-signature-wrong-log-origin",
+      "certificate": "wrong-log-origin",
+      "policy": "caOnly",
+      "expected": "MTC_COSIGNER_QUORUM"
+    },
+    {
+      "id": "mtc-signature-wrong-range",
+      "certificate": "wrong-range-signature",
+      "policy": "caOnly",
+      "expected": "MTC_COSIGNER_QUORUM"
+    },
+    {
+      "id": "mtc-original-inclusion-path-changed",
+      "certificate": "wrong-path",
+      "policy": "caAndMirror",
+      "expected": "MTC_COSIGNER_QUORUM"
+    },
+    {
+      "id": "mtc-unknown-grease-cannot-certify",
+      "certificate": "unknown-only",
+      "policy": "caOnly",
+      "expected": "MTC_COSIGNER_QUORUM"
+    },
+    {
+      "id": "mtc-unknown-malformed-cosigner-id",
+      "certificate": "unknown-malformed-cosigner-id",
+      "policy": "caOnly",
+      "expected": "MTC_PROOF_ENCODING"
+    },
+    {
+      "id": "mtc-unaligned-subtree",
+      "certificate": "un-aligned-subtree",
+      "policy": "caOnly",
+      "expected": "MTC_SUBTREE"
+    },
+    {
+      "id": "mtc-wrong-leaf-index",
+      "certificate": "wrong-index",
+      "policy": "caAndMirror",
+      "expected": "MTC_COSIGNER_QUORUM"
+    },
+    {
+      "id": "mtc-wrong-ca-name",
+      "certificate": "wrong-issuer",
+      "policy": "caOnly",
+      "expected": "MTC_ISSUER"
+    },
+    {
+      "id": "mtc-proof-algorithm-parameters",
+      "certificate": "algorithm-with-parameters",
+      "policy": "caOnly",
+      "expected": "MTC_CERTIFICATE"
+    },
+    {
+      "id": "mtc-v2-certificate-unsupported",
+      "certificate": "unsupported-v2-certificate",
+      "policy": "caOnly",
+      "expected": "DER_UNSUPPORTED"
+    },
+    {
+      "id": "mtc-invalid-validity-tag",
+      "certificate": "invalid-validity-tag",
+      "policy": "caOnly",
+      "expected": "DER_MALFORMED"
+    },
+    {
+      "id": "mtc-invalid-spki-algorithm-tag",
+      "certificate": "invalid-spki-algorithm-tag",
+      "policy": "caOnly",
+      "expected": "CERT_MALFORMED"
+    },
+    {
+      "id": "mtc-invalid-extension-oid-tag",
+      "certificate": "invalid-extension-oid-tag",
+      "policy": "caOnly",
+      "expected": "DER_MALFORMED"
+    },
+    {
+      "id": "mtc-extension-type-order",
+      "certificate": "extension-order",
+      "policy": "caOnly",
+      "expected": "MTC_PROOF_ENCODING"
+    },
+    {
+      "id": "mtc-long-id-legal-boundary",
+      "certificate": "long-id-legal-boundary",
+      "policy": "long-id-legal-boundary",
+      "expected": "ISSUANCE_PROVEN"
+    },
+    {
+      "id": "mtc-long-id-over-boundary",
+      "certificate": "long-id-over-boundary",
+      "policy": "long-id-over-boundary",
+      "expected": "MTC_POLICY"
+    },
+    {
+      "id": "mtc-extension-field-omitted",
+      "certificate": "extension-field-omitted",
+      "policy": "extensionCardinality",
+      "expected": "ISSUANCE_PROVEN"
+    },
+    {
+      "id": "mtc-extension-field-empty",
+      "certificate": "extension-field-empty",
+      "policy": "extensionCardinality",
+      "expected": "DER_MALFORMED"
+    }
+  ],
+  "logIdCases": [
+    {
+      "id": "log-id-one-octet-legal-maximum",
+      "caIdHex": "010101010101010101010101010101010101010101010101010101010101",
+      "logNumber": 1,
+      "expected": "ADMITTED",
+      "expectedBinaryHex": "0101010101010101010101010101010101010101010101010101010101010001",
+      "expectedOrigin": "1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.0.1"
+    },
+    {
+      "id": "log-id-one-octet-over-maximum",
+      "caIdHex": "01010101010101010101010101010101010101010101010101010101010101",
+      "logNumber": 1,
+      "expected": "MTC_POLICY"
+    },
+    {
+      "id": "log-id-two-octet-legal-maximum",
+      "caIdHex": "0101010101010101010101010101010101010101010101010101010101",
+      "logNumber": 128,
+      "expected": "ADMITTED",
+      "expectedBinaryHex": "0101010101010101010101010101010101010101010101010101010101008100",
+      "expectedOrigin": "1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.0.128"
+    },
+    {
+      "id": "log-id-two-octet-over-maximum",
+      "caIdHex": "010101010101010101010101010101010101010101010101010101010101",
+      "logNumber": 128,
+      "expected": "MTC_POLICY"
+    },
+    {
+      "id": "log-id-three-octet-legal-maximum",
+      "caIdHex": "01010101010101010101010101010101010101010101010101010101",
+      "logNumber": 65535,
+      "expected": "ADMITTED",
+      "expectedBinaryHex": "010101010101010101010101010101010101010101010101010101010083ff7f",
+      "expectedOrigin": "1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.0.65535"
+    },
+    {
+      "id": "log-id-three-octet-over-maximum",
+      "caIdHex": "0101010101010101010101010101010101010101010101010101010101",
+      "logNumber": 65535,
+      "expected": "MTC_POLICY"
+    }
+  ]
+}

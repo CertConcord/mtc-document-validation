@@ -22,6 +22,8 @@ The [original binary ERS corpus](vectors/raw-ers-der.json) and [binding cases](v
 
 The [original signed authority corpus](vectors/raw-authority-bytes.json) and [cases](vectors/raw-authority-cases.json) constrain a bounded [authority-history reference](reference/raw-authority-history.mjs). It checks exact source-signed appointment and document-action statements, source sequence links, claimed knowledge cutoffs and the exact document hash. `BOUND_CLAIMS` authenticates only those source claims and their internal binding. The application must independently admit each source and establish trustworthy time, actual source completeness, signer-to-document binding and succession before using them as historical facts or returning document validity.
 
+The [original MTC certificate corpus](vectors/raw-mtc-der.json) and [issuance cases](vectors/raw-mtc-cases.json) constrain a bounded [standalone MTC proof reference](reference/raw-mtc-issuance.mjs) under the selected revision 07. It checks the original X.509 DER structure and TLS proof bytes, reconstructed log-entry and subtree hashes, admitted CA serial bounds, and CA and required cosigner signatures. `ISSUANCE_PROVEN` is only the certificate-signature step; X.509 path, historical status and authority, document signature, trusted time and preservation remain separate. Relative certificates and other algorithm suites are outside this reference subset.
+
 Run with Node.js 24.15 or later:
 
     npm run check

@@ -132,7 +132,9 @@ export function encodedTime(value) {
 export function extensions(value) {
   expect(value, 0x30);
   const result = new Map();
-  for (const entry of children(value)) {
+  const entries = children(value);
+  if (!entries.length) bad('DER_MALFORMED');
+  for (const entry of entries) {
     const fields = children(expect(entry, 0x30));
     if (fields.length < 2 || fields.length > 3) bad('DER_MALFORMED');
     const id = oid(fields[0]);
