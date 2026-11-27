@@ -235,6 +235,40 @@ assert.deepEqual(transfer.requiredSet.items,JSON.parse(Buffer.from(
 assert(transfer.requiredSet.selectedAt<coherentRetirement.policy.retiredAt);
 assert(coherentRetirement.policy.retiredAt<JSON.parse(Buffer.from(
   coherentRetirement.manifest.rawBase64,'base64').toString('utf8')).declaredAt);
+const transferEvolution=json('vectors/raw-transfer-set-evolution.json');
+assert.equal(transferEvolution.format,'original-signed-transfer-set-evolution-v1');
+assert.equal(transferEvolution.sourceCorpus,
+  'vectors/coherent-document-evidence.json');
+assert.deepEqual(json('cases.json').cases.filter(x=>
+  x.component==='raw-transfer-set-evolution').map(x=>[x.id,x.expected]),
+  [...transferEvolution.cases.map(x=>[x.id,transferExpected(x)]),
+    ...transferEvolution.setControls.map(x=>[x.id,x.expected]),
+    ...transferEvolution.inputControls.map(x=>[x.id,x.expected])]);
+for(const item of [transferEvolution.oldSet,transferEvolution.newSet,
+    transferEvolution.manifestOriginal]){
+  const raw=Buffer.from(item.base64,'base64');
+  assert.equal(raw.length,item.bytes);
+  assert.equal(createHash('sha256').update(raw).digest('hex'),item.sha256);
+}
+assert.equal(transferEvolution.oldSet.base64,transfer.requiredSetRawBase64);
+const successor=JSON.parse(Buffer.from(transferEvolution.newSet.base64,
+  'base64').toString('utf8'));
+assert.equal(successor.items.length,24);
+assert.equal(successor.previousSetSha256,transferEvolution.oldSet.sha256);
+for(const row of transferEvolution.setControls){
+  const raw=Buffer.from(row.rawBase64,'base64');
+  assert.equal(raw.length,row.rawBytes,row.id);
+  assert.equal(createHash('sha256').update(raw).digest('hex'),
+    row.independentlyAdmittedSha256,row.id);
+}
+for(const row of Object.values(transferEvolution.signedRecords))
+  for(const part of ['raw','signature','predecessorSignature',
+      'successorSignature'])if(row[part]){
+    const raw=Buffer.from(row[part].base64,'base64');
+    assert.equal(raw.length,row[part].bytes);
+    assert.equal(createHash('sha256').update(raw).digest('hex'),
+      row[part].sha256);
+  }
 const mtcVectors=json('vectors/raw-mtc-cases.json');
 const mtcDer=json('vectors/raw-mtc-der.json');
 assert.equal(mtcVectors.format,'original-mtc07-issuance-cases-v1');

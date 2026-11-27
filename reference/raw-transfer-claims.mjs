@@ -6,6 +6,7 @@ import {TextDecoder, types} from 'node:util';
 const HANDOFF_DOMAIN = Buffer.from('MTC-DV-TRANSFER-HANDOFF-v1\0', 'ascii');
 const OBSERVATION_DOMAIN = Buffer.from('MTC-DV-TRANSFER-OBSERVATION-v1\0', 'ascii');
 const SET_KEYS = ['version', 'selectedAt', 'items'];
+const SUCCESSOR_SET_KEYS = ['version', 'selectedAt', 'previousSetSha256', 'items'];
 const ITEM_KEYS = ['id', 'role', 'sha256', 'retainThrough'];
 const HANDOFF_KEYS = ['version', 'id', 'fromId', 'toId', 'acceptedAt',
   'responsibleThrough', 'requiredSetSha256', 'previousSha256', 'itemIds'];
@@ -94,7 +95,7 @@ function overall(responsibility, observationClaims) {
 // Policy must come from outside the archive and fixes the selected-set digest,
 // claimed selection time, participant keys, retirement and document horizon.
 export function assessRawTransferClaims({policy, requiredSetRaw, handoffs,
-  observations, supplied}) {
+  observations, supplied, successorSetRaw}) {
   if (!policy) fail('TRANSFER_INPUT');
   const handoffInputs = copyList(handoffs, 'TRANSFER_INPUT');
   const observationInputs = copyList(observations, 'TRANSFER_INPUT');
@@ -107,6 +108,10 @@ export function assessRawTransferClaims({policy, requiredSetRaw, handoffs,
   const requiredSetSha256 = policy.requiredSetSha256;
   const sourceKeys = policy.custodianKeys;
   const sourceObserverKey = policy.observerPublicKeySpkiBase64;
+  const successorPolicy = policy.successorSet;
+  const hasSuccessor = successorSetRaw !== undefined;
+  if (hasSuccessor !== (successorPolicy !== undefined))
+    fail('TRANSFER_POLICY');
   if (![initialCustodianId, observerId].every(label) ||
       ![selectedAt, retiredAt, documentThrough].every(time) ||
       selectedAt > retiredAt || retiredAt > documentThrough ||
@@ -148,6 +153,69 @@ export function assessRawTransferClaims({policy, requiredSetRaw, handoffs,
   if (!required.some(item => item.role === 'original-document') ||
       !required.some(item => item.role === 'preservation-evidence'))
     fail('TRANSFER_SET');
+  let successor = null;
+  let successorSha256 = null;
+  const successorAdmissions = [];
+  const allRequiredById = new Map(requiredById);
+  if (hasSuccessor) {
+    if (!successorPolicy || typeof successorPolicy !== 'object')
+      fail('TRANSFER_POLICY');
+    const successorSelectedAt = successorPolicy.selectedAt;
+    successorSha256 = successorPolicy.requiredSetSha256;
+    const admitted = copyList(successorPolicy.admittedNewItems,
+      'TRANSFER_POLICY').map(item => {
+      if (!item) fail('TRANSFER_POLICY');
+      return {id: item.id, sha256: item.sha256,
+        admittedAt: item.admittedAt};
+    });
+    if (!time(successorSelectedAt) || !digest(successorSha256) ||
+        successorSelectedAt <= selectedAt || !admitted.length ||
+        !sortedUnique(admitted, item => item?.id))
+      fail('TRANSFER_POLICY');
+    const admittedById = new Map();
+    for (const item of admitted) {
+      if (!digest(item.sha256) || !time(item.admittedAt) ||
+          requiredById.has(item.id)) fail('TRANSFER_POLICY');
+      if (item.admittedAt >= successorSelectedAt)
+        fail('TRANSFER_SET_TIME');
+      admittedById.set(item.id, {sha256: item.sha256,
+        admittedAt: item.admittedAt});
+      successorAdmissions.push({id: item.id, admittedAt: item.admittedAt});
+    }
+    const successorBytes = bytes(successorSetRaw, 'TRANSFER_SET_STRUCTURE');
+    if (sha(successorBytes) !== successorSha256)
+      fail('TRANSFER_SET_ANCHOR');
+    successor = record(successorBytes, SUCCESSOR_SET_KEYS,
+      'TRANSFER_SET_STRUCTURE');
+    if (successor.version !== 2 ||
+        successor.selectedAt !== successorSelectedAt ||
+        !Array.isArray(successor.items) ||
+        !sortedUnique(successor.items, item => item?.id))
+      fail('TRANSFER_SET_STRUCTURE');
+    if (successor.previousSetSha256 !== requiredSetSha256)
+      fail('TRANSFER_SET_LINK');
+    for (const item of successor.items) {
+      if (!item || typeof item !== 'object' || Array.isArray(item) ||
+          !keysEqual(item, ITEM_KEYS) || !label(item.role) ||
+          !digest(item.sha256) || !time(item.retainThrough) ||
+          item.retainThrough < documentThrough)
+        fail('TRANSFER_SET_STRUCTURE');
+      const prior = requiredById.get(item.id);
+      if (prior && JSON.stringify(prior) !== JSON.stringify(item))
+        fail('TRANSFER_SET_MONOTONIC');
+      if (!prior) {
+        const admission = admittedById.get(item.id);
+        if (!admission || admission.sha256 !== item.sha256)
+          fail('TRANSFER_SET_MONOTONIC');
+      }
+      allRequiredById.set(item.id, item);
+    }
+    if (successor.items.length !== required.length + admitted.length ||
+        [...requiredById.keys()].some(id =>
+          !successor.items.some(item => item.id === id)) ||
+        [...admittedById.keys()].some(id => !allRequiredById.has(id)))
+      fail('TRANSFER_SET_MONOTONIC');
+  }
   const handoffRows = [];
   const handoffById = new Map();
   const rawHashes = [];
@@ -164,10 +232,8 @@ export function assessRawTransferClaims({policy, requiredSetRaw, handoffs,
         !label(row.toId) || row.fromId === row.toId ||
         !time(row.acceptedAt) || !time(row.responsibleThrough) ||
         row.acceptedAt <= selectedAt ||
-        row.requiredSetSha256 !== requiredSetSha256 ||
         !Array.isArray(row.itemIds) ||
         !sortedUnique(row.itemIds, id => id) ||
-        row.itemIds.some(id => !requiredById.has(id)) ||
         handoffById.has(row.id) ||
         (index === 0 ? row.previousSha256 !== null :
           row.previousSha256 !== rawHashes[index - 1]))
@@ -178,6 +244,15 @@ export function assessRawTransferClaims({policy, requiredSetRaw, handoffs,
       keys.get(row.fromId), 'TRANSFER_HANDOFF_SIGNATURE');
     verified(raw, successorSignature, HANDOFF_DOMAIN,
       keys.get(row.toId), 'TRANSFER_HANDOFF_SIGNATURE');
+    if (hasSuccessor && ((index === 0 &&
+        row.acceptedAt >= successor.selectedAt) || (index === 1 &&
+        row.acceptedAt <= successor.selectedAt)))
+      fail('TRANSFER_SET_TIME');
+    if (![requiredSetSha256, successorSha256].includes(
+        row.requiredSetSha256) ||
+        row.itemIds.some(id => !(row.requiredSetSha256 ===
+          requiredSetSha256 ? requiredById : allRequiredById).has(id)))
+      fail('TRANSFER_HANDOFF');
     handoffById.set(row.id, row);
     handoffRows.push(row);
     rawHashes.push(sha(raw));
@@ -193,7 +268,8 @@ export function assessRawTransferClaims({policy, requiredSetRaw, handoffs,
     const row = record(raw, OBSERVATION_KEYS, 'TRANSFER_OBSERVATION');
     if (row.version !== 1 || row.observerId !== observerId ||
         !label(row.handoffId) ||
-        row.requiredSetSha256 !== requiredSetSha256 ||
+        row.requiredSetSha256 !==
+          handoffById.get(row.handoffId)?.requiredSetSha256 ||
         !time(row.observedAt) || !Array.isArray(row.items) ||
         !sortedUnique(row.items, item => item?.id) ||
         observationsById.has(row.handoffId) ||
@@ -201,7 +277,9 @@ export function assessRawTransferClaims({policy, requiredSetRaw, handoffs,
     for (const item of row.items)
       if (!item || typeof item !== 'object' || Array.isArray(item) ||
           !keysEqual(item, OBSERVED_ITEM_KEYS) ||
-          !requiredById.has(item.id) || !digest(item.sha256))
+          !(row.requiredSetSha256 === requiredSetSha256 ?
+            requiredById : allRequiredById).has(item.id) ||
+          !digest(item.sha256))
         fail('TRANSFER_OBSERVATION');
     observationsById.set(row.handoffId, row);
   }
@@ -214,7 +292,7 @@ export function assessRawTransferClaims({policy, requiredSetRaw, handoffs,
     const original = bytes(value.bytes, 'TRANSFER_INPUT');
     if (!label(handoffId) || !label(itemId) ||
         !handoffById.has(handoffId) ||
-        !requiredById.has(itemId)) fail('TRANSFER_INPUT');
+        !allRequiredById.has(itemId)) fail('TRANSFER_INPUT');
     const key = `${handoffId}\0${itemId}`;
     if (suppliedById.has(key)) fail('TRANSFER_INPUT');
     suppliedById.set(key, original);
@@ -228,8 +306,23 @@ export function assessRawTransferClaims({policy, requiredSetRaw, handoffs,
   let predecessor = initialCustodianId;
   let coveredThrough = retiredAt;
   let previousAt = -1;
-  for (const row of handoffRows) {
+  if (hasSuccessor && (handoffRows.length !== 2 ||
+      handoffRows[0].acceptedAt >= successor.selectedAt ||
+      handoffRows[1].acceptedAt <= successor.selectedAt ||
+      successorAdmissions.some(item =>
+        item.admittedAt <= handoffRows[0].acceptedAt)))
+    fail('TRANSFER_SET_TIME');
+  for (const [index, row] of handoffRows.entries()) {
+    const applicable = hasSuccessor && index === 1 ?
+      successor.items : required;
+    const applicableSha256 = hasSuccessor && index === 1 ?
+      successorSha256 : requiredSetSha256;
     if (row.acceptedAt <= previousAt) fail('TRANSFER_HANDOFF');
+    if (row.requiredSetSha256 !== applicableSha256) {
+      responsibilityReasons.push({handoffId: row.id,
+        code: 'TRANSFER_SET_GAP'});
+      byteReasons.push({handoffId: row.id, code: 'TRANSFER_SET_GAP'});
+    }
     if (row.fromId !== predecessor)
       responsibilityReasons.push({handoffId: row.id,
         code: 'TRANSFER_PREDECESSOR_MISMATCH'});
@@ -238,7 +331,7 @@ export function assessRawTransferClaims({policy, requiredSetRaw, handoffs,
         code: 'TRANSFER_RESPONSIBILITY_GAP'});
     if (row.responsibleThrough < row.acceptedAt)
       responsibilityReasons.push({handoffId: row.id, code: 'TRANSFER_TERM_SHORT'});
-    for (const item of required) {
+    for (const item of applicable) {
       if (!row.itemIds.includes(item.id))
         responsibilityReasons.push({handoffId: row.id, itemId: item.id,
           code: 'TRANSFER_SCOPE_MISSING'});
@@ -268,5 +361,7 @@ export function assessRawTransferClaims({policy, requiredSetRaw, handoffs,
   const observationClaims = outcome(byteReasons);
   return {decision: overall(responsibility, observationClaims),
     responsibility, observationClaims, requiredSetSha256,
-    handoffCount: handoffRows.length, requiredItemCount: required.length};
+    ...(successor ? {successorSetSha256: successorSha256} : {}),
+    handoffCount: handoffRows.length,
+    requiredItemCount: successor ? successor.items.length : required.length};
 }
