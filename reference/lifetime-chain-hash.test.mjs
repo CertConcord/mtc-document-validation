@@ -16,3 +16,11 @@ for (const vector of corpus.cases) {
         {code: vector.expected});
   });
 }
+
+test('a returning failure callback cannot admit a changed same-chain hash', () => {
+  const vector = corpus.cases.find(item => item.id === 'same-chain-hash-changed');
+  const failures = [];
+  assert.throws(() => assertPreservationLifetimes(vector.records, vector.policy,
+    code => { failures.push(code); }), {code: vector.expected});
+  assert.deepEqual(failures, [vector.expected]);
+});

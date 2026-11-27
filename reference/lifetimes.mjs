@@ -6,7 +6,13 @@ const seconds = value => Number.isSafeInteger(value) && value >= 0
 const name = value => typeof value === 'string' && value.length > 0;
 
 function check(records, policy, fields, parseTime, fail) {
-  const need = (condition, code) => { if (!condition) fail(code); };
+  const need = (condition, code) => {
+    if (!condition) {
+      fail(code);
+      // A caller's reporting callback may return; rejection is mandatory.
+      reject(code);
+    }
+  };
   const at = parseTime(policy?.[fields.at]);
   const dataValidUntil = parseTime(policy?.[fields.dataValidUntil]);
   need(at !== null && dataValidUntil !== null && dataValidUntil > 0n &&

@@ -87,3 +87,15 @@ for (const vector of frozen.cases) {
       {code: vector.expected});
   });
 }
+
+test('a returning failure callback cannot admit a late original ERS claim', () => {
+  const vector = frozen.cases.find(item =>
+    item.id === 'original-ers-initial-deadline-equals-upper');
+  const records = structuredClone(frozen.sources[vector.source].records);
+  const policy = {...structuredClone(frozen.policy),
+    ...structuredClone(vector.policyPatch)};
+  const failures = [];
+  assert.throws(() => assertPreservationLifetimesMicros(records, policy,
+    code => { failures.push(code); }), {code: vector.expected});
+  assert.deepEqual(failures, [vector.expected]);
+});
