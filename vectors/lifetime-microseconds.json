@@ -1,0 +1,49 @@
+{
+  "format": "original-rfc3161-ers-preservation-microseconds-v1",
+  "purpose": "Exact interval and protection-deadline arithmetic over synthetic admitted facts derived from original signed RFC 3161 and ERS tokens. The signed claims and test policy do not themselves authenticate historical TSA status, clock or real-world protection deadlines.",
+  "sources": {
+    "directHashRenewal": {
+      "rawCase": "ers-data-and-history-direct-hash-renewal",
+      "recordSha256": "564d43a5805fab4dcd6043040336ab07d1240c93cc7202bc9267ddaa25699931",
+      "records": [
+        {"chain":0,"genTimeMicros":"1795732436000000","accuracyMicros":"1500000","poeUpperBoundMicros":"1795732437500000","validUntilMicros":"1795735000000000","hashOID":"sha256"},
+        {"chain":0,"genTimeMicros":"1795734711000000","accuracyMicros":"1500000","poeUpperBoundMicros":"1795734712500000","validUntilMicros":"1795736000000000","hashOID":"sha256"},
+        {"chain":1,"genTimeMicros":"1795735643000000","accuracyMicros":"1500000","poeUpperBoundMicros":"1795735644500000","validUntilMicros":"1795737000000000","hashOID":"sha256"}
+      ]
+    },
+    "overlappingHashRenewal": {
+      "rawCase": "ers-data-and-history-hash-renewal",
+      "recordSha256": "75a1e2322cb15e350a438d8b7170f78d693d80216b18149874116dbff6f3dd6c",
+      "records": [
+        {"chain":0,"genTimeMicros":"1795732436000000","accuracyMicros":"1500000","poeUpperBoundMicros":"1795732437500000","validUntilMicros":"1795735000000000","hashOID":"sha256"},
+        {"chain":0,"genTimeMicros":"1795734711000000","accuracyMicros":"1500000","poeUpperBoundMicros":"1795734712500000","validUntilMicros":"1795736000000000","hashOID":"sha256"},
+        {"chain":1,"genTimeMicros":"1795734713000000","accuracyMicros":"1500000","poeUpperBoundMicros":"1795734714500000","validUntilMicros":"1795737000000000","hashOID":"sha256"}
+      ]
+    }
+  },
+  "fractionalTimestamp": {
+    "rawCase": "timestamp-signed-fractional-gen-time",
+    "responseSha256": "5c188a6c2b9dacde95e59bad2f6dfbbf8c571c5b3c1fb7e2304a082d000e595c",
+    "record": {"chain":0,"genTimeMicros":"1795732436500000","accuracyMicros":"1500000","poeUpperBoundMicros":"1795732438000000","validUntilMicros":"1795735000000000","hashOID":"sha256"}
+  },
+  "policy": {
+    "atMicros":"1795735650000000",
+    "dataValidUntilMicros":"1795733000000000",
+    "hashValidUntilMicros":{"sha256":"1795738000000000"}
+  },
+  "cases": [
+    {"id":"original-ers-exact-microsecond-renewal","source":"directHashRenewal","expected":"SATISFIED"},
+    {"id":"original-ers-initial-one-microsecond-margin","source":"directHashRenewal","policyPatch":{"dataValidUntilMicros":"1795732437500001"},"expected":"SATISFIED"},
+    {"id":"original-ers-initial-deadline-equals-upper","source":"directHashRenewal","policyPatch":{"dataValidUntilMicros":"1795732437500000"},"expected":"ERS_INITIAL_PROTECTION_LATE"},
+    {"id":"original-ers-renewal-deadline-equals-upper","source":"directHashRenewal","recordPatch":{"index":0,"field":"validUntilMicros","value":"1795734712500000"},"expected":"ERS_RENEWAL_LATE"},
+    {"id":"original-ers-final-deadline-equals-evaluation","source":"directHashRenewal","policyPatch":{"atMicros":"1795737000000000"},"expected":"ERS_FINAL_PROTECTION_EXPIRED"},
+    {"id":"original-ers-hash-deadline-equals-replacement","source":"directHashRenewal","policyPatch":{"hashValidUntilMicros":{"sha256":"1795735644500000"}},"expected":"ERS_HASH_RENEWAL_LATE"},
+    {"id":"original-ers-signed-overlapping-renewal","source":"overlappingHashRenewal","expected":"ERS_INTERVAL_ORDER"},
+    {"id":"original-ers-claimed-upper-altered","source":"directHashRenewal","recordPatch":{"index":2,"field":"poeUpperBoundMicros","value":"1795735644500001"},"expected":"ERS_RECORD_FACTS"},
+    {"id":"original-ers-hash-deadline-missing","source":"directHashRenewal","policyPatch":{"hashValidUntilMicros":{}},"expected":"ERS_HASH_LIFETIME_REQUIRED"},
+    {"id":"original-ers-noncanonical-microsecond-time","source":"directHashRenewal","policyPatch":{"atMicros":"01795735650000000"},"expected":"ERS_PRESERVATION_POLICY"},
+    {"id":"original-ers-numeric-microsecond-time","source":"directHashRenewal","policyPatch":{"atMicros":1795735650000000},"expected":"ERS_PRESERVATION_POLICY"},
+    {"id":"original-fractional-timestamp-one-microsecond-margin","source":"fractionalTimestamp","policyPatch":{"atMicros":"1795732440000000","dataValidUntilMicros":"1795732438000001"},"expected":"SATISFIED"},
+    {"id":"original-fractional-timestamp-deadline-equals-upper","source":"fractionalTimestamp","policyPatch":{"atMicros":"1795732440000000","dataValidUntilMicros":"1795732438000000"},"expected":"ERS_INITIAL_PROTECTION_LATE"}
+  ]
+}

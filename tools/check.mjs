@@ -70,6 +70,24 @@ for(const v of ersVectors.cases){
   if(v.signedControl)assert(Object.hasOwn(ersDer.objects,v.signedControl.preimage),
     `${v.id}: signed control`);
 }
+const exactTime=json('vectors/lifetime-microseconds.json');
+assert.equal(exactTime.format,'original-rfc3161-ers-preservation-microseconds-v1');
+assert.deepEqual(json('cases.json').cases.filter(x=>x.component==='lifetime-microseconds')
+  .map(x=>[x.id,x.expected]),exactTime.cases.map(x=>[x.id,x.expected]));
+for(const [id,source] of Object.entries(exactTime.sources)){
+  const original=ersVectors.cases.find(x=>x.id===source.rawCase);
+  assert(original&&original.expected==='BOUND_CLAIMS',id);
+  assert.equal(ersDer.objects[original.record].sha256,source.recordSha256,id);
+  assert.equal(source.records.length,original.observationCount,id);
+}
+for(const vector of exactTime.cases)
+  assert(Object.hasOwn(exactTime.sources,vector.source)||
+    vector.source==='fractionalTimestamp',vector.id);
+const fractional=timestampVectors.cases.find(x=>
+  x.id===exactTime.fractionalTimestamp.rawCase);
+assert(fractional&&fractional.expected==='SIGNED_CLAIM');
+assert.equal(timestampDer.objects[fractional.response].sha256,
+  exactTime.fractionalTimestamp.responseSha256);
 const rawAuthority=json('vectors/raw-authority-cases.json');
 const authorityBytes=json('vectors/raw-authority-bytes.json');
 assert.equal(rawAuthority.format,'original-signed-authority-history-cases-v1');

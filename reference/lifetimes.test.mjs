@@ -20,3 +20,16 @@ test('protection deadlines and interval ordering reject gaps',()=>{
 test('unverified malformed facts are not accepted as a preservation result',()=>{
   const r=facts();r[0].poeUpperBound=1;assert.throws(()=>validate(r,policy()),{code:'ERS_RECORD_FACTS'});
 });
+test('integral-second entry rejects fractional and unsafe Number times',()=>{
+  const fractional=facts();
+  fractional[0].accuracy=0.01;
+  fractional[0].poeUpperBound=fractional[0].genTime+0.01;
+  assert.throws(()=>validate(fractional,policy()),{code:'ERS_RECORD_FACTS'});
+  const unsafe=facts();unsafe[0].genTime=Number.MAX_SAFE_INTEGER+1;
+  assert.throws(()=>validate(unsafe,policy()),{code:'ERS_RECORD_FACTS'});
+  const fractionalPolicy=policy();fractionalPolicy.at=300.5;
+  assert.throws(()=>validate(facts(),fractionalPolicy),{code:'ERS_PRESERVATION_POLICY'});
+  const fractionalHash=policy();fractionalHash.hashValidUntil.sha256=250.5;
+  assert.throws(()=>validate(facts(),fractionalHash),
+    {code:'ERS_HASH_LIFETIME_REQUIRED'});
+});
