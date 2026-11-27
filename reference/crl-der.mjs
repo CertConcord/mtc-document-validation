@@ -62,7 +62,8 @@ function revokedEntry(value) {
   return {serial, revocationTime, reason, invalidityDate};
 }
 
-export function parseCrl({recordDer, target, issuer, directMtcCa = false}) {
+export function parseCrl({recordDer, target, issuer, directMtcCa = false,
+  allowNoDistributionPoint = false}) {
   const record = Buffer.from(recordDer);
   const outer = children(one(record, 0x30));
   if (outer.length !== 3) bad('DER_MALFORMED');
@@ -115,7 +116,12 @@ export function parseCrl({recordDer, target, issuer, directMtcCa = false}) {
       bad('CRL_CRITICAL_EXTENSION_UNSUPPORTED');
   }
   if (at !== fields.length) bad('DER_MALFORMED');
-  const distributionPoint = distributionUri(target);
+  // The issuer-wide, no-CDP path is used only by a caller that explicitly
+  // admits this direct complete CRL source. IDP and delta CRLs were rejected
+  // above, and the caller must bind the target to this issuer independently.
+  const distributionPoint = allowNoDistributionPoint &&
+    !target.extensions.has(certificateOid.crlDistributionPoints)
+    ? null : distributionUri(target);
   const matches = entries.filter(entry => entry.serial === target.serial);
   if (matches.length > 1) bad('CRL_DUPLICATE_TARGET');
   return {recordSha256: digest(record), signerSha256: issuer.sha256,

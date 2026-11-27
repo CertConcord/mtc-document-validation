@@ -569,6 +569,25 @@
     {"id":"fixed-set-signed-null-set-digest","expected":"TRANSFER_HANDOFF","component":"raw-transfer-set-evolution"},
     {"id":"coherent-same-document-ers-renewal","expected":"BOUND_CLAIMS","component":"coherent-ers-renewal"},
     {"id":"coherent-signed-whole-ats-instead-of-token","expected":"REJECTED","component":"coherent-ers-renewal"},
-    {"id":"coherent-renewal-changed-original-document","expected":"REJECTED","component":"coherent-ers-renewal"}
+    {"id":"coherent-renewal-changed-original-document","expected":"REJECTED","component":"coherent-ers-renewal"},
+    {"id":"cessation-before-initial","expected":"BOUNDED_PRE_REVOCATION_CLAIM","component":"raw-tsa-retirement"},
+    {"id":"cessation-before-renewal","expected":"BOUNDED_PRE_REVOCATION_CLAIM","component":"raw-tsa-retirement"},
+    {"id":"unspecified-before-initial","expected":"BOUNDED_PRE_REVOCATION_CLAIM","component":"raw-tsa-retirement"},
+    {"id":"affiliation-before-initial","expected":"BOUNDED_PRE_REVOCATION_CLAIM","component":"raw-tsa-retirement"},
+    {"id":"superseded-before-initial","expected":"BOUNDED_PRE_REVOCATION_CLAIM","component":"raw-tsa-retirement"},
+    {"id":"key-compromise-invalidates-earlier","expected":"REJECTED","component":"raw-tsa-retirement"},
+    {"id":"missing-reason-invalidates-earlier","expected":"REJECTED","component":"raw-tsa-retirement"},
+    {"id":"equal-revocation-not-before","expected":"REJECTED","component":"raw-tsa-retirement"},
+    {"id":"accuracy-overlaps-revocation","expected":"INDETERMINATE","component":"raw-tsa-retirement"},
+    {"id":"unlisted-is-not-good","expected":"INDETERMINATE","component":"raw-tsa-retirement"},
+    {"id":"certificate-hold-unsupported","expected":"UNSUPPORTED","component":"raw-tsa-retirement"},
+    {"id":"receipt-missing","expected":"INDETERMINATE","component":"raw-tsa-retirement"},
+    {"id":"receipt-wrong-source","expected":"INDETERMINATE","component":"raw-tsa-retirement"},
+    {"id":"receipt-wrong-record","expected":"REJECTED","component":"raw-tsa-retirement"},
+    {"id":"receipt-before-crl","expected":"REJECTED","component":"raw-tsa-retirement"},
+    {"id":"crl-not-yet-known","expected":"INDETERMINATE","component":"raw-tsa-retirement"},
+    {"id":"crl-signature-tampered","expected":"REJECTED","component":"raw-tsa-retirement"},
+    {"id":"timestamp-covered-bytes-wrong","expected":"REJECTED","component":"raw-tsa-retirement"},
+    {"id":"source-issuer-unadmitted","expected":"INDETERMINATE","component":"raw-tsa-retirement"}
   ]
 }
