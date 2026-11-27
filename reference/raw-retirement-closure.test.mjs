@@ -113,6 +113,8 @@ for(const vector of vectors.cases)test(vector.id,()=>{
   if(vector.mutateSelectedAnchor)policy.publicationAnchor.rootSha256='00'.repeat(32);
   if(vector.omitSelectedAnchor)delete policy.publicationAnchor;
   if(vector.omitReceipt)retrieved.find(x=>x.id===vector.omitReceipt).receipt=null;
+  if(vector.malformedReceipt)
+    retrieved.find(x=>x.id===vector.malformedReceipt).receipt=vector.receiptValue;
   if(vector.receiptControl)
     retrieved.find(x=>x.id==='historical-status').receipt=envelope(corpus.controls[vector.receiptControl]);
   if(vector.mutateReceiptSignature)
