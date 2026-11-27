@@ -543,6 +543,12 @@
     {"id":"signed-successor-signature-corrupted","expected":"TRANSFER_HANDOFF_SIGNATURE","component":"raw-transfer-claims"},
     {"id":"signed-observer-signature-corrupted","expected":"TRANSFER_OBSERVATION_SIGNATURE","component":"raw-transfer-claims"},
     {"id":"independent-required-set-anchor-disagrees","expected":"TRANSFER_SET_ANCHOR","component":"raw-transfer-claims"},
-    {"id":"independent-custodian-keys-swapped","expected":"TRANSFER_HANDOFF_SIGNATURE","component":"raw-transfer-claims"}
+    {"id":"independent-custodian-keys-swapped","expected":"TRANSFER_HANDOFF_SIGNATURE","component":"raw-transfer-claims"},
+    {"id":"supplied-original-mismatch-without-second-observation","expected":"REJECTED","component":"raw-transfer-claims"},
+    {"id":"supplied-original-mismatch-with-late-observation","expected":"REJECTED","component":"raw-transfer-claims"},
+    {"id":"supplied-original-mismatch-with-incomplete-observation","expected":"REJECTED","component":"raw-transfer-claims"},
+    {"id":"signed-observer-mismatch-with-original-missing","expected":"REJECTED","component":"raw-transfer-claims"},
+    {"id":"second-observation-and-original-both-missing","expected":"INDETERMINATE","component":"raw-transfer-claims"},
+    {"id":"incomplete-observation-with-matching-original","expected":"INDETERMINATE","component":"raw-transfer-claims"}
   ]
 }

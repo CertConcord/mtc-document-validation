@@ -100,11 +100,21 @@ function replay(vector) {
         itemId: item.id, bytes});
     }
   }
+  const extraSecondItems = vector.supplySecondItems === 'all' ?
+    fixture.requiredSet.items.map(item => item.id) :
+    vector.supplySecondItems || [];
+  for (const itemId of extraSecondItems)
+    supplied.push({handoffId: secondHandoffId, itemId,
+      bytes: itemId === vector.substituteAtSecond ?
+        control('substitutedAuthorityOriginal') : originals[itemId]});
   if (vector.extraAtSecond === 'retirement-manifest')
     supplied.push({handoffId: secondHandoffId,
       itemId: vector.extraAtSecond,
       bytes: signed(retirement.manifest)});
   const selectedPolicy = {...policy};
+  if (vector.observerPublicKeyField)
+    selectedPolicy.observerPublicKeySpkiBase64 =
+      fixture.policy[vector.observerPublicKeyField];
   if (vector.badSetAnchor)
     selectedPolicy.requiredSetSha256 =
       fixture.controls.unadmittedSetAnchorSha256;

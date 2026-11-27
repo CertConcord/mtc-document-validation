@@ -153,7 +153,8 @@
     "mtc-issuer": "MCowBQYDK2VwAyEAdNzWQHCR8Paq/KwA2h7O4lJcGepBkXMI1OwdCWkK68M=",
     "archive-A": "MCowBQYDK2VwAyEA4SixOjvkemvsQtqDRoXYTsp6omWes+FVFyyBU0sO0gQ=",
     "archive-B": "MCowBQYDK2VwAyEAoC0VJWs9ZH5ccS6kq56OGQv5dtO0Gu7Wg8ZbtsOxuiQ=",
-    "observer": "MCowBQYDK2VwAyEApuggiJJPU28kODmjCziigaexhgjLOikQrUTxQGwUtUI="
+    "observer": "MCowBQYDK2VwAyEApuggiJJPU28kODmjCziigaexhgjLOikQrUTxQGwUtUI=",
+    "observerP2": "MCowBQYDK2VwAyEAtMyLOXza3I26qVSC+6YcVnjVTB35CoPtc9Wz3+jF1e8="
   },
   "originals": {
     "first": {
@@ -274,6 +275,20 @@
       "rawSha256": "20ef6df7cac318efee4e52247c186813d40262cd4b21ac610a581c9606631510",
       "signatureBase64": "5Qe1a+TzU6Ezh8+9shMvILnGLUYyugHqUaEd3aP3UMSs6Qf3BLLfGtzyrVBn0YP05tMj41+E8lTkhH6wKPrWAA==",
       "signatureSha256": "cb3a628a95d00b751a74d810854184297c5162a178a8c23473ad6c1dd6bc6734"
+    },
+    "firstObservationP2": {
+      "rawBase64": "eyJ2ZXJzaW9uIjoxLCJvYnNlcnZlcklkIjoib2JzZXJ2ZXIiLCJoYW5kb2ZmSWQiOiJoYW5kb2ZmLUEiLCJyZXF1aXJlZFNldFNoYTI1NiI6IjYyYzJmN2NmM2NiZGUyZTg4NjhmYzMzZTQ5N2U1YmNjNmFmOWQwYmVhOGQ1MDFhYWM0NmNhMjg0ZTQzNzkzMzQiLCJvYnNlcnZlZEF0IjoxNzk1OTEwNDA5LCJpdGVtcyI6W3siaWQiOiJhdXRob3JpdHktaGlzdG9yeSIsInNoYTI1NiI6IjllYTAzZDQyN2ZhZjFmMGIzZWYzMTE0N2U4Nzc2ZmYwMGRjMDYzZGRjNGVhM2M5MDU2NDQ4YmY1ZjAwMGUzOGQifSx7ImlkIjoiY29uc2lzdGVuY3ktcHJvb2YiLCJzaGEyNTYiOiI0YTNjMDQ5YzIxNjdhMmQzMzllNTU2Njg4NGRjYTExNGRlOGNkMmYzNjkwYzFkMzQyNTBkNWQ2YmU3MDY1NzQ2In0seyJpZCI6ImRvY3VtZW50Iiwic2hhMjU2IjoiNjQxMjY1ODcwNmUwM2I5ZTg2YzgzMTliMWZjYWU5OGU2MTdiNmYzNTllYTBlNzJmM2RkNDcxODNiYzNjYmI2NSJ9LHsiaWQiOiJkb2N1bWVudC1zaWduYXR1cmUiLCJzaGEyNTYiOiI3M2ZjNTU3MTFmZDgxMjAyNGRjYjU1YjBmMzQ2ZTU1M2RjYjZhYjY0ZDUyMGMwMTJmODRlYWUyYjFlNTczYWYyIn0seyJpZCI6ImRvY3VtZW50LXRpbWVzdGFtcC1yZXF1ZXN0Iiwic2hhMjU2IjoiOTZiNjQzNWJlNTJiYzdhYTBmYmU0YmRkODU4ZWJmZjNmZTE5OWEwZjEyYjc0NjJkM2Q4YzVlNzVlNWQxMmQwYiJ9LHsiaWQiOiJkb2N1bWVudC10aW1lc3RhbXAtcmVzcG9uc2UiLCJzaGEyNTYiOiIwNTFiZjAwM2IxOWE1MjZiMjc4N2EyNTcyN2Q3Mzg1MDczZDlmZWMzNzUwMDRlN2QyYzI5MDc4NmUwYjk5MTA2In0seyJpZCI6Imhpc3RvcmljYWwtY3JsIiwic2hhMjU2IjoiZmU0OGRlMDI0NGI3NDY2ZWNlMzlmOTY1NDMyMTJjZjVjMjFiMTgzMzhmN2VjZGU4MDU3YzI0YjEyYjA2NjgyNiJ9LHsiaWQiOiJoaXN0b3JpY2FsLXN0YXR1cyIsInNoYTI1NiI6IjUzY2NmNGE4NTIzYWY0YjQ2MTdjNWIyOWYxYzgyNDRmZWFiZTg1NDM1NzkwYTc0MDQyYjY0YzE0OGNiNDBmMjkifSx7ImlkIjoibG9nLWVudHJ5OjAiLCJzaGEyNTYiOiJlNDA0MGQxZjZjN2U4ODE5MjM5YWRkZDk1ODU2YjI5MTNkNmY1OGM0MzA2NWJiZDM5MmIwYzY3MTMzNTc2ZmU3In0seyJpZCI6ImxvZy1lbnRyeToxIiwic2hhMjU2IjoiYmE0YzJmMTU3YjY1ZDQ4ZDczMjQ4ZTMzNDgwMzExYzYwOTIyZTEyNWYyNzM4NjcxODQwZjhmNjRjZGViYzkyYSJ9LHsiaWQiOiJsb2ctZW50cnk6MiIsInNoYTI1NiI6IjZhMjQ1MjhjZTM4NTc3YThlYjkxNjgyMzM1OTIzNDJjMjdlOTUwYjQyYzU0M2Y1MWIwN2I4NjZjM2FiMjczNzMifSx7ImlkIjoibG9nLWVudHJ5OjMiLCJzaGEyNTYiOiI3YTZmY2Q1YjFkYzg3YWJkNWRjZmQ3YTI1YzM0NDdiODNlNTQ5YjZiMWE0MDI5ZjIzZjc0NzA3OThiOTY0ZDc4In0seyJpZCI6Im1vbml0b3Itb2JzZXJ2YXRpb24iLCJzaGEyNTYiOiI3NTMzZWVjYzg5ZDBiMjVkZGFkZGUzNWU2ZTQ5YjJjNjk1OTIyOTUxYWJiNTFmYjkyYTY4YzliZGFkYzIwOGMxIn0seyJpZCI6Im10Yy1jYS1yZXByZXNlbnRhdGlvbiIsInNoYTI1NiI6ImM5NmUwYTNkOTY0MzY3NTQzYWJmNmIzNmI3ZmQ4ZDc4MjM0MzJiNjk2OWZlM2RjMmVkNTQzZGZhZDc2ODkzZjkifSx7ImlkIjoibXRjLWNlcnRpZmljYXRlIiwic2hhMjU2IjoiN2IxZjRhOGE5NTA1ODVkNTY3MjFkMzQ3MmM4YzI3M2I4YTk4ZjA2OGZiNmNkOTQyY2IwMTg3YjA0NWMyM2QyZCJ9LHsiaWQiOiJtdGMtc3VwZXJpb3IiLCJzaGEyNTYiOiIwZTYwY2IzZDliOGY4ODE5MzJiMWI1YTgzZjc2YmM2MGIyYzFmNzc0MDE0MWNkMDc0ZWY1MmQ3OGM4ZDUwYzk5In0seyJpZCI6InByZXNlcnZhdGlvbi1kb2N1bWVudCIsInNoYTI1NiI6ImQ2YzM4Y2UyYTAyYTMyZTQ5NGJjMmNiOWVmZWRkMmU5ZjZmZDExMzQ1MWI5NmQyMDM4M2RjZTg1N2JiZWMwNTgifSx7ImlkIjoicHJlc2VydmF0aW9uLXNpZ25hdHVyZSIsInNoYTI1NiI6ImU3NTFlYTY1YmUzYzQxY2Y1MmQ2YmU2ZDQ4OTZmYTQ0MjA4OTgyMWE0ZmIxYTZjZGVlOTQ1OTA0ZGUzZWE5Y2MifSx7ImlkIjoicHVibGljYXRpb24taGVhZCIsInNoYTI1NiI6IjBmNDJjZjEzOTNhZjczZWUwYWQ4M2JhZjU5MTRkYWIwNzE5NmE2NTM3YzU0NzViZTJhOWM3ZDcxMWQ1YjM2NzQifSx7ImlkIjoic2lnbmF0dXJlLXRpbWVzdGFtcC1yZXF1ZXN0Iiwic2hhMjU2IjoiMjE1MjE5NjU3MWFmYzIyOTk0NGI5NTZjYWRhMmE3YjEzOGE4NmFhMTI0ZGVhYjVhNDNjNTU4M2ZjMjcxZTNhOCJ9LHsiaWQiOiJzaWduYXR1cmUtdGltZXN0YW1wLXJlc3BvbnNlIiwic2hhMjU2IjoiNjhlOWQwOGU4MzRhMGMwNGQ3OTUwODZjNmFhMzM3NzZlMjhiYTMxNGVlMzRiNzZhNGIxNDM1MmU1M2I0ZDVhOSJ9LHsiaWQiOiJ0aW1lc3RhbXAtaXNzdWVyIiwic2hhMjU2IjoiOTBhMWU4ZjE2YzY4ZTVkNjE1MzM4NTEwZmIxOTljNjE3NWE3ZTQwNmQ2NzhjNGIzZjU4MWNmODQxM2JhMTNhNiJ9LHsiaWQiOiJ0aW1lc3RhbXAtdHNhIiwic2hhMjU2IjoiODUxMWI5ZjdmY2FiMWI5ZTM2Yzc2OTEzYWY3NzYyMmMyYTNmMzkxYTFiMGMyMDIyOTM5N2M4NmEyYTFiNzk0ZiJ9XX0=",
+      "rawBytes": 2558,
+      "rawSha256": "045c16ddc59e5ce2ccb7cdb31993e4fc7b1a5094a0c822527d4bf7b4b7b299f0",
+      "signatureBase64": "kFu1FaQmzEHZDfyl8B/Ywtv3TasAYxiKBuNdCvTi3HzCbmTSsOuYTtp3/+7GCccLNaQuW3Q6OPWrSRHTCM1EDg==",
+      "signatureSha256": "3d30438f851e013e0397ff4b1aa0bbe04a376f7f90776a5a24a82eee363246ff"
+    },
+    "secondWithoutAuthorityObservationP2": {
+      "rawBase64": "eyJ2ZXJzaW9uIjoxLCJvYnNlcnZlcklkIjoib2JzZXJ2ZXIiLCJoYW5kb2ZmSWQiOiJoYW5kb2ZmLUIiLCJyZXF1aXJlZFNldFNoYTI1NiI6IjYyYzJmN2NmM2NiZGUyZTg4NjhmYzMzZTQ5N2U1YmNjNmFmOWQwYmVhOGQ1MDFhYWM0NmNhMjg0ZTQzNzkzMzQiLCJvYnNlcnZlZEF0IjoxNzk1OTEwNDcwLCJpdGVtcyI6W3siaWQiOiJjb25zaXN0ZW5jeS1wcm9vZiIsInNoYTI1NiI6IjRhM2MwNDljMjE2N2EyZDMzOWU1NTY2ODg0ZGNhMTE0ZGU4Y2QyZjM2OTBjMWQzNDI1MGQ1ZDZiZTcwNjU3NDYifSx7ImlkIjoiZG9jdW1lbnQiLCJzaGEyNTYiOiI2NDEyNjU4NzA2ZTAzYjllODZjODMxOWIxZmNhZTk4ZTYxN2I2ZjM1OWVhMGU3MmYzZGQ0NzE4M2JjM2NiYjY1In0seyJpZCI6ImRvY3VtZW50LXNpZ25hdHVyZSIsInNoYTI1NiI6IjczZmM1NTcxMWZkODEyMDI0ZGNiNTViMGYzNDZlNTUzZGNiNmFiNjRkNTIwYzAxMmY4NGVhZTJiMWU1NzNhZjIifSx7ImlkIjoiZG9jdW1lbnQtdGltZXN0YW1wLXJlcXVlc3QiLCJzaGEyNTYiOiI5NmI2NDM1YmU1MmJjN2FhMGZiZTRiZGQ4NThlYmZmM2ZlMTk5YTBmMTJiNzQ2MmQzZDhjNWU3NWU1ZDEyZDBiIn0seyJpZCI6ImRvY3VtZW50LXRpbWVzdGFtcC1yZXNwb25zZSIsInNoYTI1NiI6IjA1MWJmMDAzYjE5YTUyNmIyNzg3YTI1NzI3ZDczODUwNzNkOWZlYzM3NTAwNGU3ZDJjMjkwNzg2ZTBiOTkxMDYifSx7ImlkIjoiaGlzdG9yaWNhbC1jcmwiLCJzaGEyNTYiOiJmZTQ4ZGUwMjQ0Yjc0NjZlY2UzOWY5NjU0MzIxMmNmNWMyMWIxODMzOGY3ZWNkZTgwNTdjMjRiMTJiMDY2ODI2In0seyJpZCI6Imhpc3RvcmljYWwtc3RhdHVzIiwic2hhMjU2IjoiNTNjY2Y0YTg1MjNhZjRiNDYxN2M1YjI5ZjFjODI0NGZlYWJlODU0MzU3OTBhNzQwNDJiNjRjMTQ4Y2I0MGYyOSJ9LHsiaWQiOiJsb2ctZW50cnk6MCIsInNoYTI1NiI6ImU0MDQwZDFmNmM3ZTg4MTkyMzlhZGRkOTU4NTZiMjkxM2Q2ZjU4YzQzMDY1YmJkMzkyYjBjNjcxMzM1NzZmZTcifSx7ImlkIjoibG9nLWVudHJ5OjEiLCJzaGEyNTYiOiJiYTRjMmYxNTdiNjVkNDhkNzMyNDhlMzM0ODAzMTFjNjA5MjJlMTI1ZjI3Mzg2NzE4NDBmOGY2NGNkZWJjOTJhIn0seyJpZCI6ImxvZy1lbnRyeToyIiwic2hhMjU2IjoiNmEyNDUyOGNlMzg1NzdhOGViOTE2ODIzMzU5MjM0MmMyN2U5NTBiNDJjNTQzZjUxYjA3Yjg2NmMzYWIyNzM3MyJ9LHsiaWQiOiJsb2ctZW50cnk6MyIsInNoYTI1NiI6IjdhNmZjZDViMWRjODdhYmQ1ZGNmZDdhMjVjMzQ0N2I4M2U1NDliNmIxYTQwMjlmMjNmNzQ3MDc5OGI5NjRkNzgifSx7ImlkIjoibW9uaXRvci1vYnNlcnZhdGlvbiIsInNoYTI1NiI6Ijc1MzNlZWNjODlkMGIyNWRkYWRkZTM1ZTZlNDliMmM2OTU5MjI5NTFhYmI1MWZiOTJhNjhjOWJkYWRjMjA4YzEifSx7ImlkIjoibXRjLWNhLXJlcHJlc2VudGF0aW9uIiwic2hhMjU2IjoiYzk2ZTBhM2Q5NjQzNjc1NDNhYmY2YjM2YjdmZDhkNzgyMzQzMmI2OTY5ZmUzZGMyZWQ1NDNkZmFkNzY4OTNmOSJ9LHsiaWQiOiJtdGMtY2VydGlmaWNhdGUiLCJzaGEyNTYiOiI3YjFmNGE4YTk1MDU4NWQ1NjcyMWQzNDcyYzhjMjczYjhhOThmMDY4ZmI2Y2Q5NDJjYjAxODdiMDQ1YzIzZDJkIn0seyJpZCI6Im10Yy1zdXBlcmlvciIsInNoYTI1NiI6IjBlNjBjYjNkOWI4Zjg4MTkzMmIxYjVhODNmNzZiYzYwYjJjMWY3NzQwMTQxY2QwNzRlZjUyZDc4YzhkNTBjOTkifSx7ImlkIjoicHJlc2VydmF0aW9uLWRvY3VtZW50Iiwic2hhMjU2IjoiZDZjMzhjZTJhMDJhMzJlNDk0YmMyY2I5ZWZlZGQyZTlmNmZkMTEzNDUxYjk2ZDIwMzgzZGNlODU3YmJlYzA1OCJ9LHsiaWQiOiJwcmVzZXJ2YXRpb24tc2lnbmF0dXJlIiwic2hhMjU2IjoiZTc1MWVhNjViZTNjNDFjZjUyZDZiZTZkNDg5NmZhNDQyMDg5ODIxYTRmYjFhNmNkZWU5NDU5MDRkZTNlYTljYyJ9LHsiaWQiOiJwdWJsaWNhdGlvbi1oZWFkIiwic2hhMjU2IjoiMGY0MmNmMTM5M2FmNzNlZTBhZDgzYmFmNTkxNGRhYjA3MTk2YTY1MzdjNTQ3NWJlMmE5YzdkNzExZDViMzY3NCJ9LHsiaWQiOiJzaWduYXR1cmUtdGltZXN0YW1wLXJlcXVlc3QiLCJzaGEyNTYiOiIyMTUyMTk2NTcxYWZjMjI5OTQ0Yjk1NmNhZGEyYTdiMTM4YTg2YWExMjRkZWFiNWE0M2M1NTgzZmMyNzFlM2E4In0seyJpZCI6InNpZ25hdHVyZS10aW1lc3RhbXAtcmVzcG9uc2UiLCJzaGEyNTYiOiI2OGU5ZDA4ZTgzNGEwYzA0ZDc5NTA4NmM2YWEzMzc3NmUyOGJhMzE0ZWUzNGI3NmE0YjE0MzUyZTUzYjRkNWE5In0seyJpZCI6InRpbWVzdGFtcC1pc3N1ZXIiLCJzaGEyNTYiOiI5MGExZThmMTZjNjhlNWQ2MTUzMzg1MTBmYjE5OWM2MTc1YTdlNDA2ZDY3OGM0YjNmNTgxY2Y4NDEzYmExM2E2In0seyJpZCI6InRpbWVzdGFtcC10c2EiLCJzaGEyNTYiOiI4NTExYjlmN2ZjYWIxYjllMzZjNzY5MTNhZjc3NjIyYzJhM2YzOTFhMWIwYzIwMjI5Mzk3Yzg2YTJhMWI3OTRmIn1dfQ==",
+      "rawBytes": 2455,
+      "rawSha256": "822108414d4fdb81984a6254231b1afa68c545b4a7d896700006659ce6ef6621",
+      "signatureBase64": "uDjTl2ol2/VrxSruQx13K+52CFqymHFjBoS3eNCFJpSGJT5GP7HodoQhnRg4oRtcuEZTvCVWQ0vDRS2S+OAUCg==",
+      "signatureSha256": "680444417c20158302b5ceb76d3ccb2259b92c99129c3efba6d4a3090c65ca62"
     }
   },
   "cases": [
@@ -498,6 +513,101 @@
       ],
       "swapCustodianKeys": true,
       "expectedError": "TRANSFER_HANDOFF_SIGNATURE"
+    },
+    {
+      "id": "supplied-original-mismatch-without-second-observation",
+      "handoffs": [
+        "first",
+        "second"
+      ],
+      "observations": [
+        "firstObservation"
+      ],
+      "supplySecondItems": "all",
+      "substituteAtSecond": "authority-history",
+      "expectedResponsibility": "BOUND_CLAIMS",
+      "expectedBytes": "REJECTED",
+      "expectedReason": "TRANSFER_BYTES_MISMATCH"
+    },
+    {
+      "id": "supplied-original-mismatch-with-late-observation",
+      "handoffs": [
+        "first",
+        "second"
+      ],
+      "observations": [
+        "firstObservation",
+        "lateObservation"
+      ],
+      "substituteAtSecond": "authority-history",
+      "expectedResponsibility": "BOUND_CLAIMS",
+      "expectedBytes": "REJECTED",
+      "expectedReason": "TRANSFER_BYTES_MISMATCH"
+    },
+    {
+      "id": "supplied-original-mismatch-with-incomplete-observation",
+      "handoffs": [
+        "first",
+        "second"
+      ],
+      "observations": [
+        "firstObservationP2",
+        "secondWithoutAuthorityObservationP2"
+      ],
+      "observerPublicKeyField": "observerP2",
+      "supplySecondItems": [
+        "authority-history"
+      ],
+      "substituteAtSecond": "authority-history",
+      "expectedResponsibility": "BOUND_CLAIMS",
+      "expectedBytes": "REJECTED",
+      "expectedReason": "TRANSFER_BYTES_MISMATCH"
+    },
+    {
+      "id": "signed-observer-mismatch-with-original-missing",
+      "handoffs": [
+        "first",
+        "second"
+      ],
+      "observations": [
+        "firstObservation",
+        "wrongDigestObservation"
+      ],
+      "missingAtSecond": "authority-history",
+      "expectedResponsibility": "BOUND_CLAIMS",
+      "expectedBytes": "REJECTED",
+      "expectedReason": "TRANSFER_BYTES_MISMATCH"
+    },
+    {
+      "id": "second-observation-and-original-both-missing",
+      "handoffs": [
+        "first",
+        "second"
+      ],
+      "observations": [
+        "firstObservation"
+      ],
+      "expectedResponsibility": "BOUND_CLAIMS",
+      "expectedBytes": "INDETERMINATE",
+      "expectedReason": "TRANSFER_ITEM_MISSING"
+    },
+    {
+      "id": "incomplete-observation-with-matching-original",
+      "handoffs": [
+        "first",
+        "second"
+      ],
+      "observations": [
+        "firstObservationP2",
+        "secondWithoutAuthorityObservationP2"
+      ],
+      "observerPublicKeyField": "observerP2",
+      "supplySecondItems": [
+        "authority-history"
+      ],
+      "expectedResponsibility": "BOUND_CLAIMS",
+      "expectedBytes": "INDETERMINATE",
+      "expectedReason": "TRANSFER_ITEM_MISSING"
     }
   ],
   "sourceCorpus": "vectors/coherent-document-evidence.json",

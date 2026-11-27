@@ -245,14 +245,17 @@ export function assessRawTransferClaims({policy, requiredSetRaw, handoffs,
       const observed = observationsById.get(row.id);
       const observationItem = observed?.items.find(x => x.id === item.id);
       const original = suppliedById.get(`${row.id}\0${item.id}`);
-      if (!observed || observed.observedAt !== row.acceptedAt ||
-          !observationItem || !original)
-        byteReasons.push({handoffId: row.id, itemId: item.id,
-          code: 'TRANSFER_ITEM_MISSING'});
-      else if (sha(original) !== item.sha256 ||
-          sha(original) !== observationItem.sha256)
+      const originalDigest = original ? sha(original) : null;
+      const applicableObservation = observed?.observedAt === row.acceptedAt ?
+        observationItem : null;
+      if ((originalDigest && originalDigest !== item.sha256) ||
+          (applicableObservation &&
+            applicableObservation.sha256 !== item.sha256))
         byteReasons.push({handoffId: row.id, itemId: item.id,
           code: 'TRANSFER_BYTES_MISMATCH'});
+      else if (!applicableObservation || !original)
+        byteReasons.push({handoffId: row.id, itemId: item.id,
+          code: 'TRANSFER_ITEM_MISSING'});
     }
     predecessor = row.toId;
     coveredThrough = row.responsibleThrough;
