@@ -14,7 +14,7 @@ const sha256 = bytes => createHash('sha256').update(bytes).digest('hex');
 
 test('frozen original DER has the recorded byte count and SHA-256', () => {
   assert.equal(corpus.format, 'frozen-der-status-corpus-v1');
-  assert.ok(Object.keys(corpus.objects).length >= 14);
+  assert.ok(Object.keys(corpus.objects).length >= 16);
   for (const [id, item] of Object.entries(corpus.objects)) {
     const bytes = object(id);
     assert.equal(bytes.length, item.bytes, id);

@@ -165,11 +165,11 @@
       "reason": "CRL_SIGNATURE_INVALID"
     },
     {
-      "id": "mtc-delegated-ocsp-unsupported",
+      "id": "mtc-explicit-responder-certificate-unsupported",
       "kind": "OCSP",
       "record": "ocsp-good",
       "expected": "UNSUPPORTED",
-      "reason": "OCSP_DELEGATED_UNSUPPORTED",
+      "reason": "OCSP_RESPONDER_CERT_UNSUPPORTED",
       "responder": "mtc-ca"
     },
     {

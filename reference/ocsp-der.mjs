@@ -122,7 +122,7 @@ function responderMatches(value, signer) {
 
 export function parseOcsp({recordDer, target, issuer, responderDer, requestDer,
   directMtcCa = false}) {
-  if (directMtcCa && responderDer) bad('OCSP_DELEGATED_UNSUPPORTED');
+  if (directMtcCa && responderDer) bad('OCSP_RESPONDER_CERT_UNSUPPORTED');
   const record = Buffer.from(recordDer);
   const outer = children(one(record, 0x30));
   if (outer.length < 1 || outer.length > 2) bad('DER_MALFORMED');

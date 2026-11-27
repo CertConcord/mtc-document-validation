@@ -77,7 +77,9 @@ export function parseCrl({recordDer, target, issuer, directMtcCa = false}) {
   if (fields[at]?.tag === 0x02 && smallInteger(fields[at++]) !== 1)
     bad('CRL_VERSION_UNSUPPORTED');
   const inner = fields[at++];
-  if (!raw(inner).equals(raw(outer[1]))) bad('CRL_SIGNATURE_ALGORITHM_UNSUPPORTED');
+  if (algorithm(inner) !== signedAlgorithm ||
+      (directMtcCa && children(inner).length !== 1))
+    bad('CRL_SIGNATURE_ALGORITHM_UNSUPPORTED');
   if (!raw(expect(fields[at++], 0x30)).equals(issuer.subject))
     bad('CRL_ISSUER_MISMATCH');
   const usage = issuer.extensions.get(certificateOid.keyUsage);
