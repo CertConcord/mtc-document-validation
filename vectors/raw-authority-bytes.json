@@ -178,6 +178,28 @@
       "rawBytes": 277,
       "rawSha256": "2fe14c4e2658c4fbfc59741e897c0fc1bc5c60e5e2db6e84cdc50b4aeeb5bc8a",
       "signatureSha256": "a9d6712f5320dc834fb956e13b288a91b2410d75a15edac1b31ef6b9371e47a0"
+    },
+    "samecut-1": {
+      "rawBase64": "eyJ2ZXJzaW9uIjoxLCJraW5kIjoiZXZlbnQiLCJzb3VyY2VJZCI6Imlzc3Vlci1yZWdpc3RyeSIsInNlcXVlbmNlIjoxLCJwcmV2aW91c1NoYTI1NiI6bnVsbCwicHJvZmlsZUlkIjoiZG9jdW1lbnRzOnYxIiwicm9sZSI6Imlzc3Vlci1hdXRob3JpemF0aW9uIiwic3ViamVjdElkIjoibXRjLWNhOlEiLCJzY29wZSI6ImRvY3VtZW50czp2MSIsImFubm91bmNlZEF0IjoxODAsInN0YXRlRnJvbSI6MTAwLCJzdGF0ZVVudGlsIjoxNTEsImRlY2lzaW9uIjoiQUxMT1cifQ==",
+      "signatureBase64": "TjfEZsEKyVGQ/Qu4x1o5Vtvr36WFyQAa4FWE+7p5D9eyn9nxL4MUTODzTulioDSoOi42HJrCyFYLCK9L+rIhAg==",
+      "rawBytes": 265,
+      "rawSha256": "e8aea438fb0c3e3b6843feec31e9633e5feb4bc5199e562605c1f806f8e45799",
+      "signatureSha256": "2951165b657688c4682fce3f409343cbeabb75c1cf8bb61ca3293cb7b97cdb33"
+    },
+    "samecut-2": {
+      "rawBase64": "eyJ2ZXJzaW9uIjoxLCJraW5kIjoic2VhbCIsInNvdXJjZUlkIjoiaXNzdWVyLXJlZ2lzdHJ5Iiwic2VxdWVuY2UiOjIsInByZXZpb3VzU2hhMjU2IjoiODYxZWZlNmQyZmE3NDBhZjA2MjhmN2UyOTRmODg5MDc2ZDk3MmU4Nzc2ZTViMjJjOGYzMmI3ODhhZjQwOTk3YSIsInByb2ZpbGVJZCI6ImRvY3VtZW50czp2MSIsInJvbGUiOiJpc3N1ZXItYXV0aG9yaXphdGlvbiIsInN1YmplY3RJZCI6Im10Yy1jYTpRIiwic2NvcGUiOiJkb2N1bWVudHM6djEiLCJhbm5vdW5jZWRBdCI6MjA1LCJ0aHJvdWdoIjoyMDV9",
+      "signatureBase64": "cXKubQC3zK3VI7SgYDz65rpJIAyDRs3myNh+O8jGjyV/572TV397e1dpiOA/CUTOq7TflLC908L7Zs9IirleAw==",
+      "rawBytes": 288,
+      "rawSha256": "787629e458af7844db4b0c5266c2acb957279afa800a41621cb3d4679f627a24",
+      "signatureSha256": "362da72d4360e89502eb15ce2e5df3bd034a688a9977390d928d8f4fcf35f605"
+    },
+    "samecut-3": {
+      "rawBase64": "eyJ2ZXJzaW9uIjoxLCJraW5kIjoiZXZlbnQiLCJzb3VyY2VJZCI6Imlzc3Vlci1yZWdpc3RyeSIsInNlcXVlbmNlIjozLCJwcmV2aW91c1NoYTI1NiI6ImVjOTI4ZDVkMDFmZjFlZDI5YTg2YWQxMzAxM2NlM2Y5YzkxZGMxNzFiNTcyNjY2Y2U1NGMzNTdiNmY1ZWI5ODAiLCJwcm9maWxlSWQiOiJkb2N1bWVudHM6djEiLCJyb2xlIjoiaXNzdWVyLWF1dGhvcml6YXRpb24iLCJzdWJqZWN0SWQiOiJtdGMtY2E6USIsInNjb3BlIjoiZG9jdW1lbnRzOnYxIiwiYW5ub3VuY2VkQXQiOjIwNSwic3RhdGVGcm9tIjoxMDAsInN0YXRlVW50aWwiOjE1MSwiZGVjaXNpb24iOiJERU5ZIn0=",
+      "signatureBase64": "Apx/cBJ9iH5gbLekWkrEwY0O1WNIdmaYruFjO2e7r+UMOZ2BeN2fwKQWwaCaehRBGFPYeqgPfgEwJd1eEqGhAA==",
+      "rawBytes": 326,
+      "rawSha256": "93ab36f49cc3d5cf19147489db5d0728edd5393c7d3fa2125bb1fb6212ed4a91",
+      "signatureSha256": "daebfbb09b263802aa22b11dabd54a7fb3e721b6ab56592eab52f8e1ad437387"
     }
-  }
+  },
+  "sameSecondIssuerPublicKeySpkiBase64": "MCowBQYDK2VwAyEAPRQ1ejuFJYoTB+eRsPFzo36CZVNU+/am1dN0re8Kip8="
 }

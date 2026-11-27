@@ -116,14 +116,17 @@ export function assessRawAuthorityHistory({stateAt, knownAt, policy, records, do
       missing('AUTHORITY_COVERAGE_MISSING');
       continue;
     }
-    const applicable = chain.filter(x => x.record.sequence < sealing.record.sequence &&
-      x.record.kind === 'event' && x.record.announcedAt <= sealing.record.through &&
+    const byCutoff = chain.filter(x => x.record.kind === 'event' &&
+      x.record.announcedAt <= knownAt);
+    const applicable = byCutoff.filter(x =>
       x.record.stateFrom <= stateAt && stateAt < x.record.stateUntil);
     const decisions = new Set(applicable.map(x => x.record.decision));
     if (!decisions.size) missing('AUTHORITY_DECISION_MISSING');
     else if (decisions.has('DENY')) missing('AUTHORITY_DENIED');
     else if (decisions.has('UNKNOWN'))
       missing(decisions.has('ALLOW') ? 'AUTHORITY_CONFLICT' : 'AUTHORITY_UNKNOWN');
+    else if (byCutoff.some(x => x.record.sequence > sealing.record.sequence))
+      missing('AUTHORITY_UNSEALED_SUFFIX');
     else {
       claims.push({...context,decision:'ALLOW',sealSha256:sealing.digest});
     }

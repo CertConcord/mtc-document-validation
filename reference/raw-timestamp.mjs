@@ -224,8 +224,11 @@ function signedData(value, tsa, issuer, policy, covered, requestBytes,
     bad('TIMESTAMP_CONTENT_TYPE_UNSUPPORTED');
   const signedContent = content(explicit(encapsulated[1], 0xa0, 0x04));
   const info = tstInfo(signedContent);
-  let at = 3, embedded = [];
-  if (fields[at]?.tag === 0xa0) embedded = children(fields[at++]).map(raw);
+  let at = 3, embedded = [], certificatesPresent = false;
+  if (fields[at]?.tag === 0xa0) {
+    certificatesPresent = true;
+    embedded = children(fields[at++]).map(raw);
+  }
   if (fields[at]?.tag === 0xa1) bad('TIMESTAMP_CMS_CRL_UNSUPPORTED');
   if (at !== fields.length - 1) bad('TIMESTAMP_CMS_UNSUPPORTED');
   const signerInfos = children(expect(fields[at], 0x31));
@@ -244,6 +247,8 @@ function signedData(value, tsa, issuer, policy, covered, requestBytes,
     if (asked.nonce !== info.nonce) bad('TIMESTAMP_NONCE_MISMATCH');
     if (asked.certReq && !embedded.some(bytes => bytes.equals(tsa.encoded)))
       bad('TIMESTAMP_REQUEST_CERT_MISSING');
+    if (!asked.certReq && certificatesPresent)
+      bad('TIMESTAMP_UNREQUESTED_CERTIFICATES');
   } else if (info.nonce && requireRequestForNonce) bad('TIMESTAMP_REQUEST_MISSING');
   if (info.accuracyMicros === null) bad('TIMESTAMP_ACCURACY_MISSING');
   if (info.accuracyMicros > policy.maxAccuracyMicros)

@@ -14,6 +14,23 @@
       "expected": "BOUND_CLAIMS"
     },
     {
+      "id": "authority-same-second-seal-then-allow",
+      "stateAt": 120,
+      "knownAt": 205,
+      "issuerKey": "sameSecondIssuerPublicKeySpkiBase64",
+      "records": ["samecut-1", "samecut-2", "action-1", "action-2"],
+      "expected": "BOUND_CLAIMS"
+    },
+    {
+      "id": "authority-same-second-seal-then-deny",
+      "stateAt": 120,
+      "knownAt": 205,
+      "issuerKey": "sameSecondIssuerPublicKeySpkiBase64",
+      "records": ["samecut-1", "samecut-2", "samecut-3", "action-1", "action-2"],
+      "expected": "REJECTED",
+      "reason": "AUTHORITY_DENIED"
+    },
+    {
       "id": "authority-retrospective-withdrawal",
       "stateAt": 120,
       "knownAt": 250,

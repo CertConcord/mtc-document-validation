@@ -14,7 +14,7 @@ const sha256 = bytes => createHash('sha256').update(bytes).digest('hex');
 
 test('original timestamp bytes match frozen counts and SHA-256', () => {
   assert.equal(corpus.format, 'frozen-rfc3161-der-corpus-v1');
-  assert.equal(Object.keys(corpus.objects).length, 41);
+  assert.equal(Object.keys(corpus.objects).length, 43);
   for (const [id, item] of Object.entries(corpus.objects)) {
     const bytes = object(id);
     assert.equal(bytes.length, item.bytes, id);

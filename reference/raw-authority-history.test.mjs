@@ -30,7 +30,10 @@ test('signed original positive and negative authority-history controls', () => {
       const {rawBase64,signatureBase64}=bytes.objects[id];
       return {rawBase64,signatureBase64};
     });
-    const input={stateAt:v.stateAt,knownAt:v.knownAt,policy:bytes.policy,records,document};
+    const policy=v.issuerKey ? {...bytes.policy,requirements:bytes.policy.requirements.map(x=>
+      x.role==='issuer-authorization' ? {...x,
+        publicKeySpkiBase64:bytes[v.issuerKey]} : x)} : bytes.policy;
+    const input={stateAt:v.stateAt,knownAt:v.knownAt,policy,records,document};
     if(v.error)assert.throws(()=>assessRawAuthorityHistory(input),{code:v.error},v.id);
     else {
       const actual=assessRawAuthorityHistory(input);

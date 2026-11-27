@@ -18,6 +18,8 @@
     {"id":"timestamp-no-nonce-no-retained-request","response":"no-nonce-response","request":null,"expected":"SIGNED_CLAIM"},
     {"id":"timestamp-external-tsa-cert-without-embedded-copy","response":"no-cert-response","request":"no-cert-request","expected":"SIGNED_CLAIM"},
     {"id":"timestamp-requested-cert-not-embedded","response":"no-cert-response","request":"cert-request-no-nonce","expected":"REJECTED","reason":"TIMESTAMP_REQUEST_CERT_MISSING"},
+    {"id":"timestamp-certreq-absent-with-embedded-cert","request":"request-certreq-absent-same-nonce","expected":"REJECTED","reason":"TIMESTAMP_UNREQUESTED_CERTIFICATES"},
+    {"id":"timestamp-certreq-absent-with-empty-certificates-field","response":"response-empty-certificates-field","request":"request-certreq-absent-same-nonce","expected":"REJECTED","reason":"TIMESTAMP_UNREQUESTED_CERTIFICATES"},
     {"id":"timestamp-wrong-covered-bytes","covered":"other-document","expected":"REJECTED","reason":"TIMESTAMP_IMPRINT_MISMATCH"},
     {"id":"timestamp-request-other-imprint","response":"other-data-response","covered":"other-document","expected":"REJECTED","reason":"TIMESTAMP_REQUEST_IMPRINT_MISMATCH"},
     {"id":"timestamp-request-other-nonce","request":"other-nonce-request","expected":"REJECTED","reason":"TIMESTAMP_NONCE_MISMATCH"},
